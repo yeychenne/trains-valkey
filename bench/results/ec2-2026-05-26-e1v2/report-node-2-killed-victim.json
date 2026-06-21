@@ -1,0 +1,7 @@
+{
+  "engine_label": "node-2",
+  "acked_total": 2000,
+  "missing_keys": "[1000 phase-2 keys: chaos:k1000..chaos:k1999 — expected, see REPORT.md]",
+  "dbsize": 1000,
+  "_note": "Node 2's proxy was SIGKILLed at T+20s (mid phase-1). The engine retained the 1000 phase-1 writes already applied, but received none of the 1000 phase-2 writes (because its proxy was dead). This is the expected and correct behaviour — node 2 is not a survivor. The chaos verifier exits non-zero for this engine; the survivor claim is about nodes 0 and 1 only."
+}

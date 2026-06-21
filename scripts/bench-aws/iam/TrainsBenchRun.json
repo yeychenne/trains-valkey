@@ -1,0 +1,45 @@
+{
+  "_comment": "TrainsBenchRunRole — the RUNTIME/operator scope. Used by coordinator.py, e5_sequencer.py, day2-runbook.sh chaos drivers. Drives existing bench instances via SSM + reads results from S3. Creates NO infrastructure. Laptop-OK (low blast radius). Replace <BENCH_ACCOUNT_ID>. Tighten the SSM Resource to the bench instances once their ids/tags are known (the bench tags everything trains-bench-*).",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SendCommandToBenchInstances",
+      "Effect": "Allow",
+      "Action": ["ssm:SendCommand"],
+      "Resource": [
+        "arn:aws:ssm:eu-west-3::document/AWS-RunShellScript",
+        "arn:aws:ec2:eu-west-3:<BENCH_ACCOUNT_ID>:instance/*"
+      ],
+      "Condition": {
+        "StringEquals": { "ssm:resourceTag/aws:cloudformation:stack-name": "TrainsBenchCompute" }
+      }
+    },
+    {
+      "Sid": "ReadCommandResults",
+      "Effect": "Allow",
+      "Action": ["ssm:GetCommandInvocation", "ssm:ListCommandInvocations", "ssm:ListCommands"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DescribeInstancesForRunMapping",
+      "Effect": "Allow",
+      "Action": ["ec2:DescribeInstances", "ec2:DescribeInstanceStatus"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ReadStackOutputs",
+      "Effect": "Allow",
+      "Action": ["cloudformation:DescribeStacks"],
+      "Resource": "arn:aws:cloudformation:eu-west-3:<BENCH_ACCOUNT_ID>:stack/TrainsBench*/*"
+    },
+    {
+      "Sid": "BenchBucketIO",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
+      "Resource": [
+        "arn:aws:s3:::trains-bench-<BENCH_ACCOUNT_ID>-eu-west-3",
+        "arn:aws:s3:::trains-bench-<BENCH_ACCOUNT_ID>-eu-west-3/*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+# CI for trains-valkey
+#
+# trains-core/net/recovery are git-pinned to yeychenne/trains-rust (public).
+# No auth token needed — the dependency is public.
+#
+# Budget policy: ubuntu runners only; the account spending limit stays at
+# $0 so an overage blocks instead of billing. Fallback if free
+# minutes get tight: runs-on [self-hosted].
+#
+# No `cargo fmt --check` job: aligned-field style is deliberate.
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install a RESP engine for tests/redis_backend.rs
+        # The backend test spawns valkey-server or redis-server from PATH
+        # (skips loudly otherwise). Prefer valkey; redis-server is the
+        # engine-agnostic fallback available in ubuntu-latest's apt.
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y valkey || sudo apt-get install -y redis-server
+
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Tests (and assert the backend test did not silently skip)
+        run: |
+          set -o pipefail
+          cargo test --workspace 2>&1 | tee /tmp/test-out.txt
+          if grep -q "SKIP: no valkey-server/redis-server" /tmp/test-out.txt; then
+            echo "::error::redis_backend tests skipped — engine install step regressed"
+            exit 1
+          fi
+
+  # Python bench tooling (E5 sequencer). Stdlib only — no pip install, no AWS.
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Byte-compile the coordinator scripts
+        run: python -m py_compile bench/coordinator/*.py
+      - name: E5 sequencer unit tests
+        run: python bench/coordinator/test_e5_sequencer.py

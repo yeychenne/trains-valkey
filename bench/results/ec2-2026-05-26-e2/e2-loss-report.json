@@ -1,0 +1,22 @@
+{
+  "acked_total": 2000,
+  "present_on_new_primary": 2000,
+  "missing": 0,
+  "mismatched": 0,
+  "missing_acked_via_old_primary": 0,
+  "new_primary_dbsize": 2000,
+  "new_primary_addr": "10.0.0.200:6379",
+  "by_primary_acked": {
+    "10.0.0.253:6379": 685,
+    "10.0.0.200:6379": 1315
+  },
+  "missing_keys_sample": [],
+  "_workload": {
+    "count": 2000,
+    "rate_ms_between_writes": 20,
+    "throughput_wr_per_s": 49.2,
+    "wall_clock_s": 45.43,
+    "kill_at_chaos_time_s": 13.95,
+    "failover_window_s": 4.51
+  }
+}

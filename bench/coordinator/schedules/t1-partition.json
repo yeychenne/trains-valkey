@@ -1,0 +1,9 @@
+{
+  "name": "t1-partition",
+  "description": "Tier-1.1: one-way partition node 1 -> node 2 at T+10s for 20s. Detector should fire, view change reconfigures, zero acked-write loss.",
+  "ring_size": 3,
+  "iface": "ens5",
+  "events": [
+    {"kind": "partition", "at": 10, "duration": 20, "from": 1, "to": 2}
+  ]
+}

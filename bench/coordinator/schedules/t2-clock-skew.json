@@ -1,0 +1,9 @@
+{
+  "name": "t2-clock-skew",
+  "description": "Tier-2.5: step node 1's wall clock +10s at T+10s, restore at T+40s. TRAINS ordering is logical-clock based, not wall-clock, so delivery + dedup must continue unaffected.",
+  "ring_size": 3,
+  "iface": "ens5",
+  "events": [
+    {"kind": "clock-skew", "at": 10, "duration": 30, "target": 1, "secs": 10}
+  ]
+}

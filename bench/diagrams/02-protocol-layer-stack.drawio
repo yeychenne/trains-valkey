@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" modified="2026-05-27T08:00:00.000Z" agent="claude-opus-4-7" version="22.0.0">
+  <diagram name="Protocol-Layer-Stack" id="layers">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="trains-valkey protocol stack — 5 crates, 4 layers" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="20" width="650" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 4: app -->
+        <mxCell id="L4" value="Application (RESP client)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="600" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L4-note" value="redis-cli / valkey-cli / chaos.rs / demo apps" style="text;html=1;align=center;fontSize=10;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="120" y="130" width="600" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 3: proxy (trains-valkey) -->
+        <mxCell id="L3" value="trains-valkey  (the proxy)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="120" y="170" width="600" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-1" value="RESP listener + parser&#xa;(resp.rs, command.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="140" y="200" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-2" value="classify Read / DetWrite / NonDetWrite&#xa;(classify.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="310" y="200" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-3" value="origin-side effect resolver&#xa;(effect.rs)&#xa;SPOP→SREM, INCRBYFLOAT→SET …" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="500" y="200" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-4" value="replica.apply + dedup&#xa;(replica.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="140" y="270" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-5" value="RedisStore trait&#xa;(store.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="310" y="270" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-6" value="MemStore / RedisBackend&#xa;(backend.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="500" y="270" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 2: recovery -->
+        <mxCell id="L2" value="trains-recovery  (extracted in PR-RD-7)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="120" y="370" width="600" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-1" value="clock-gap failure detector&#xa;(failure_detector.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="140" y="400" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-2" value="view-change state machine&#xa;Gather/Compute/Install tokens&#xa;(view_change.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="430" y="400" width="270" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 1: net -->
+        <mxCell id="L1" value="trains-net  (TLS ring transport, async)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="120" y="500" width="600" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-1" value="RingTransport / connector_loop&#xa;rustls (ring backend, no OpenSSL)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="140" y="530" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-2" value="PR-RD-6 TCP_USER_TIMEOUT=3s&#xa;PR-RD-8 abort() closes conns&#xa;PR-RD-9 connector reads TLS stream" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="430" y="530" width="270" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 0: core -->
+        <mxCell id="L0" value="trains-core  (TRAINS protocol kernel — sync, no I/O)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="120" y="630" width="600" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="L0-1" value="TrainsNode state machine&#xa;uniform total-order broadcast (uTOB)&#xa;token-ring protocol, formally verified in TLA+" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="140" y="660" width="560" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Right-side annotation -->
+        <mxCell id="ann" value="dependency direction:&#xa;every layer depends only on&#xa;layers below it.&#xa;trains-valkey depends on&#xa;all four lower layers.&#xa;trains-recovery now sits&#xa;ABOVE trains-net so&#xa;trains-valkey &#x2192; trains-cli&#xa;dep is gone (PR-RD-7)." style="text;html=1;align=left;whiteSpace=wrap;fontSize=10;fontStyle=2;spacingLeft=4" vertex="1" parent="1">
+          <mxGeometry x="740" y="400" width="100" height="220" as="geometry" />
+        </mxCell>
+
+        <!-- bottom note -->
+        <mxCell id="bot" value="LOC totals: trains-core ~1400 · trains-net ~700 · trains-recovery ~500 · trains-valkey ~2200 · trains-cli ~1100" style="text;html=1;align=center;fontSize=9;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="100" y="750" width="650" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

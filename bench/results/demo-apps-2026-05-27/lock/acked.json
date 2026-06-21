@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "workload": "distributed-lock",
+  "started_at": 1779862348.576371,
+  "finished_at": 1779862358.594679,
+  "target_host": "127.0.0.1",
+  "target_port": 16379,
+  "workers": 4,
+  "lock_keys": [
+    "k0",
+    "k1",
+    "k2",
+    "k3",
+    "k4",
+    "k5",
+    "k6",
+    "k7"
+  ],
+  "counter_value": 39531,
+  "events_summary": {
+    "total": 82073,
+    "acquired": 39531,
+    "released": 39531,
+    "missed": 3011,
+    "orphaned": 0
+  },
+  "events_sample_first_5": [
+    {
+      "t": 636960.621636083,
+      "worker": 1,
+      "lock_key": "k4",
+      "op": "acquire",
+      "token": "2b9cfc4c-8b3a-4920-a989-3549a56ee455",
+      "latency_ms": 2.923708059825003
+    },
+    {
+      "t": 636960.621664875,
+      "worker": 3,
+      "lock_key": "k2",
+      "op": "acquire",
+      "token": "6e8bf357-ea23-4928-8e91-1b513ed77900",
+      "latency_ms": 2.827291958965361
+    },
+    {
+      "t": 636960.62168875,
+      "worker": 0,
+      "lock_key": "k0",
+      "op": "acquire",
+      "token": "2c05fbe7-5d32-484b-bdbd-5ba96d7cbf12",
+      "latency_ms": 3.0943340389057994
+    },
+    {
+      "t": 636960.62171,
+      "worker": 2,
+      "lock_key": "k6",
+      "op": "acquire",
+      "token": "201b20c4-b135-4f3b-a4ab-87f54ee61197",
+      "latency_ms": 2.9042080277577043
+    },
+    {
+      "t": 636960.622130583,
+      "worker": 1,
+      "lock_key": "k4",
+      "op": "release",
+      "token": "2b9cfc4c-8b3a-4920-a989-3549a56ee455",
+      "latency_ms": 0.11191703379154205
+    }
+  ],
+  "events_sample_last_5": [
+    {
+      "t": 636970.626300375,
+      "worker": 0,
+      "lock_key": "k1",
+      "op": "release",
+      "token": "a2fbd1df-31f8-4f15-a054-e5abe8fa99ed",
+      "latency_ms": 0.08712499402463436
+    },
+    {
+      "t": 636970.626384666,
+      "worker": 0,
+      "lock_key": "k5",
+      "op": "acquire",
+      "token": "78cae101-e245-4828-b686-e22926f95e80",
+      "latency_ms": 0.07800001185387373
+    },
+    {
+      "t": 636970.626605083,
+      "worker": 0,
+      "lock_key": "k5",
+      "op": "release",
+      "token": "78cae101-e245-4828-b686-e22926f95e80",
+      "latency_ms": 0.08091691415756941
+    },
+    {
+      "t": 636970.62670225,
+      "worker": 0,
+      "lock_key": "k0",
+      "op": "acquire",
+      "token": "64ac4169-f5e2-4b97-a7ab-5bc31e929b58",
+      "latency_ms": 0.09175005834549665
+    },
+    {
+      "t": 636970.626953666,
+      "worker": 0,
+      "lock_key": "k0",
+      "op": "release",
+      "token": "64ac4169-f5e2-4b97-a7ab-5bc31e929b58",
+      "latency_ms": 0.07133395411074162
+    }
+  ]
+}

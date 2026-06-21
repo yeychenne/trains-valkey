@@ -1,0 +1,17 @@
+{
+  "target": "sentinel://10.0.0.137:26379",
+  "count": 20000,
+  "acked": 20000,
+  "pipeline": 10,
+  "target_rate": 1000.0,
+  "elapsed_s": 20.232,
+  "throughput_wr_per_s": 988.53,
+  "batch_latency_ms": {
+    "n_batches": 2000,
+    "p50": 1.175,
+    "p95": 1.275,
+    "p99": 1.739,
+    "p999": 7.235,
+    "max": 8.253
+  }
+}

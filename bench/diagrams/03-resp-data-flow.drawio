@@ -1,0 +1,142 @@
+<mxfile host="app.diagrams.net" modified="2026-05-27T08:00:00.000Z" agent="claude-opus-4-7" version="22.0.0">
+  <diagram name="RESP-Data-Flow" id="dataflow">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="RESP write path:  classify &#x2192; resolve &#x2192; broadcast &#x2192; deliver-in-order &#x2192; apply" style="text;html=1;align=center;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="20" width="950" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Client -->
+        <mxCell id="client" value="RESP client&#xa;SET k v&#xa;SPOP s" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="client-reply" value="+OK after total-order delivery + apply" style="text;html=1;align=center;fontSize=9;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="40" y="190" width="170" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Origin proxy (node-0) container -->
+        <mxCell id="origin" value="origin proxy  (node-0)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;verticalAlign=top;align=left;spacingLeft=8;spacingTop=8;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="240" y="80" width="320" height="430" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step1" value="1. parse RESP&#xa;(resp.rs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="260" y="120" width="280" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step2" value="2. classify command&#xa;Read / DeterministicWrite / NonDetWrite" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="260" y="180" width="280" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step3" value="3. effect resolver  (origin-side)&#xa;non-deterministic mutations  &#x2192;  deterministic effect&#xa;SPOP key   &#x2192;   SREM key m&#xa;INCRBYFLOAT k v  &#x2192;  SET k (x+v) formatted %.17g" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="260" y="240" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step4" value="4. wrap as WriteOp&#xa;(origin, request_id, effect)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="260" y="330" width="280" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step5" value="5. TRAINS oBroadcast  (trains-core via trains-net)&#xa;ring &#x2014; uniform total order delivery" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="260" y="390" width="280" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step6" value="6. wait for delivery on self, then apply" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="260" y="450" width="280" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Other proxies -->
+        <mxCell id="other-label" value="other proxies (node-1, node-2)" style="text;html=1;align=center;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="630" y="80" width="320" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="other-1" value="node-1: receive on ring &#x2192; deliver in total order" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="630" y="110" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="other-1b" value="dedup on (origin, request_id)&#xa;apply WriteOp via RedisStore" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="630" y="160" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="other-1c" value="valkey-1  (loopback)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="700" y="220" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="other-2" value="node-2: receive on ring &#x2192; deliver in total order" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="630" y="300" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="other-2b" value="dedup on (origin, request_id)&#xa;apply WriteOp via RedisStore" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="630" y="350" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="other-2c" value="valkey-2  (loopback)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="700" y="410" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- origin valkey -->
+        <mxCell id="valkey0" value="valkey-0  (loopback)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="340" y="540" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Invariants box -->
+        <mxCell id="inv" value="The four invariants&#xa;&#xa;1. Total order on writes&#xa;   (uniform delivery, TRAINS)&#xa;&#xa;2. At-most-once apply&#xa;   per-replica (origin, request_id) dedup&#xa;&#xa;3. Deterministic effect&#xa;   non-det resolved at origin before broadcast&#xa;&#xa;4. Crash masking&#xa;   confirmed permanent crash triggers&#xa;   view change &#x2192; ring re-forms" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;align=left;fontSize=10;verticalAlign=top;spacingLeft=8;spacingTop=6" vertex="1" parent="1">
+          <mxGeometry x="990" y="100" width="200" height="280" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e-client-step1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic" edge="1" parent="1" source="client" target="step1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-1-2" style="endArrow=classic;html=1" edge="1" parent="1" source="step1" target="step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-2-3" style="endArrow=classic;html=1" edge="1" parent="1" source="step2" target="step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-3-4" style="endArrow=classic;html=1" edge="1" parent="1" source="step3" target="step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-4-5" style="endArrow=classic;html=1" edge="1" parent="1" source="step4" target="step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-5-6" style="endArrow=classic;html=1" edge="1" parent="1" source="step5" target="step6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-6-valkey0" style="endArrow=classic;html=1" edge="1" parent="1" source="step6" target="valkey0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Ring broadcast edges -->
+        <mxCell id="e-broadcast-1" value="ring broadcast" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#9673A6;strokeWidth=2;fontSize=9" edge="1" parent="1" source="step5" target="other-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-broadcast-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#9673A6;strokeWidth=2" edge="1" parent="1" source="step5" target="other-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- other proxies apply -->
+        <mxCell id="e-other1-apply" style="endArrow=classic;html=1" edge="1" parent="1" source="other-1" target="other-1b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-other1-valkey" style="endArrow=classic;html=1" edge="1" parent="1" source="other-1b" target="other-1c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-other2-apply" style="endArrow=classic;html=1" edge="1" parent="1" source="other-2" target="other-2b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-other2-valkey" style="endArrow=classic;html=1" edge="1" parent="1" source="other-2b" target="other-2c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- reply -->
+        <mxCell id="e-reply" value="+OK" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#82B366;strokeWidth=2;dashed=1;fontSize=10" edge="1" parent="1" source="valkey0" target="client">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="565" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

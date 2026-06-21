@@ -1,0 +1,10 @@
+{
+  "name": "t1-multi-victim",
+  "description": "Tier-1.2: sequential SIGKILL of node 1 (T+15s) then node 2 (T+45s) on a 5-node ring. Ring reconfigures twice; the remaining 3 survivors lose zero acked writes.",
+  "ring_size": 5,
+  "iface": "ens5",
+  "events": [
+    {"kind": "kill-proxy", "at": 15, "target": 1},
+    {"kind": "kill-proxy", "at": 45, "target": 2}
+  ]
+}

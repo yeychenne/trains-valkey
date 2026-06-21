@@ -1,0 +1,18 @@
+{
+  "_comment": "Assume-only inline policy for the per-machine bootstrap user trains-bootstrap-<machine>. Its SOLE power is sts:AssumeRole on the two TRAINS bench roles — clean blast-radius separation from the ao-bootstrap-<machine> users (which may assume ONLY BedrockInvokeRole; do not widen them). The deploy role is listed for the interim laptop path; once Phase 2 moves deploy to GitHub-OIDC/CodeBuild, drop TrainsBenchDeployRole from here so the laptop can only assume the small run role. Replace <BENCH_ACCOUNT_ID>.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AssumeBenchRunRole",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": "arn:aws:iam::<BENCH_ACCOUNT_ID>:role/TrainsBenchRunRole"
+    },
+    {
+      "Sid": "AssumeBenchDeployRoleInterimLaptopOnly",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": "arn:aws:iam::<BENCH_ACCOUNT_ID>:role/TrainsBenchDeployRole"
+    }
+  ]
+}

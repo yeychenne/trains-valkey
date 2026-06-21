@@ -1,0 +1,93 @@
+{
+  "_comment": "TrainsBenchExec — the scoped policy passed to `cdk bootstrap --cloudformation-execution-policies`. It is attached to the CloudFormationExecutionRole, which ONLY CloudFormation can assume. This is where the bench's real infra power lives — NOT on the deploy identity. Derived from trains_bench/stacks/{network,compute}.py; TIGHTEN/loosen from the first `cdk diff` + `cdk deploy` AccessDenied events (see the runbook). Replace <BENCH_ACCOUNT_ID>. Deliberately NOT AdministratorAccess.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Ec2NetworkAndFleet",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVpc", "ec2:DeleteVpc", "ec2:ModifyVpcAttribute",
+        "ec2:CreateSubnet", "ec2:DeleteSubnet", "ec2:ModifySubnetAttribute",
+        "ec2:CreateRouteTable", "ec2:DeleteRouteTable", "ec2:CreateRoute", "ec2:DeleteRoute",
+        "ec2:AssociateRouteTable", "ec2:DisassociateRouteTable",
+        "ec2:CreateInternetGateway", "ec2:DeleteInternetGateway",
+        "ec2:AttachInternetGateway", "ec2:DetachInternetGateway",
+        "ec2:AllocateAddress", "ec2:ReleaseAddress", "ec2:AssociateAddress", "ec2:DisassociateAddress",
+        "ec2:CreateSecurityGroup", "ec2:DeleteSecurityGroup",
+        "ec2:AuthorizeSecurityGroupIngress", "ec2:RevokeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress", "ec2:RevokeSecurityGroupEgress",
+        "ec2:RunInstances", "ec2:TerminateInstances", "ec2:StopInstances", "ec2:StartInstances",
+        "ec2:CreateTags", "ec2:DeleteTags",
+        "ec2:Describe*", "ec2:Get*"
+      ],
+      "Resource": "*",
+      "Condition": { "StringEquals": { "aws:RequestedRegion": "eu-west-3" } }
+    },
+    {
+      "Sid": "IamForBenchRolesBoundedOnly",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole", "iam:DeleteRole", "iam:GetRole", "iam:TagRole", "iam:UntagRole",
+        "iam:AttachRolePolicy", "iam:DetachRolePolicy",
+        "iam:PutRolePolicy", "iam:DeleteRolePolicy", "iam:GetRolePolicy", "iam:ListRolePolicies", "iam:ListAttachedRolePolicies",
+        "iam:CreateInstanceProfile", "iam:DeleteInstanceProfile",
+        "iam:AddRoleToInstanceProfile", "iam:RemoveRoleFromInstanceProfile", "iam:GetInstanceProfile"
+      ],
+      "Resource": [
+        "arn:aws:iam::<BENCH_ACCOUNT_ID>:role/trains-bench-*",
+        "arn:aws:iam::<BENCH_ACCOUNT_ID>:role/TrainsBench*",
+        "arn:aws:iam::<BENCH_ACCOUNT_ID>:instance-profile/trains-bench-*"
+      ],
+      "Condition": {
+        "StringEquals": { "iam:PermissionsBoundary": "arn:aws:iam::<BENCH_ACCOUNT_ID>:policy/TrainsBenchBoundary" }
+      }
+    },
+    {
+      "Sid": "PassRoleToBenchServicesOnly",
+      "Effect": "Allow",
+      "Action": ["iam:PassRole"],
+      "Resource": "arn:aws:iam::<BENCH_ACCOUNT_ID>:role/trains-bench-*",
+      "Condition": {
+        "StringEquals": { "iam:PassedToService": ["ec2.amazonaws.com", "lambda.amazonaws.com"] }
+      }
+    },
+    {
+      "Sid": "S3BenchBuckets",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket", "s3:DeleteBucket",
+        "s3:PutBucketVersioning", "s3:PutLifecycleConfiguration", "s3:PutBucketLogging",
+        "s3:PutBucketPublicAccessBlock", "s3:PutEncryptionConfiguration", "s3:PutBucketPolicy",
+        "s3:PutBucketTagging", "s3:GetBucket*", "s3:GetLifecycleConfiguration", "s3:GetEncryptionConfiguration",
+        "s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion", "s3:ListBucket", "s3:ListBucketVersions"
+      ],
+      "Resource": [
+        "arn:aws:s3:::trains-bench-*",
+        "arn:aws:s3:::trains-bench-*/*",
+        "arn:aws:s3:::cdk-*-assets-<BENCH_ACCOUNT_ID>-eu-west-3",
+        "arn:aws:s3:::cdk-*-assets-<BENCH_ACCOUNT_ID>-eu-west-3/*"
+      ]
+    },
+    {
+      "Sid": "LambdaForAutoDeleteCustomResource",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction", "lambda:DeleteFunction", "lambda:GetFunction",
+        "lambda:InvokeFunction", "lambda:UpdateFunctionConfiguration", "lambda:TagResource"
+      ],
+      "Resource": "arn:aws:lambda:eu-west-3:<BENCH_ACCOUNT_ID>:function:TrainsBench*"
+    },
+    {
+      "Sid": "LogsForLambda",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:DeleteLogGroup", "logs:PutRetentionPolicy", "logs:DescribeLogGroups"],
+      "Resource": "arn:aws:logs:eu-west-3:<BENCH_ACCOUNT_ID>:log-group:/aws/lambda/TrainsBench*"
+    },
+    {
+      "Sid": "CdkBootstrapSsmParam",
+      "Effect": "Allow",
+      "Action": ["ssm:GetParameter", "ssm:GetParameters"],
+      "Resource": "arn:aws:ssm:eu-west-3:<BENCH_ACCOUNT_ID>:parameter/cdk-bootstrap/*"
+    }
+  ]
+}

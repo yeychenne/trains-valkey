@@ -1,0 +1,121 @@
+<mxfile host="app.diagrams.net" modified="2026-05-27T08:00:00.000Z" agent="claude-opus-4-7" version="22.0.0">
+  <diagram name="View-Change-Sequence" id="vc">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Failure detection &amp; view change — single permanent crash (node-2)" style="text;html=1;align=center;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="20" width="850" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines (vertical) -->
+        <mxCell id="ll0" value="node-0&#xa;(lowest-id survivor =&#xa;view-change coordinator)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="120" y="70" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ll1" value="node-1&#xa;(survivor)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="460" y="70" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ll2" value="node-2  (about to die)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="800" y="70" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline lines -->
+        <mxCell id="line0" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#6C8EBF;dashed=1" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="130" as="sourcePoint" />
+            <mxPoint x="210" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line1" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#6C8EBF;dashed=1" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="130" as="sourcePoint" />
+            <mxPoint x="550" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line2" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#B85450;dashed=1" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890" y="130" as="sourcePoint" />
+            <mxPoint x="890" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T0 — SIGKILL -->
+        <mxCell id="t0" value="T0  SIGKILL node-2  (operator-injected via SSM RunCommand)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=10;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="740" y="200" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t0-X" value="X" style="text;html=1;align=center;fontSize=24;fontStyle=1;fontColor=#B85450" vertex="1" parent="1">
+          <mxGeometry x="875" y="240" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- T1 — node-1 writes block at TCP_USER_TIMEOUT -->
+        <mxCell id="t1" value="T1 + ~3s  PR-RD-6: kernel TCP_USER_TIMEOUT fires, ring socket force-closes" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9" vertex="1" parent="1">
+          <mxGeometry x="440" y="290" width="450" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t1-arrow" value="" style="endArrow=classic;html=1;strokeColor=#B85450;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5" edge="1" parent="1" source="t1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890" y="305" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T2 — connector_loop sees close (PR-RD-9) -->
+        <mxCell id="t2" value="T2  PR-RD-9: connector_loop reads TLS stream, sees Close_notify / EOF&#xa;exits writer, force_reconnect, fails on connect" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="450" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- T3 — unreachable_rx fires -->
+        <mxCell id="t3" value="T3  unreachable_rx fires on node-1 and node-0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=10;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="800" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3-arrow" value="" style="endArrow=classic;html=1;strokeColor=#82B366;strokeWidth=2;exitX=0;exitY=0.5;entryX=1;entryY=0.5" edge="1" parent="1" source="t3" target="ll0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- T4 — Gather token from coordinator -->
+        <mxCell id="t4" value="T4  node-0 (lowest-id survivor) becomes view-change coordinator&#xa;issues Gather token to all reachable survivors" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="460" width="380" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="t4-arrow" value="Gather" style="endArrow=classic;html=1;strokeColor=#9673A6;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=9" edge="1" parent="1" source="t4" target="ll1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T5 — each survivor returns its recovery report -->
+        <mxCell id="t5" value="T5  every survivor returns its recovery report&#xa;(last-applied seq per origin, dedup set excerpt)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="100" y="520" width="380" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="t5-arrow" value="report" style="endArrow=classic;html=1;strokeColor=#9673A6;strokeWidth=2;exitX=0;exitY=0.5;entryX=1;entryY=0.5;fontSize=9" edge="1" parent="1" source="ll1" target="t5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- T6 — coordinator computes recovery plan -->
+        <mxCell id="t6" value="T6  coordinator computes recovery plan&#xa;new ring membership, gap-fill if any holes" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="100" y="580" width="380" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- T7 — Install token -->
+        <mxCell id="t7" value="T7  coordinator issues Install token&#xa;every survivor applies new view atomically" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="640" width="380" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="t7-arrow" value="Install" style="endArrow=classic;html=1;strokeColor=#9673A6;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=9" edge="1" parent="1" source="t7" target="ll1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T8 — proxy resumes serving writes -->
+        <mxCell id="t8" value="T8  surviving proxies resume serving writes in the new view&#xa;(observed MTTR ~10s in EC2; PR-RD-6 + PR-RD-8 + PR-RD-9 wall-clock 45.30 s end-to-end for the during-window E1-v2 run)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=10;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="710" width="800" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Footnote box -->
+        <mxCell id="foot" value="Failure-detection paths (PR-RD-6/8/9 stacked):&#xa;• kernel level — TCP_USER_TIMEOUT=3s force-closes the socket&#xa;• application level — abort() also closes accepted-conn tasks (no leaked writers)&#xa;• connector level — connector reads the TLS stream, sees Close_notify when peer dies idle&#xa;Pre-stack symptom (E1, May-26 morning): writes hung 5 min into kernel buffer, no view-change.&#xa;Post-stack result (E1-v2, May-26 PM): 2000/2000 acked through the masked window." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;align=left;fontSize=10;verticalAlign=top;spacingLeft=8;spacingTop=6" vertex="1" parent="1">
+          <mxGeometry x="100" y="780" width="900" height="100" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

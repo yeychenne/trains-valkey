@@ -1,0 +1,44 @@
+[package]
+name        = "trains-valkey"
+description = "RESP write-interception proxy that replicates Valkey/Redis over the TRAINS ring (state-machine replication)"
+version.workspace      = true
+edition.workspace      = true
+rust-version.workspace = true
+
+[[bin]]
+name = "trains-valkey"
+path = "src/main.rs"
+
+[[bin]]
+name = "trains-valkey-chaos"
+path = "src/bin/chaos.rs"
+
+[dependencies]
+trains-core     = { workspace = true }
+trains-net      = { workspace = true }
+# Reuse the reconfiguration primitives (FailureDetector, ViewChange) rather
+# than duplicate the safety-critical view-change state machine (PR-RD-4).
+# Extracted from trains-cli into its own crate in PR-RD-7 so the redis proxy
+# no longer depends on the CLI binary's crate. Post-split (2026-05-28), all
+# three protocol crates resolve via the workspace's git deps in the
+# yeychenne/trains-rust repo.
+trains-recovery = { workspace = true }
+tokio       = { workspace = true }
+# Client-boundary mTLS (R-06): the proxy wraps accepted RESP connections in a
+# rustls acceptor that pins client certs via trains-net's SPKI verifier.
+tokio-rustls = { workspace = true }
+rustls       = { workspace = true }
+serde       = { workspace = true }
+serde_json  = { workspace = true }
+bincode     = { workspace = true }
+thiserror   = { workspace = true }
+tracing     = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow      = { workspace = true }
+clap        = { workspace = true }
+
+[dev-dependencies]
+tokio              = { workspace = true }
+
+[lints]
+workspace = true

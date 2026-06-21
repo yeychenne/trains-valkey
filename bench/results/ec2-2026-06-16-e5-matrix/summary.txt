@@ -1,0 +1,2 @@
+t1-rejoin FAIL [chaos] total acked 2000 writes  
+t1-rejoin PASS [chaos] total acked 2000 writes  

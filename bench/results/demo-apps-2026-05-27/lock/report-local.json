@@ -1,0 +1,8 @@
+{
+  "engine_host": "127.0.0.1",
+  "engine_port": 16379,
+  "counter_observed": 39531,
+  "counter_expected": 39531,
+  "counter_match": true,
+  "locks_still_held": 0
+}

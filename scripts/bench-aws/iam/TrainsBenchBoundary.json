@@ -1,0 +1,43 @@
+{
+  "_comment": "TrainsBenchBoundary — the permission BOUNDARY attached (via `cdk bootstrap --custom-permissions-boundary TrainsBenchBoundary`) to every IAM role the bench's CloudFormation creates: the EC2 instance role (SSM core + S3 bench-bucket RW) and the Lambda exec role CDK generates for auto_delete_objects. It CAPS what any such role can ever do, so a leaked deploy cred cannot mint an admin role. This is a ceiling, not a grant. Replace <BENCH_ACCOUNT_ID>.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "InstanceRoleCeiling",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:UpdateInstanceInformation",
+        "ssmmessages:*",
+        "ec2messages:*",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "LambdaCustomResourceCeiling",
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
+        "s3:ListBucketVersions",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DenyEscalation",
+      "Effect": "Deny",
+      "Action": [
+        "iam:*",
+        "sts:AssumeRole",
+        "organizations:*",
+        "account:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "t2-burst-partition",
+  "description": "Tier-2.6: combine a partition (1->2, T+10s/20s) with added egress latency on the load-target node 0 (150ms, T+10s/20s) to stress detection under a high-rate burst workload. Zero acked-write loss.",
+  "ring_size": 3,
+  "iface": "ens5",
+  "events": [
+    {"kind": "partition", "at": 10, "duration": 20, "from": 1, "to": 2},
+    {"kind": "netem-latency", "at": 10, "duration": 20, "target": 0, "ms": 150}
+  ]
+}

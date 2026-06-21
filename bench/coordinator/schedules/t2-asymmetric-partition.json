@@ -1,0 +1,9 @@
+{
+  "name": "t2-asymmetric-partition",
+  "description": "Tier-2.4: asymmetric partition — node 2 can send to node 0 but node 0 cannot send to node 2 (drop only 0->2) at T+10s for 25s. The detector should fire on the broken side.",
+  "ring_size": 3,
+  "iface": "ens5",
+  "events": [
+    {"kind": "partition", "at": 10, "duration": 25, "from": 0, "to": 2}
+  ]
+}

@@ -1,0 +1,5 @@
+t1-partition PASS [chaos] abandoned 516 write(s): no +OK within Some(5s) (not counted as acked) [chaos] total acked 1000 writes  
+t1-rejoin FAIL [chaos] total acked 2000 writes  
+t2-asymmetric-partition PASS [chaos] abandoned 516 write(s): no +OK within Some(5s) (not counted as acked) [chaos] total acked 1000 writes  
+t2-clock-skew PASS [chaos] total acked 2000 writes  
+t2-burst-partition PASS [chaos] abandoned 516 write(s): no +OK within Some(5s) (not counted as acked) [chaos] total acked 1000 writes  

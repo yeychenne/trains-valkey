@@ -1,0 +1,9 @@
+{
+  "engine_host": "127.0.0.1",
+  "engine_port": 16379,
+  "leaderboard_key": "leaderboard",
+  "members_observed": 50,
+  "members_expected": 50,
+  "all_match": true,
+  "divergent_members": {}
+}

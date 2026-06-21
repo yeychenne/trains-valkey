@@ -1,0 +1,10 @@
+{
+  "name": "t1-rejoin",
+  "description": "Tier-1.3: SIGKILL node 2 mid-load (T+15s), then restart it (T+75s) so it rejoins via state transfer while writes continue. Zero acked-write loss; rejoined node's DBSIZE matches survivors after catch-up.",
+  "ring_size": 3,
+  "iface": "ens5",
+  "events": [
+    {"kind": "kill-proxy", "at": 15, "target": 2},
+    {"kind": "restart-proxy", "at": 75, "target": 2}
+  ]
+}

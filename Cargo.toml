@@ -1,0 +1,41 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/trains-valkey",
+]
+
+[workspace.package]
+version      = "0.1.0"
+edition      = "2021"
+rust-version = "1.78"
+authors      = ["Yves Eychenne <yeychenne@yahoo.fr>"]
+license      = "MIT"
+
+[workspace.dependencies]
+# Protocol kernel + TLS ring transport + recovery (failure detector + view-change).
+# Sourced from the trains-rust repo. Pinned to a specific commit for
+# reproducibility; bump on each trains-rust release. Once trains-rust publishes
+# to crates.io, switch these three lines to version strings (e.g. "0.1").
+trains-core     = { git = "https://github.com/yeychenne/trains-rust", rev = "da8c173878ed291a0935389de133313ef75fd132" }
+trains-net      = { git = "https://github.com/yeychenne/trains-rust", rev = "da8c173878ed291a0935389de133313ef75fd132" }
+trains-recovery = { git = "https://github.com/yeychenne/trains-rust", rev = "da8c173878ed291a0935389de133313ef75fd132" }
+
+# Async runtime + RESP wire + framing
+tokio        = { version = "1", features = ["full"] }
+tokio-rustls = "0.26"
+rustls       = { version = "0.23", default-features = false, features = ["ring", "std"] }
+serde        = { version = "1", features = ["derive"] }
+serde_json   = "1"
+bincode      = { version = "2", features = ["serde"] }
+thiserror    = "2"
+anyhow       = "1"
+tracing      = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap         = { version = "4", features = ["derive"] }
+
+[profile.release]
+lto           = true
+codegen-units = 1
+
+[workspace.lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
