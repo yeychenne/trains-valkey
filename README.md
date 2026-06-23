@@ -1,13 +1,24 @@
 # trains-valkey
 
-A RESP-level write-interception proxy that gives Redis loss-free
-failover via state-machine replication over a uniform total-order
-broadcast ring. *Sentinel without acked-write loss, against an
-unmodified Valkey or Redis 8.*
+**Control-plane-grade HA for Valkey/Redis.** A RESP-level write-interception
+proxy that gives an unmodified Valkey/Redis loss-free failover via state-machine
+replication over a uniform total-order broadcast ring. *Sentinel without
+acked-write loss.*
 
-Built on top of [trains-rust](https://github.com/yeychenne/trains-rust)
-— the TRAINS protocol kernel + TLS ring transport + view-change
-recovery, formally verified in TLA+ / Apalache / Ivy.
+Failover is a **control-plane** decision — who is primary, which writes survive,
+when the cluster reconfigures — and a control plane should never trade
+consistency for the appearance of availability. Redis Sentinel does: its
+asynchronous replication is, by Redis' own docs, eventually consistent with
+"last failover wins," and Jepsen has measured it discarding [over a thousand
+acknowledged writes in a single partition](https://aphyr.com/posts/283-jepsen-redis).
+trains-valkey puts the failover/replication decisions on a **formally-verified,
+consistency-first total-order ring** instead, so an acknowledged write survives
+partition, double-kill, and rejoin.
+
+Built on [trains-rust](https://github.com/yeychenne/trains-rust) — the TRAINS
+control-plane primitive (a ~2,360-line kernel checked six independent ways:
+TLA+/TLC, Apalache, Kani/CBMC, PropTest fuzzing, differential testing, and
+trace validation).
 
 ## What this gives you
 
