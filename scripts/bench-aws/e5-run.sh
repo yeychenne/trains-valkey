@@ -14,6 +14,19 @@
 # local `trains` (trains-cli) for keygen. AWS via $AWS_PROFILE (e.g. <aws-profile>
 # or trains-run).
 #
+# IMPORTANT — ring size is a COMPILE-TIME CONSTANT.  `trains-core/build.rs`
+# reads `TRAINS_RING_SIZE` from the build environment (default 3) and bakes
+# it into the binary.  Schedules with `ring_size != TRAINS_RING_SIZE` will
+# skip with a size-mismatch warning.  To run a scenario at N=5:
+#
+#   TRAINS_RING_SIZE=5 cargo zigbuild --release \
+#     --target aarch64-unknown-linux-gnu -p trains-valkey
+#   TRAINS_RING_SIZE=5 cargo build --release -p trains-cli   # for keygen
+#
+# To run scenarios at different N in one session, rebuild + redeploy or
+# stage multiple labelled binaries.  Mixing ring-size-3 and ring-size-5
+# scenarios against a single binary build is not supported.
+#
 # Usage:
 #   AWS_PROFILE=<aws-profile> ./scripts/bench-aws/e5-run.sh                 # all schedules that fit the deploy
 #   AWS_PROFILE=<aws-profile> ./scripts/bench-aws/e5-run.sh t1-partition t1-rejoin

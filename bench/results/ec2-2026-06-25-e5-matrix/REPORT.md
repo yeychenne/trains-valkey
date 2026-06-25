@@ -35,12 +35,30 @@ upper end of "small."
 
 ## Result
 
+Per-node (from the live `e5-run.sh` stdout):
+
+| Node | Role | `acked` | `missing_keys` | `DBSIZE` |
+|------|------|--------:|-----------------|---------:|
+| 0 | survivor (issuer) | **1 999** | `[]` | **2 000** |
+| 1 | killed at T+15 s | — | (proxy down — skipped) | — |
+| 2 | killed at T+45 s | — | (proxy down — skipped) | — |
+| 3 | survivor          | **1 999** | `[]` | **2 000** |
+| 4 | survivor          | **1 999** | `[]` | **2 000** |
+
 | Metric                | Value | Notes |
 |-----------------------|------:|-------|
-| Acked writes (chaos client) | **1 999** / 2 000 | the missing one was explicitly *abandoned* by the client after 5 s with no `+OK` (the `--abandon-secs 5` honest fingerprint), not lost |
-| Acked-write loss on survivors | **0** | every survivor holds all 1 999 acked writes |
-| Survivors converged | ✅ | byte-identical `DBSIZE` across the three live engines |
+| Acked writes (chaos client side) | **1 999** / 2 000 | the 2 000th was explicitly *abandoned* by the chaos client after 5 s with no `+OK` (the `--abandon-secs 5` honest fingerprint), so not counted as acked |
+| Acked-write loss on survivors | **0** | `missing_keys = []` on every survivor — every acked write was applied |
+| **Survivor `DBSIZE` (per engine)** | **2 000** | the abandoned write *did* make it through the ring and was applied on all three survivor engines, byte-identical.  The chaos client gave up on the ack before the `+OK` came back — but the write itself completed on the data plane |
+| Survivors converged | ✅ | identical `DBSIZE = 2 000` across the three live engines |
 | Killed nodes (1, 2)   | proxies down, engines stale (expected) — not counted as survivors |
+
+This is a **stronger** result than the headline "zero acked-write loss":
+all 2 000 writes were ordered + applied by the ring; the chaos client
+just gave up waiting on one of them inside its own timeout window.
+The protocol delivered everything; the *test harness* abandoned one
+ack — by design (`--abandon-secs 5`), to put a soft cap on tail
+latency so chaos sweeps stay bounded.
 
 Raw e5-run.sh summary line:
 ```

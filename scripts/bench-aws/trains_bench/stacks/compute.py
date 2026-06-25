@@ -35,9 +35,17 @@ MAX_NODES = 5
 # host — avoids a cross-compile dependency and is slightly cheaper.
 INSTANCE_TYPE = ec2.InstanceType("t4g.small")
 # eu-west-3b returned `InsufficientInstanceCapacity` for t4g.small on 2026-05-26;
-# AWS told us to use 3a/3c. Three nodes round-robin across 2 AZs (2 in 3a, 1 in
+# AWS told us to use 3a/3c.  Three nodes round-robin across 2 AZs (2 in 3a, 1 in
 # 3c) — still multi-AZ enough to exercise cross-AZ ring latency for the chaos
 # run; widen to 3 AZs if capacity returns.
+#
+# Fallback observed 2026-06-25 on the N=5 deploy: both eu-west-3a AND
+# eu-west-3b were exhausted for t4g.small.  All 5 nodes deployed
+# successfully in eu-west-3c only.  Single-AZ is acceptable for short-lived
+# bench runs (no HA requirement for the test fleet).  If the deploy
+# fail-fasts on capacity in 3a, temporarily narrow `AZS` to `["eu-west-3c"]`
+# and retry.  The default stays 3a+3c so future runs exercise cross-AZ
+# latency when capacity allows.
 AZS = ["eu-west-3a", "eu-west-3c"]
 
 
