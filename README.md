@@ -30,12 +30,13 @@ trace validation).
 | Sub-ms p99 latency at moderate write rates | ✅ | ✅ |
 | Drops in front of an unmodified engine (no Redis fork) | n/a | ✅ Valkey 9.x or Redis 8 |
 
-Verified on EC2 with a 3-node `t4g.small` ring:
+Verified on EC2 (3-node and 5-node `t4g.small` rings in `eu-west-3`):
 
 | Experiment | Setup | Result |
 |---|---|---|
 | **E1-v2** (during-window kill) | 3-node trains-valkey ring, SIGKILL the victim's proxy mid-load | **2 000 / 2 000 acked writes preserved** on every survivor; byte-identical `DBSIZE`; ~45 s wall-clock |
 | **E5 t1-rejoin** (kill → restart → rejoin) | SIGKILL node 2 mid-load, restart it; it rejoins via state transfer while writes continue | **Rejoined node converges 2 000 / 2 000**, matching survivors, zero acked-write loss (v2). [REPORT](bench/results/ec2-2026-06-16-e5-rejoin/REPORT.md) |
+| **E5 t1-multi-victim** (5-node ring, 2 sequential kills) | 5-node ring; SIGKILL node 1 at T+15s, SIGKILL node 2 at T+45s; remaining 3 must converge | **1 999 / 1 999 acked writes preserved** on every survivor; the one missing write was explicitly *abandoned* by the chaos client after 5 s with no `+OK` (the `--abandon-secs` honest fingerprint — not a loss); survivors byte-identical. Closes the "credibility on small clusters" gap. [REPORT](bench/results/ec2-2026-06-25-e5-matrix/REPORT.md) |
 | **E4 clean rate-threshold sweep** | Sentinel comparison at 50 / 500 / 1 000 / 2 000 wr/s | Sentinel: **0 loss at every rate** with fresh cluster per rate. trains-valkey: same property, *plus* survives multi-victim scenarios Sentinel doesn't. |
 | **Demos (local-smoke)** | distributed-lock + leaderboard apps | Lock: 8 192 cycles/s, p99 0.156 ms, 0 orphans. Leaderboard: 30 634 ops/s, p99 0.164 ms, exact reconciliation. |
 
