@@ -21,7 +21,15 @@ from constructs import Construct
 
 from trains_bench.stacks.network import TrainsBenchNetworkStack
 
-MAX_NODES = 3
+MAX_NODES = 5
+# Bumped from 3 to 5 on 2026-06-25 — the bench infra was already N-agnostic
+# (see `e5-run.sh` which reads `MaxNodes` from cdk-outputs.json and the
+# pre-existing `t1-multi-victim` schedule with ring_size 5).  This widens
+# the deploy to support the t1-multi-victim scenario (kill 2 of 5; the
+# remaining 3 survivors must converge with zero acked-write loss) — the
+# "credibility on small clusters" round of the post-launch verification
+# roadmap.  Smaller scenarios (ring_size=3) still run against 3 of the 5
+# nodes; `e5-run.sh` selects the prefix.
 # t4g.small = 2 vCPU / 2 GiB ARM Graviton, ~$0.0168/hr in eu-west-3.
 # Switched from t3.small (x86_64) on 2026-05-26 to match the arm64-Mac build
 # host — avoids a cross-compile dependency and is slightly cheaper.
