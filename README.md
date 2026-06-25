@@ -15,10 +15,17 @@ trains-valkey puts the failover/replication decisions on a **formally-verified,
 consistency-first total-order ring** instead, so an acknowledged write survives
 partition, double-kill, and rejoin.
 
+In [PACELC](https://en.wikipedia.org/wiki/PACELC_design_principle) terms,
+Sentinel is **PA/EL** and trains-valkey is **PC/EC** — same RESP protocol on
+top, opposite trade-off underneath. The choice isn't old-vs-new; it's which
+side of the PACELC grid your workload belongs on. Caching session data? `PA/EL`
+is correct — keep Sentinel. Storing the lease whose loss double-spends a
+customer or unblocks a frozen deploy? You want `PC/EC`.
+
 Built on [trains-rust](https://github.com/yeychenne/trains-rust) — the TRAINS
-control-plane primitive (a ~2,360-line kernel checked six independent ways:
-TLA+/TLC, Apalache, Kani/CBMC, PropTest fuzzing, differential testing, and
-trace validation).
+control-plane primitive (a ~2,360-line kernel checked seven independent ways:
+TLA+/TLC, Apalache, Kani/CBMC, PropTest fuzzing, differential testing, trace
+validation, and Ivy parameterised verification at unbounded N).
 
 ## What this gives you
 
