@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::net::SocketAddr;
 use std::process::{Child, Command as ProcessCommand, Stdio};
 use std::sync::{Arc, Barrier, Mutex, mpsc};
@@ -7,7 +7,9 @@ use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use serde::Serialize;
 use trains_valkey::{Command, RedisBackend, RedisStore, Reply};
-use trains_valkey_arctic_shadow::{ConcurrentArcticStore, OrderedArcticStore, SharedArcticReader};
+use trains_valkey_arctic_shadow::{
+    ConcurrentArcticStore, OrderedArcticStore, SharedArcticReader, generation_strategy,
+};
 
 const VALUE: &[u8] = b"0123456789abcdef0123456789abcdef";
 const SAMPLE_EVERY: usize = 16;
@@ -35,6 +37,15 @@ impl Workload {
             Self::WriteOnly => true,
         }
     }
+
+    fn from_name(name: &str) -> Self {
+        match name {
+            "read-only" => Self::ReadOnly,
+            "read-90-write-10" => Self::Read90Write10,
+            "write-only" => Self::WriteOnly,
+            _ => panic!("unknown benchmark workload '{name}'"),
+        }
+    }
 }
 
 #[derive(Serialize)]
@@ -42,6 +53,8 @@ struct Config {
     keys: usize,
     operations_per_thread: usize,
     thread_counts: Vec<usize>,
+    backends: Vec<String>,
+    workloads: Vec<String>,
     repetitions: usize,
     latency_sample_every: usize,
     value_bytes: usize,
@@ -60,13 +73,18 @@ struct CaseResult {
     latency_samples: usize,
     latency_p50_ns: u64,
     latency_p99_ns: u64,
+    process_cpu_ms: f64,
+    engine_cpu_ms: f64,
 }
 
 #[derive(Serialize)]
 struct Report {
     generated_unix_seconds: u64,
+    label: String,
+    generation_strategy: &'static str,
     architecture: &'static str,
     available_parallelism: usize,
+    process_max_rss_kb: Option<u64>,
     config: Config,
     results: Vec<CaseResult>,
 }
@@ -89,6 +107,47 @@ impl DeterministicRng {
     fn index(&mut self, upper: usize) -> usize {
         (self.next() as usize) % upper
     }
+}
+
+#[cfg(target_os = "linux")]
+fn process_cpu_ms(pid: u32) -> Option<f64> {
+    let stat = std::fs::read_to_string(format!("/proc/{pid}/stat")).ok()?;
+    let fields = stat
+        .get(stat.rfind(')')? + 2..)?
+        .split_whitespace()
+        .collect::<Vec<_>>();
+    let user_ticks = fields.get(11)?.parse::<u64>().ok()?;
+    let system_ticks = fields.get(12)?.parse::<u64>().ok()?;
+    // SAFETY: sysconf reads a process-global constant and does not retain pointers.
+    let ticks_per_second = unsafe { libc::sysconf(libc::_SC_CLK_TCK) };
+    (ticks_per_second > 0)
+        .then_some((user_ticks + system_ticks) as f64 * 1_000.0 / ticks_per_second as f64)
+}
+
+#[cfg(not(target_os = "linux"))]
+fn process_cpu_ms(_pid: u32) -> Option<f64> {
+    None
+}
+
+fn own_process_cpu_ms() -> f64 {
+    process_cpu_ms(std::process::id()).unwrap_or(0.0)
+}
+
+#[cfg(target_os = "linux")]
+fn process_max_rss_kb() -> Option<u64> {
+    std::fs::read_to_string("/proc/self/status")
+        .ok()?
+        .lines()
+        .find_map(|line| line.strip_prefix("VmHWM:"))?
+        .split_whitespace()
+        .next()?
+        .parse()
+        .ok()
+}
+
+#[cfg(not(target_os = "linux"))]
+fn process_max_rss_kb() -> Option<u64> {
+    None
 }
 
 trait PointWorker {
@@ -123,7 +182,7 @@ struct OrderedArcticWorker {
 
 impl PointWorker for OrderedArcticWorker {
     fn get(&mut self, key: &[u8]) -> bool {
-        matches!(self.reader.pin().get(key), Reply::Bulk(_))
+        matches!(self.reader.get(key), Reply::Bulk(_))
     }
 
     fn set(&mut self, key: &[u8], value: &[u8]) {
@@ -286,6 +345,7 @@ where
             .expect("benchmark worker failed before start");
     }
 
+    let cpu_started = own_process_cpu_ms();
     let started = Instant::now();
     start_barrier.wait();
     let mut latencies = Vec::new();
@@ -293,6 +353,7 @@ where
         latencies.extend(handle.join().expect("benchmark worker panicked"));
     }
     let elapsed = started.elapsed();
+    let process_cpu_ms = (own_process_cpu_ms() - cpu_started).max(0.0);
     latencies.sort_unstable();
 
     let total_operations = threads * operations_per_thread;
@@ -308,6 +369,8 @@ where
         latency_samples: latencies.len(),
         latency_p50_ns: percentile(&latencies, 50),
         latency_p99_ns: percentile(&latencies, 99),
+        process_cpu_ms,
+        engine_cpu_ms: 0.0,
     }
 }
 
@@ -496,14 +559,16 @@ fn preload_valkey(addr: SocketAddr, keys: &[Vec<u8>]) {
 }
 
 fn run_valkey(
-    addr: SocketAddr,
+    engine: &Engine,
     workload: Workload,
     threads: usize,
     operations_per_thread: usize,
     keys: Arc<Vec<Vec<u8>>>,
 ) -> CaseResult {
-    preload_valkey(addr, &keys);
-    run_case(
+    preload_valkey(engine.addr, &keys);
+    let engine_cpu_started = engine.cpu_ms();
+    let addr = engine.addr;
+    let mut result = run_case(
         "valkey",
         "local RESP process boundary",
         workload,
@@ -513,7 +578,9 @@ fn run_valkey(
         move || ValkeyWorker {
             backend: RedisBackend::connect(addr).expect("connect Valkey benchmark worker"),
         },
-    )
+    );
+    result.engine_cpu_ms = (engine.cpu_ms() - engine_cpu_started).max(0.0);
+    result
 }
 
 fn engine_bin() -> &'static str {
@@ -573,6 +640,10 @@ impl Engine {
         }
         panic!("Valkey engine at {addr} never became ready");
     }
+
+    fn cpu_ms(&self) -> f64 {
+        process_cpu_ms(self.child.id()).unwrap_or(0.0)
+    }
 }
 
 impl Drop for Engine {
@@ -603,21 +674,61 @@ fn thread_counts() -> Vec<usize> {
         .unwrap_or_else(|| vec![1, 2, 4, 8])
 }
 
+fn selected_names(env_name: &str, allowed: &[&str]) -> Vec<String> {
+    let requested: BTreeSet<String> = std::env::var(env_name)
+        .ok()
+        .map(|value| {
+            value
+                .split(',')
+                .map(str::trim)
+                .filter(|part| !part.is_empty())
+                .map(str::to_owned)
+                .collect()
+        })
+        .unwrap_or_else(|| allowed.iter().map(|name| (*name).to_owned()).collect());
+    for name in &requested {
+        assert!(
+            allowed.contains(&name.as_str()),
+            "unknown {env_name} value '{name}'"
+        );
+    }
+    let selected: Vec<_> = allowed
+        .iter()
+        .filter(|name| requested.contains(**name))
+        .map(|name| (*name).to_owned())
+        .collect();
+    assert!(!selected.is_empty(), "{env_name} selected no cases");
+    selected
+}
+
 fn main() {
+    const BACKENDS: [&str; 5] = [
+        "arctic",
+        "ordered-arctic",
+        "mutex-btree",
+        "ordered-mutex-btree",
+        "valkey",
+    ];
+    const WORKLOADS: [&str; 3] = ["read-only", "read-90-write-10", "write-only"];
+
     let keys_count = env_usize("ARCTIC_BENCH_KEYS", 10_000);
     let operations_per_thread = env_usize("ARCTIC_BENCH_OPS_PER_THREAD", 10_000);
     let thread_counts = thread_counts();
+    let backends = selected_names("ARCTIC_BENCH_BACKENDS", &BACKENDS);
+    let workload_names = selected_names("ARCTIC_BENCH_WORKLOADS", &WORKLOADS);
+    let selected_backends: BTreeSet<_> = backends.iter().map(String::as_str).collect();
     let repetitions = env_usize("ARCTIC_BENCH_REPETITIONS", 3);
     let keys = make_keys(keys_count);
-    let engine = Engine::spawn();
-    let workloads = [
-        Workload::ReadOnly,
-        Workload::Read90Write10,
-        Workload::WriteOnly,
-    ];
+    let engine = selected_backends.contains("valkey").then(Engine::spawn);
+    let workloads = workload_names
+        .iter()
+        .map(|name| Workload::from_name(name))
+        .collect::<Vec<_>>();
     let mut results = Vec::new();
 
-    println!("backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms");
+    println!(
+        "backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms"
+    );
     for workload in workloads {
         for &threads in &thread_counts {
             for repetition in 0..repetitions {
@@ -630,6 +741,9 @@ fn main() {
                 };
                 let mut cases = Vec::with_capacity(order.len());
                 for backend in order {
+                    if !selected_backends.contains(BACKENDS[backend]) {
+                        continue;
+                    }
                     cases.push(match backend {
                         0 => run_arctic(workload, threads, operations_per_thread, keys.clone()),
                         1 => run_ordered_arctic(
@@ -648,7 +762,7 @@ fn main() {
                             keys.clone(),
                         ),
                         _ => run_valkey(
-                            engine.addr,
+                            engine.as_ref().expect("Valkey backend has an engine"),
                             workload,
                             threads,
                             operations_per_thread,
@@ -659,7 +773,7 @@ fn main() {
                 for mut result in cases {
                     result.repetition = repetition;
                     println!(
-                        "{},{},{},{},{:.0},{},{},{:.3}",
+                        "{},{},{},{},{:.0},{},{},{:.3},{:.3},{:.3}",
                         result.backend,
                         result.workload,
                         result.threads,
@@ -668,6 +782,8 @@ fn main() {
                         result.latency_p50_ns,
                         result.latency_p99_ns,
                         result.elapsed_ms,
+                        result.process_cpu_ms,
+                        result.engine_cpu_ms,
                     );
                     results.push(result);
                 }
@@ -680,12 +796,17 @@ fn main() {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_secs(),
+        label: std::env::var("ARCTIC_BENCH_LABEL").unwrap_or_else(|_| "unlabelled".into()),
+        generation_strategy: generation_strategy(),
         architecture: std::env::consts::ARCH,
         available_parallelism: thread::available_parallelism().map_or(1, usize::from),
+        process_max_rss_kb: process_max_rss_kb(),
         config: Config {
             keys: keys_count,
             operations_per_thread,
             thread_counts,
+            backends,
+            workloads: workload_names,
             repetitions,
             latency_sample_every: SAMPLE_EVERY,
             value_bytes: VALUE.len(),

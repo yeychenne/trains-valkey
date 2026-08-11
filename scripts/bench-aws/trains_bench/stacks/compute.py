@@ -21,6 +21,8 @@ from constructs import Construct
 
 from trains_bench.stacks.network import TrainsBenchNetworkStack
 
+# Defaults preserve the existing small-cluster chaos environment. app.py
+# selects a one-node C7g configuration only when -c perfMode=true is supplied.
 MAX_NODES = 5
 # Bumped from 3 to 5 on 2026-06-25 — the bench infra was already N-agnostic
 # (see `e5-run.sh` which reads `MaxNodes` from cdk-outputs.json and the
@@ -56,6 +58,11 @@ class TrainsBenchComputeStack(cdk.Stack):
         construct_id: str,
         *,
         network: TrainsBenchNetworkStack,
+        max_nodes: int = MAX_NODES,
+        instance_type: ec2.InstanceType = INSTANCE_TYPE,
+        availability_zones: list[str] = AZS,
+        perf_mode: bool = False,
+        max_run_hours: int = 6,
         **kwargs,
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -145,10 +152,13 @@ class TrainsBenchComputeStack(cdk.Stack):
 
         # ── User data — minimal setup; coordinator delivers the binary ─────
         user_data = ec2.UserData.for_linux()
-        user_data.add_commands(
-            "yum install -y awscli",
-            "mkdir -p /opt/trains",
-        )
+        user_data.add_commands("yum install -y awscli", "mkdir -p /opt/trains")
+        if perf_mode:
+            user_data.add_commands(
+                "yum install -y git gcc gcc-c++ make cmake perl jq sysstat || true",
+                # This is a second containment layer after the launcher teardown.
+                f"shutdown -h +{max_run_hours * 60}",
+            )
 
         # ── Provision MAX_NODES instances, round-robin across AZs ──────────
         # Filter subnets to the AZs in our allowlist (e.g. drop eu-west-3b if
@@ -158,24 +168,26 @@ class TrainsBenchComputeStack(cdk.Stack):
         all_subnets = network.vpc.select_subnets(
             subnet_type=ec2.SubnetType.PUBLIC
         ).subnets
-        subnet_list = [s for s in all_subnets if s.availability_zone in AZS]
+        subnet_list = [
+            s for s in all_subnets if s.availability_zone in availability_zones
+        ]
         if not subnet_list:
             raise RuntimeError(
-                f"No PUBLIC subnets in allowed AZs {AZS}; "
+                f"No PUBLIC subnets in allowed AZs {availability_zones}; "
                 f"VPC has {[s.availability_zone for s in all_subnets]}"
             )
 
         self.instance_ids: list[str] = []
         self.private_ips: list[str] = []
 
-        for i in range(MAX_NODES):
+        for i in range(max_nodes):
             az_idx = i % len(subnet_list)
             subnet = subnet_list[az_idx]
 
             inst = ec2.Instance(
                 self,
                 f"Node{i:02d}",
-                instance_type=INSTANCE_TYPE,
+                instance_type=instance_type,
                 machine_image=ami,
                 vpc=network.vpc,
                 vpc_subnets=ec2.SubnetSelection(subnets=[subnet]),
@@ -191,6 +203,11 @@ class TrainsBenchComputeStack(cdk.Stack):
             # uses role directly, but we also need the CfnInstanceProfile
             # dependency for SSM to recognise the instance).
             inst.node.add_dependency(instance_profile)
+            cdk.Tags.of(inst).add(
+                "Experiment", "arctic-ec2-a1" if perf_mode else "trains-ring"
+            )
+            if perf_mode:
+                cdk.Tags.of(inst).add("MaxRunHours", str(max_run_hours))
 
             cdk.CfnOutput(
                 self,
@@ -212,5 +229,11 @@ class TrainsBenchComputeStack(cdk.Stack):
             export_name="TrainsBench-BucketName",
         )
         cdk.CfnOutput(
-            self, "MaxNodes", value=str(MAX_NODES), export_name="TrainsBench-MaxNodes"
+            self, "MaxNodes", value=str(max_nodes), export_name="TrainsBench-MaxNodes"
+        )
+        cdk.CfnOutput(
+            self,
+            "PerfMode",
+            value=str(perf_mode).lower(),
+            export_name="TrainsBench-PerfMode",
         )

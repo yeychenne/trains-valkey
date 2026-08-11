@@ -5,9 +5,9 @@ Valkey engine while TRAINS provides the replicated total order. It is outside
 the production workspace because Arctic 0.1.3 uses Rust edition 2024 while the
 production workspace retains its Rust 1.78 minimum.
 
-The experiment is correctness-only. The current proxy serializes store access,
-so these results must not be presented as evidence of Arctic's concurrent
-throughput.
+The experiment combines correctness gates with bounded local data-plane
+measurements. The production proxy still serializes store access, so these
+results must not be presented as end-to-end TRAINS throughput.
 
 The single-region service contract, composition invariants, refinement map,
 durability assumptions, and pre-performance decision gate are recorded in
@@ -93,3 +93,30 @@ cargo run --release --bin data-plane-bench
 The 2026-08-11 result records a bounded GO for interface performance work, not
 a production switch. See
 `../../bench/results/arctic-ordered-data-plane-2026-08-11.md`.
+
+## ArcSwap candidate and EC2-A1 gate
+
+The default ordered store uses `ArcSwap` for generation publication. Point
+reads hold a cheap generation guard while snapshot replacement atomically
+publishes a fully built generation. Build with `--features rwlock-generation`
+to recover the committed-style `RwLock` generation baseline for an A/B run.
+
+The EC2-A1 launcher provisions one ARM64 `c7g.2xlarge`, verifies the live
+regional price against a 60 USD ceiling, pins the source commit and Rust 1.95.0,
+runs both correctness suites, alternates seven benchmark rounds, collects the
+raw JSON and report, and destroys the stack. User data also shuts the instance
+down after six hours. Run from the repository root:
+
+```sh
+AWS_PROFILE=devops-admin \
+MAX_BUDGET_USD=60 \
+./scripts/bench-aws/arctic-ec2-a1.sh all
+```
+
+The architecture-matched gate is at least 1.5x `ordered-mutex-btree` throughput
+at eight threads for read-only and 90/10 traffic, with no more than a 15%
+write-only regression. Valkey is an endpoint reference because it additionally
+includes RESP, loopback networking, and a process boundary.
+
+Cross-node linearizable reads, durability after all nodes restart, full Valkey
+compatibility, and multi-region operation remain outside this phase's claim.

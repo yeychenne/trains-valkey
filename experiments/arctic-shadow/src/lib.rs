@@ -1,8 +1,12 @@
+#[cfg(not(feature = "rwlock-generation"))]
+use arc_swap::ArcSwap;
 use arctic::key::{BoxedSlice, NonNull, Slice};
 use arctic::{ConcurrentMap, Order};
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+#[cfg(feature = "rwlock-generation")]
+use std::sync::RwLock;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Arc, RwLock};
 use trains_valkey::{Command, RedisStore, Reply, SnapshotError};
 
 type ArcticKey = BoxedSlice<NonNull>;
@@ -55,6 +59,20 @@ impl ConcurrentArcticStore {
         }
     }
 
+    fn exists(&self, keys: &[&[u8]]) -> Reply {
+        let mut present = 0i64;
+        for key in keys {
+            let key = match Self::key(key) {
+                Ok(key) => key,
+                Err(reply) => return reply,
+            };
+            if self.data.get(key).is_some() {
+                present += 1;
+            }
+        }
+        Reply::Integer(present)
+    }
+
     pub fn remove(&self, key: &[u8]) -> Result<bool, Reply> {
         let key = Self::key(key)?;
         let removed = self.data.remove(key).is_some();
@@ -96,6 +114,77 @@ impl Default for StoreGeneration {
     }
 }
 
+#[cfg(not(feature = "rwlock-generation"))]
+struct GenerationCell(ArcSwap<StoreGeneration>);
+
+#[cfg(feature = "rwlock-generation")]
+struct GenerationCell(RwLock<StoreGeneration>);
+
+impl GenerationCell {
+    fn new() -> Self {
+        #[cfg(not(feature = "rwlock-generation"))]
+        {
+            Self(ArcSwap::from_pointee(StoreGeneration::default()))
+        }
+        #[cfg(feature = "rwlock-generation")]
+        {
+            Self(RwLock::new(StoreGeneration::default()))
+        }
+    }
+
+    fn with<R>(&self, inspect: impl FnOnce(&StoreGeneration) -> R) -> R {
+        #[cfg(not(feature = "rwlock-generation"))]
+        {
+            let generation = self.0.load();
+            inspect(&generation)
+        }
+        #[cfg(feature = "rwlock-generation")]
+        {
+            let generation = self.0.read().expect("Arctic generation lock poisoned");
+            let snapshot = StoreGeneration {
+                epoch: generation.epoch,
+                data: Arc::clone(&generation.data),
+            };
+            drop(generation);
+            inspect(&snapshot)
+        }
+    }
+
+    fn load_owned(&self) -> Arc<StoreGeneration> {
+        #[cfg(not(feature = "rwlock-generation"))]
+        {
+            self.0.load_full()
+        }
+        #[cfg(feature = "rwlock-generation")]
+        {
+            let generation = self.0.read().expect("Arctic generation lock poisoned");
+            Arc::new(StoreGeneration {
+                epoch: generation.epoch,
+                data: Arc::clone(&generation.data),
+            })
+        }
+    }
+
+    fn replace(&self, generation: StoreGeneration) {
+        #[cfg(not(feature = "rwlock-generation"))]
+        {
+            self.0.store(Arc::new(generation));
+        }
+        #[cfg(feature = "rwlock-generation")]
+        {
+            *self.0.write().expect("Arctic generation lock poisoned") = generation;
+        }
+    }
+}
+
+pub const fn generation_strategy() -> &'static str {
+    if cfg!(feature = "rwlock-generation") {
+        "rwlock"
+    } else {
+        "arc-swap"
+    }
+}
+
 /// A pinned local Arctic generation.
 ///
 /// Snapshot replacement never mutates a generation in place. An in-flight
@@ -103,65 +192,57 @@ impl Default for StoreGeneration {
 /// sees the fully built replacement.
 #[derive(Clone)]
 pub struct ArcticReadView {
-    epoch: u64,
-    data: Arc<ConcurrentArcticStore>,
+    generation: Arc<StoreGeneration>,
 }
 
 impl ArcticReadView {
     pub fn epoch(&self) -> u64 {
-        self.epoch
+        self.generation.epoch
     }
 
     pub fn get(&self, key: &[u8]) -> Reply {
-        self.data.get(key)
+        self.generation.data.get(key)
     }
 
     pub fn exists(&self, keys: &[&[u8]]) -> Reply {
-        let mut present = 0i64;
-        for key in keys {
-            let key = match ConcurrentArcticStore::key(key) {
-                Ok(key) => key,
-                Err(reply) => return reply,
-            };
-            if self.data.data.get(key).is_some() {
-                present += 1;
-            }
-        }
-        Reply::Integer(present)
+        self.generation.data.exists(keys)
     }
 
     /// Diagnostic ordered view. It is stable across generation replacement;
     /// callers must still exclude point mutations when they need a snapshot cut.
     pub fn snapshot_sorted(&self) -> Vec<(Vec<u8>, Vec<u8>)> {
-        self.data.snapshot_sorted()
+        self.generation.data.snapshot_sorted()
     }
 }
 
 /// Cloneable point-read handle for the concurrent data plane.
 #[derive(Clone)]
 pub struct SharedArcticReader {
-    generation: Arc<RwLock<StoreGeneration>>,
+    generation: Arc<GenerationCell>,
 }
 
 impl SharedArcticReader {
     pub fn pin(&self) -> ArcticReadView {
-        let generation = self
-            .generation
-            .read()
-            .expect("Arctic generation lock poisoned");
         ArcticReadView {
-            epoch: generation.epoch,
-            data: Arc::clone(&generation.data),
+            generation: self.generation.load_owned(),
         }
+    }
+
+    pub fn get(&self, key: &[u8]) -> Reply {
+        self.generation.with(|generation| generation.data.get(key))
+    }
+
+    pub fn exists(&self, key: &[u8]) -> Reply {
+        self.generation
+            .with(|generation| generation.data.exists(&[key]))
     }
 
     /// Concurrent point reads only. `DBSIZE` remains on the ordered side
     /// because a separate cardinality counter has a mutation visibility window.
     pub fn query(&self, cmd: &Command) -> Reply {
-        let view = self.pin();
         match cmd.name.as_str() {
             "GET" => match cmd.arg(1) {
-                Some(key) => view.get(key),
+                Some(key) => self.get(key),
                 None => Reply::error("ERR wrong number of arguments for 'get' command"),
             },
             "EXISTS" => {
@@ -174,7 +255,7 @@ impl SharedArcticReader {
                 let Some(key) = cmd.arg(1) else {
                     return Reply::error("ERR wrong number of arguments for 'exists' command");
                 };
-                view.exists(&[key])
+                self.exists(key)
             }
             "DBSIZE" => Reply::error("ERR DBSIZE requires the ordered Arctic writer"),
             other => Reply::error(format!(
@@ -190,13 +271,13 @@ impl SharedArcticReader {
 /// `&mut self`. TRAINS' delivery driver can therefore remain the sole writer
 /// while RESP tasks clone [`SharedArcticReader`] for local point reads.
 pub struct OrderedArcticStore {
-    generation: Arc<RwLock<StoreGeneration>>,
+    generation: Arc<GenerationCell>,
 }
 
 impl Default for OrderedArcticStore {
     fn default() -> Self {
         Self {
-            generation: Arc::new(RwLock::new(StoreGeneration::default())),
+            generation: Arc::new(GenerationCell::new()),
         }
     }
 }
@@ -212,12 +293,9 @@ impl OrderedArcticStore {
         }
     }
 
-    fn current(&self) -> ArcticReadView {
-        self.reader().pin()
-    }
-
     pub fn snapshot_sorted(&self) -> Vec<(Vec<u8>, Vec<u8>)> {
-        self.current().snapshot_sorted()
+        self.generation
+            .with(|generation| generation.data.snapshot_sorted())
     }
 }
 
@@ -226,8 +304,7 @@ pub type ArcticStore = OrderedArcticStore;
 
 impl RedisStore for OrderedArcticStore {
     fn apply(&mut self, cmd: &Command) -> Reply {
-        let current = self.current();
-        match cmd.name.as_str() {
+        self.generation.with(|current| match cmd.name.as_str() {
             "SET" => {
                 let (Some(key), Some(value)) = (cmd.arg(1), cmd.arg(2)) else {
                     return Reply::error("ERR wrong number of arguments for 'set' command");
@@ -250,18 +327,22 @@ impl RedisStore for OrderedArcticStore {
                 Reply::Integer(removed)
             }
             other => Reply::error(format!("ERR Arctic shadow does not support '{other}'")),
-        }
+        })
     }
 
     fn query(&self, cmd: &Command) -> Reply {
         if cmd.name == "DBSIZE" {
-            return Reply::Integer(self.current().data.len() as i64);
+            return self
+                .generation
+                .with(|generation| Reply::Integer(generation.data.len() as i64));
         }
         if cmd.name == "EXISTS" && cmd.argv.len() > 2 {
             let keys: Vec<_> = (1..cmd.argv.len())
                 .filter_map(|index| cmd.arg(index))
                 .collect();
-            return self.current().exists(&keys);
+            return self
+                .generation
+                .with(|generation| generation.data.exists(&keys));
         }
         self.reader().query(cmd)
     }
@@ -285,12 +366,14 @@ impl RedisStore for OrderedArcticStore {
                 "snapshot contained an invalid Arctic key"
             );
         }
-        let mut generation = self
+        let epoch = self
             .generation
-            .write()
-            .expect("Arctic generation lock poisoned");
-        generation.epoch += 1;
-        generation.data = Arc::new(replacement);
+            .with(|generation| generation.epoch)
+            .wrapping_add(1);
+        self.generation.replace(StoreGeneration {
+            epoch,
+            data: Arc::new(replacement),
+        });
         Ok(())
     }
 }

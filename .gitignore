@@ -7,6 +7,7 @@ Cargo.lock.bak
 # CDK (synth output + transient deploy outputs)
 scripts/bench-aws/cdk.out/
 scripts/bench-aws/cdk-outputs.json
+scripts/bench-aws/arctic-cdk-outputs.json
 
 # Compiled binaries staged for upload (regenerable via build-linux.sh)
 scripts/bench-aws/dist/
