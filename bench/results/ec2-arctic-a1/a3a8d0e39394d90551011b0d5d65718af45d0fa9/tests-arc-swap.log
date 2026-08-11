@@ -1,0 +1,365 @@
+    Updating crates.io index
+    Updating git repository `https://github.com/yeychenne/trains-rust`
+ Downloading crates ...
+  Downloaded anstyle v1.0.14
+  Downloaded anstyle-parse v1.0.0
+  Downloaded anstream v1.0.0
+  Downloaded allocator-api2 v0.2.21
+  Downloaded aho-corasick v1.1.4
+  Downloaded memoffset v0.9.1
+  Downloaded matchers v0.2.0
+  Downloaded cmake v0.1.58
+  Downloaded darling v0.23.0
+  Downloaded futures-core v0.3.33
+  Downloaded libm v0.2.16
+  Downloaded untrusted v0.7.1
+  Downloaded rand_core v0.10.1
+  Downloaded pem v3.0.6
+  Downloaded pin-project-lite v0.2.17
+  Downloaded yasna v0.5.2
+  Downloaded scopeguard v1.2.0
+  Downloaded untrusted v0.9.0
+  Downloaded zmij v1.0.23
+  Downloaded zerocopy-derive v0.8.55
+  Downloaded tracing-subscriber v0.3.23
+  Downloaded zeroize v1.9.0
+  Downloaded unicode-ident v1.0.24
+  Downloaded zeroize_derive v1.5.0
+  Downloaded thiserror-impl v2.0.19
+  Downloaded rand v0.10.2
+  Downloaded clap_builder v4.6.2
+  Downloaded arctic-map v0.1.3
+  Downloaded syn v3.0.3
+  Downloaded arc-swap v1.9.2
+  Downloaded tracing v0.1.44
+  Downloaded aws-lc-rs v1.17.3
+  Downloaded s2n-quic-core v0.85.0
+  Downloaded mio v1.2.2
+  Downloaded serde_json v1.0.151
+  Downloaded rustls v0.23.42
+  Downloaded regex-syntax v0.8.11
+  Downloaded thiserror v2.0.19
+  Downloaded syn v2.0.119
+  Downloaded smallvec v1.15.2
+  Downloaded s2n-quic-rustls v0.85.0
+  Downloaded portable-atomic v1.14.0
+  Downloaded regex-automata v0.4.16
+  Downloaded typenum v1.20.1
+  Downloaded tokio v1.53.1
+  Downloaded s2n-quic-platform v0.85.0
+  Downloaded base64 v0.22.1
+  Downloaded anyhow v1.0.104
+  Downloaded tracing-attributes v0.1.31
+  Downloaded zerocopy v0.8.55
+  Downloaded libc v0.2.189
+  Downloaded s2n-quic-transport v0.85.0
+  Downloaded proc-macro2 v1.0.107
+  Downloaded getrandom v0.4.3
+  Downloaded futures v0.3.33
+  Downloaded clap_derive v4.6.4
+  Downloaded serde_core v1.0.229
+  Downloaded quote v1.0.47
+  Downloaded nu-ansi-term v0.50.3
+  Downloaded intrusive-collections v0.10.2
+  Downloaded hex v0.4.3
+  Downloaded getrandom v0.2.17
+  Downloaded errno v0.3.14
+  Downloaded digest v0.10.7
+  Downloaded chacha20 v0.10.1
+  Downloaded byteorder v1.5.0
+  Downloaded block-buffer v0.10.4
+  Downloaded version_check v0.9.5
+  Downloaded utf8parse v0.2.2
+  Downloaded unty v0.0.4
+  Downloaded ring v0.17.14
+  Downloaded tracing-log v0.2.0
+  Downloaded strsim v0.11.1
+  Downloaded socket2 v0.5.10
+  Downloaded siphasher v1.0.3
+  Downloaded sha2 v0.10.9
+  Downloaded seize v0.5.1
+  Downloaded s2n-quic v1.85.0
+  Downloaded rustversion v1.0.23
+  Downloaded rcgen v0.13.2
+  Downloaded parking_lot v0.12.5
+  Downloaded num-conv v0.2.2
+  Downloaded hashbrown v0.17.1
+  Downloaded generic-array v0.14.7
+  Downloaded futures-io v0.3.33
+  Downloaded dunce v1.0.5
+  Downloaded clap_lex v1.1.0
+  Downloaded clap v4.6.4
+  Downloaded arbitrary-int v2.1.1
+  Downloaded anstyle-query v1.1.5
+  Downloaded tokio-rustls v0.26.4
+  Downloaded tokio-macros v2.7.1
+  Downloaded time v0.3.54
+  Downloaded thread_local v1.1.10
+  Downloaded subtle v2.6.1
+  Downloaded serde_derive v1.0.229
+  Downloaded s2n-quic-crypto v0.85.0
+  Downloaded memchr v2.8.3
+  Downloaded log v0.4.33
+  Downloaded futures-task v0.3.33
+  Downloaded equivalent v1.0.2
+  Downloaded colorchoice v1.0.5
+  Downloaded cfg-if v1.0.4
+  Downloaded virtue v0.0.18
+  Downloaded socket2 v0.6.5
+  Downloaded slab v0.4.12
+  Downloaded signal-hook-registry v1.4.8
+  Downloaded shlex v2.0.1
+  Downloaded s2n-codec v0.85.0
+  Downloaded sharded-slab v0.1.7
+  Downloaded serde v1.0.229
+  Downloaded ident_case v1.0.1
+  Downloaded tracing-core v0.1.36
+  Downloaded time-core v0.1.9
+  Downloaded heck v0.5.0
+  Downloaded itoa v1.0.18
+  Downloaded futures-sink v0.3.33
+  Downloaded rustls-webpki v0.103.13
+  Downloaded rustls-pemfile v2.2.0
+  Downloaded powerfmt v0.2.0
+  Downloaded lazy_static v1.5.0
+  Downloaded hex-literal v1.1.0
+  Downloaded bincode v2.0.1
+  Downloaded parking_lot_core v0.9.12
+  Downloaded atomic-waker v1.1.2
+  Downloaded foldhash v0.2.0
+  Downloaded deranged v0.5.8
+  Downloaded darling_macro v0.23.0
+  Downloaded cpufeatures v0.2.17
+  Downloaded bincode_derive v2.0.1
+  Downloaded autocfg v1.5.1
+  Downloaded rustls-pki-types v1.15.1
+  Downloaded pkg-config v0.3.33
+  Downloaded once_cell v1.21.4
+  Downloaded num-traits v0.2.19
+  Downloaded num-rational v0.4.2
+  Downloaded num-integer v0.1.46
+  Downloaded lock_api v0.4.14
+  Downloaded is_terminal_polyfill v1.70.2
+  Downloaded futures-macro v0.3.33
+  Downloaded futures-channel v0.3.33
+  Downloaded fs_extra v1.3.0
+  Downloaded find-msvc-tools v0.1.9
+  Downloaded darling_core v0.23.0
+  Downloaded crossbeam-utils v0.8.22
+  Downloaded cc v1.4.0
+  Downloaded bytes v1.12.1
+  Downloaded jobserver v0.1.35
+  Downloaded futures-util v0.3.33
+  Downloaded crypto-common v0.1.7
+  Downloaded ribbit v0.2.1
+  Downloaded ribbit-derive v0.1.0
+  Downloaded aws-lc-sys v0.43.0
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.4
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling autocfg v1.5.1
+   Compiling fs_extra v1.3.0
+   Compiling once_cell v1.21.4
+   Compiling pin-project-lite v0.2.17
+   Compiling dunce v1.0.5
+   Compiling pkg-config v0.3.33
+   Compiling libm v0.2.16
+   Compiling aws-lc-rs v1.17.3
+   Compiling bytes v1.12.1
+   Compiling zerocopy v0.8.55
+   Compiling num-traits v0.2.19
+   Compiling subtle v2.6.1
+   Compiling smallvec v1.15.2
+   Compiling crossbeam-utils v0.8.22
+   Compiling untrusted v0.9.0
+   Compiling parking_lot_core v0.9.12
+   Compiling untrusted v0.7.1
+   Compiling syn v2.0.119
+   Compiling syn v3.0.3
+   Compiling byteorder v1.5.0
+   Compiling version_check v0.9.5
+   Compiling getrandom v0.2.17
+   Compiling jobserver v0.1.35
+   Compiling atomic-waker v1.1.2
+   Compiling scopeguard v1.2.0
+   Compiling generic-array v0.14.7
+   Compiling lazy_static v1.5.0
+   Compiling log v0.4.33
+   Compiling cc v1.4.0
+   Compiling hex-literal v1.1.0
+   Compiling futures-sink v0.3.33
+   Compiling futures-core v0.3.33
+   Compiling memchr v2.8.3
+   Compiling serde_core v1.0.229
+   Compiling futures-channel v0.3.33
+   Compiling lock_api v0.4.14
+   Compiling num-integer v0.1.46
+   Compiling errno v0.3.14
+   Compiling memoffset v0.9.1
+   Compiling cmake v0.1.58
+   Compiling num-rational v0.4.2
+   Compiling typenum v1.20.1
+   Compiling rustls v0.23.42
+   Compiling signal-hook-registry v1.4.8
+   Compiling parking_lot v0.12.5
+   Compiling aws-lc-sys v0.43.0
+   Compiling ring v0.17.14
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.2
+   Compiling slab v0.4.12
+   Compiling rand_core v0.10.1
+   Compiling futures-task v0.3.33
+   Compiling futures-io v0.3.33
+   Compiling zmij v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling serde v1.0.229
+   Compiling serde_derive v1.0.229
+   Compiling tracing-core v0.1.36
+   Compiling time-core v0.1.9
+   Compiling serde_json v1.0.151
+   Compiling heck v0.5.0
+   Compiling allocator-api2 v0.2.21
+   Compiling ident_case v1.0.1
+   Compiling deranged v0.5.8
+   Compiling powerfmt v0.2.0
+   Compiling num-conv v0.2.2
+   Compiling thiserror v2.0.19
+   Compiling strsim v0.11.1
+   Compiling foldhash v0.2.0
+   Compiling equivalent v1.0.2
+   Compiling zeroize_derive v1.5.0
+   Compiling zerocopy-derive v0.8.55
+   Compiling futures-macro v0.3.33
+   Compiling tokio-macros v2.7.1
+   Compiling s2n-quic-platform v0.85.0
+   Compiling zeroize v1.9.0
+   Compiling rustls-pki-types v1.15.1
+   Compiling futures-util v0.3.33
+   Compiling tokio v1.53.1
+   Compiling time v0.3.54
+   Compiling hashbrown v0.17.1
+   Compiling tracing-attributes v0.1.31
+   Compiling darling_core v0.23.0
+   Compiling intrusive-collections v0.10.2
+   Compiling thiserror-impl v2.0.19
+   Compiling chacha20 v0.10.1
+   Compiling futures v0.3.33
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling siphasher v1.0.3
+   Compiling virtue v0.0.18
+   Compiling itoa v1.0.18
+   Compiling utf8parse v0.2.2
+   Compiling base64 v0.22.1
+   Compiling trains-core v0.1.0 (https://github.com/yeychenne/trains-rust?rev=da8c173878ed291a0935389de133313ef75fd132#da8c1738)
+   Compiling pem v3.0.6
+   Compiling bincode_derive v2.0.1
+   Compiling anstyle-parse v1.0.0
+   Compiling darling_macro v0.23.0
+   Compiling digest v0.10.7
+   Compiling rand v0.10.2
+   Compiling s2n-codec v0.85.0
+   Compiling tracing v0.1.44
+   Compiling yasna v0.5.2
+   Compiling cpufeatures v0.2.17
+   Compiling unty v0.0.4
+   Compiling trains-net v0.1.0 (https://github.com/yeychenne/trains-rust?rev=da8c173878ed291a0935389de133313ef75fd132#da8c1738)
+   Compiling s2n-quic-core v0.85.0
+   Compiling regex-syntax v0.8.11
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle v1.0.14
+   Compiling anstyle-query v1.1.5
+   Compiling colorchoice v1.0.5
+   Compiling portable-atomic v1.14.0
+   Compiling anstream v1.0.0
+   Compiling regex-automata v0.4.16
+   Compiling bincode v2.0.1
+   Compiling rcgen v0.13.2
+   Compiling sha2 v0.10.9
+   Compiling darling v0.23.0
+   Compiling rustls-pemfile v2.2.0
+   Compiling socket2 v0.5.10
+   Compiling s2n-quic-transport v0.85.0
+   Compiling clap_lex v1.1.0
+   Compiling hex v0.4.3
+   Compiling anyhow v1.0.104
+   Compiling rustversion v1.0.23
+   Compiling clap_builder v4.6.2
+   Compiling ribbit-derive v0.1.0
+   Compiling matchers v0.2.0
+   Compiling tracing-log v0.2.0
+   Compiling clap_derive v4.6.4
+   Compiling sharded-slab v0.1.7
+   Compiling thread_local v1.1.10
+   Compiling nu-ansi-term v0.50.3
+   Compiling arbitrary-int v2.1.1
+   Compiling tracing-subscriber v0.3.23
+   Compiling clap v4.6.4
+   Compiling ribbit v0.2.1
+   Compiling seize v0.5.1
+   Compiling arc-swap v1.9.2
+   Compiling arctic-map v0.1.3
+   Compiling rustls-webpki v0.103.13
+   Compiling s2n-quic-crypto v0.85.0
+   Compiling s2n-quic-rustls v0.85.0
+   Compiling tokio-rustls v0.26.4
+   Compiling s2n-quic v1.85.0
+   Compiling trains-recovery v0.1.0 (https://github.com/yeychenne/trains-rust?rev=da8c173878ed291a0935389de133313ef75fd132#da8c1738)
+   Compiling trains-valkey v0.1.0 (/opt/trains/source/crates/trains-valkey)
+   Compiling trains-valkey-arctic-shadow v0.1.0 (/opt/trains/source/experiments/arctic-shadow)
+    Finished `release` profile [optimized] target(s) in 53.66s
+     Running unittests src/lib.rs (target/release/deps/trains_valkey_arctic_shadow-4de3b30fe1e7de69)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/data-plane-bench.rs (target/release/deps/data_plane_bench-5bfea3d9187d3837)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/concurrent_store.rs (target/release/deps/concurrent_store-f8144ce216aa9e36)
+
+running 3 tests
+test concurrent_arctic_store_handles_shared_reads_writes_and_removes ... ok
+test snapshot_install_atomically_replaces_the_reader_generation ... ok
+test ordered_writer_and_shared_readers_make_progress_together ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/deterministic_faults.rs (target/release/deps/deterministic_faults-19b6a682e97a2a84)
+
+running 1 test
+test deterministic_fault_schedules_preserve_mirrored_state_across_victim_rotation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/differential_manifest.rs (target/release/deps/differential_manifest-d5c60fe694424bbf)
+
+running 1 test
+test seeded_command_manifest_matches_valkey_and_arctic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/shadow_valkey.rs (target/release/deps/shadow_valkey-932e361ea7a71e52)
+
+running 5 tests
+test duplicate_delivery_applies_to_valkey_and_arctic_once ... ok
+test arctic_point_commands_and_snapshot_match_valkey ... ok
+test passive_rejoiner_imports_mirrored_snapshot_and_tails_live_writes ... ok
+test trains_three_node_arctic_shadow_matches_valkey ... ok
+test live_crash_rejoin_promote_restores_mirrored_full_view ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.69s
+
+   Doc-tests trains_valkey_arctic_shadow
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

@@ -1,0 +1,53 @@
+   Compiling trains-valkey-arctic-shadow v0.1.0 (/opt/trains/source/experiments/arctic-shadow)
+    Finished `release` profile [optimized] target(s) in 5.34s
+     Running unittests src/lib.rs (target/release/deps/trains_valkey_arctic_shadow-d1b190b15ca207b1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/data-plane-bench.rs (target/release/deps/data_plane_bench-15048a293c32fe1b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/concurrent_store.rs (target/release/deps/concurrent_store-20720f254cbc2c0b)
+
+running 3 tests
+test snapshot_install_atomically_replaces_the_reader_generation ... ok
+test concurrent_arctic_store_handles_shared_reads_writes_and_removes ... ok
+test ordered_writer_and_shared_readers_make_progress_together ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/deterministic_faults.rs (target/release/deps/deterministic_faults-22ca3a269fadb5e8)
+
+running 1 test
+test deterministic_fault_schedules_preserve_mirrored_state_across_victim_rotation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/differential_manifest.rs (target/release/deps/differential_manifest-de0c18c1762e8a5d)
+
+running 1 test
+test seeded_command_manifest_matches_valkey_and_arctic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/shadow_valkey.rs (target/release/deps/shadow_valkey-de4f81a404dc9896)
+
+running 5 tests
+test duplicate_delivery_applies_to_valkey_and_arctic_once ... ok
+test arctic_point_commands_and_snapshot_match_valkey ... ok
+test passive_rejoiner_imports_mirrored_snapshot_and_tails_live_writes ... ok
+test trains_three_node_arctic_shadow_matches_valkey ... ok
+test live_crash_rejoin_promote_restores_mirrored_full_view ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.60s
+
+   Doc-tests trains_valkey_arctic_shadow
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

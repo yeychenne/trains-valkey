@@ -1,0 +1,338 @@
+{
+  "ratios": {
+    "read-only": 18.07375500005473,
+    "read-90-write-10": 2.930109831125306,
+    "write-only": 0.9630453976944043
+  },
+  "gates": {
+    "read": true,
+    "mixed": true,
+    "write": true
+  },
+  "median_process_max_rss_kb": {
+    "arc-swap": 43560,
+    "rwlock": 42920
+  },
+  "ordered_rows": [
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-arctic",
+      "workload": "read-90-write-10",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 748558.360436336,
+      "throughput_mad_ratio": 0.013493397145615335,
+      "median_p99_ns": 8712,
+      "median_process_cpu_ms": 1460.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-arctic",
+      "workload": "read-90-write-10",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 3397525.1745424834,
+      "throughput_mad_ratio": 0.009620060044626497,
+      "median_p99_ns": 19906,
+      "median_process_cpu_ms": 8160.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-arctic",
+      "workload": "read-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 2494210.6875730744,
+      "throughput_mad_ratio": 0.028184655009688243,
+      "median_p99_ns": 765,
+      "median_process_cpu_ms": 400.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-arctic",
+      "workload": "read-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 21980436.44442526,
+      "throughput_mad_ratio": 0.018238620774754428,
+      "median_p99_ns": 588,
+      "median_process_cpu_ms": 2780.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-arctic",
+      "workload": "write-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 115475.97956659978,
+      "throughput_mad_ratio": 0.013538146503462516,
+      "median_p99_ns": 11840,
+      "median_process_cpu_ms": 9740.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-arctic",
+      "workload": "write-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 333995.06821529596,
+      "throughput_mad_ratio": 0.003978551919780979,
+      "median_p99_ns": 73518,
+      "median_process_cpu_ms": 45980.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-90-write-10",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 727962.520733146,
+      "throughput_mad_ratio": 0.022990821949260925,
+      "median_p99_ns": 9101,
+      "median_process_cpu_ms": 1480.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-90-write-10",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 1159521.441296167,
+      "throughput_mad_ratio": 0.010162185963422285,
+      "median_p99_ns": 47967,
+      "median_process_cpu_ms": 29980.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 2107368.6809643935,
+      "throughput_mad_ratio": 0.021189560253904928,
+      "median_p99_ns": 800,
+      "median_process_cpu_ms": 480.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 1216152.1744849754,
+      "throughput_mad_ratio": 0.007164521441903948,
+      "median_p99_ns": 32415,
+      "median_process_cpu_ms": 36210.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-mutex-btree",
+      "workload": "write-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 116959.80389647227,
+      "throughput_mad_ratio": 0.009847600835780514,
+      "median_p99_ns": 9101,
+      "median_process_cpu_ms": 9680.0
+    },
+    {
+      "strategy": "arc-swap",
+      "backend": "ordered-mutex-btree",
+      "workload": "write-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 346811.34348900133,
+      "throughput_mad_ratio": 0.008215290656028556,
+      "median_p99_ns": 24561,
+      "median_process_cpu_ms": 45250.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-arctic",
+      "workload": "read-90-write-10",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 740723.4950517237,
+      "throughput_mad_ratio": 0.009640886297864555,
+      "median_p99_ns": 8696,
+      "median_process_cpu_ms": 1480.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-arctic",
+      "workload": "read-90-write-10",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 3183619.0941806897,
+      "throughput_mad_ratio": 0.008035230378438077,
+      "median_p99_ns": 20424,
+      "median_process_cpu_ms": 8940.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-arctic",
+      "workload": "read-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 2652931.2600944364,
+      "throughput_mad_ratio": 0.012251580348958591,
+      "median_p99_ns": 749,
+      "median_process_cpu_ms": 380.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-arctic",
+      "workload": "read-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 6969963.009752873,
+      "throughput_mad_ratio": 0.017732497217678223,
+      "median_p99_ns": 1669,
+      "median_process_cpu_ms": 9110.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-arctic",
+      "workload": "write-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 114878.9437684354,
+      "throughput_mad_ratio": 0.009331617559661505,
+      "median_p99_ns": 11818,
+      "median_process_cpu_ms": 9830.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-arctic",
+      "workload": "write-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 333223.8957887508,
+      "throughput_mad_ratio": 0.007550992570052897,
+      "median_p99_ns": 75278,
+      "median_process_cpu_ms": 46060.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-90-write-10",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 711148.059456475,
+      "throughput_mad_ratio": 0.004773633352809602,
+      "median_p99_ns": 9049,
+      "median_process_cpu_ms": 1510.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-90-write-10",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 1161590.9003947182,
+      "throughput_mad_ratio": 0.016783203854573756,
+      "median_p99_ns": 45656,
+      "median_process_cpu_ms": 30770.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 2107413.385046448,
+      "throughput_mad_ratio": 0.016808594483368893,
+      "median_p99_ns": 804,
+      "median_process_cpu_ms": 480.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-mutex-btree",
+      "workload": "read-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 1213118.9309414169,
+      "throughput_mad_ratio": 0.023265103428163503,
+      "median_p99_ns": 30903,
+      "median_process_cpu_ms": 36920.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-mutex-btree",
+      "workload": "write-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 118418.99909343649,
+      "throughput_mad_ratio": 0.009407734674638896,
+      "median_p99_ns": 8936,
+      "median_process_cpu_ms": 9590.0
+    },
+    {
+      "strategy": "rwlock",
+      "backend": "ordered-mutex-btree",
+      "workload": "write-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 345462.2069222258,
+      "throughput_mad_ratio": 0.0026364177940987753,
+      "median_p99_ns": 24708,
+      "median_process_cpu_ms": 45130.0
+    }
+  ],
+  "valkey": [
+    {
+      "workload": "read-90-write-10",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 60013.637446161265,
+      "median_p99_ns": 18056,
+      "median_process_cpu_ms": 2030.0,
+      "median_engine_cpu_ms": 2590.0
+    },
+    {
+      "workload": "read-90-write-10",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 154480.41271566055,
+      "median_p99_ns": 67223,
+      "median_process_cpu_ms": 12900.0,
+      "median_engine_cpu_ms": 12940.0
+    },
+    {
+      "workload": "read-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 60482.84704679557,
+      "median_p99_ns": 17548,
+      "median_process_cpu_ms": 2010.0,
+      "median_engine_cpu_ms": 2580.0
+    },
+    {
+      "workload": "read-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 156257.14762919818,
+      "median_p99_ns": 65350,
+      "median_process_cpu_ms": 12830.0,
+      "median_engine_cpu_ms": 12800.0
+    },
+    {
+      "workload": "write-only",
+      "threads": 1,
+      "samples": 7,
+      "median_ops_per_second": 58875.245635325766,
+      "median_p99_ns": 17649,
+      "median_process_cpu_ms": 2020.0,
+      "median_engine_cpu_ms": 2680.0
+    },
+    {
+      "workload": "write-only",
+      "threads": 8,
+      "samples": 7,
+      "median_ops_per_second": 149664.06032729585,
+      "median_p99_ns": 69475,
+      "median_process_cpu_ms": 13010.0,
+      "median_engine_cpu_ms": 13370.0
+    }
+  ]
+}

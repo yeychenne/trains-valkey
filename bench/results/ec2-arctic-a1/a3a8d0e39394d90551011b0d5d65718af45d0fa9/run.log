@@ -1,0 +1,764 @@
+=== Wait for host initialization ===
+....................................................................................................
+status: done
+Last metadata expiration check: 0:00:21 ago on Tue Aug 11 15:57:12 2026.
+Package git-2.50.1-1.amzn2023.0.1.aarch64 is already installed.
+Package gcc-11.5.0-5.amzn2023.0.5.aarch64 is already installed.
+Package gcc-c++-11.5.0-5.amzn2023.0.5.aarch64 is already installed.
+Package make-1:4.3-5.amzn2023.0.2.aarch64 is already installed.
+Package cmake-3.22.2-1.amzn2023.0.6.aarch64 is already installed.
+Package perl-4:5.32.1-477.amzn2023.0.9.aarch64 is already installed.
+Package jq-1.8.1-60.amzn2023.aarch64 is already installed.
+Package sysstat-12.5.6-1.amzn2023.0.3.aarch64 is already installed.
+Package tar-2:1.34-1.amzn2023.0.4.aarch64 is already installed.
+Package gzip-1.12-1.amzn2023.0.1.aarch64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+Last metadata expiration check: 0:00:21 ago on Tue Aug 11 15:57:12 2026.
+Dependencies resolved.
+================================================================================
+ Package      Architecture  Version                     Repository         Size
+================================================================================
+Installing:
+ valkey       aarch64       9.0.5-1.amzn2023.0.1        amazonlinux       1.7 M
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Total download size: 1.7 M
+Installed size: 6.1 M
+Downloading Packages:
+valkey-9.0.5-1.amzn2023.0.1.aarch64.rpm          23 MB/s | 1.7 MB     00:00
+--------------------------------------------------------------------------------
+Total                                            13 MB/s | 1.7 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                        1/1
+  Running scriptlet: valkey-9.0.5-1.amzn2023.0.1.aarch64                    1/1
+  Installing       : valkey-9.0.5-1.amzn2023.0.1.aarch64                    1/1
+  Running scriptlet: valkey-9.0.5-1.amzn2023.0.1.aarch64                    1/1
+  Verifying        : valkey-9.0.5-1.amzn2023.0.1.aarch64                    1/1
+
+Installed:
+  valkey-9.0.5-1.amzn2023.0.1.aarch64
+
+Complete!
+=== Install pinned Rust toolchain ===
+info: downloading installer
+warn: It looks like you have an existing rustup settings file at:
+warn: /root/.rustup/settings.toml
+warn: Rustup will install the default toolchain as specified in the settings file,
+warn: instead of the one inferred from the default host triple.
+info: profile set to minimal
+info: default host triple is aarch64-unknown-linux-gnu
+info: syncing channel updates for 1.95.0-aarch64-unknown-linux-gnu
+info: latest update on 2026-04-16 for version 1.95.0 (59807616e 2026-04-14)
+info: downloading 3 components
+info: default toolchain set to 1.95.0-aarch64-unknown-linux-gnu
+
+  1.95.0-aarch64-unknown-linux-gnu installed - rustc 1.95.0 (59807616e 2026-04-14)
+
+
+Rust is installed now. Great!
+
+To get started you may need to restart your current shell.
+This would reload your PATH environment variable to include
+Cargo's bin directory ($HOME/.cargo/bin).
+
+To configure your current shell, you need to source
+the corresponding env file under $HOME/.cargo.
+
+This is usually done by running one of the following (note the leading DOT):
+. "$HOME/.cargo/env"            # For sh/bash/zsh/ash/dash/pdksh
+source "$HOME/.cargo/env.fish"  # For fish
+source "~/.cargo/env.nu"  # For nushell
+source "$HOME/.cargo/env.tcsh"  # For tcsh
+. "$HOME/.cargo/env.ps1"        # For pwsh
+source "$HOME/.cargo/env.xsh"   # For xonsh
+info: syncing channel updates for 1.95.0-aarch64-unknown-linux-gnu
+
+  1.95.0-aarch64-unknown-linux-gnu unchanged - rustc 1.95.0 (59807616e 2026-04-14)
+
+info: checking for self-update (current version: 1.29.0)
+info: using existing install for 1.95.0-aarch64-unknown-linux-gnu
+info: default toolchain set to 1.95.0-aarch64-unknown-linux-gnu
+
+  1.95.0-aarch64-unknown-linux-gnu unchanged - rustc 1.95.0 (59807616e 2026-04-14)
+
+=== Check out immutable candidate ===
+Cloning into '/opt/trains/source'...
+HEAD is now at a3a8d0e experiment: add ArcSwap AWS validation gate
+=== Capture host and source identity ===
+=== Correctness gate: ArcSwap and committed-style RwLock ===
+    Updating crates.io index
+    Updating git repository `https://github.com/yeychenne/trains-rust`
+ Downloading crates ...
+  Downloaded anstyle v1.0.14
+  Downloaded anstyle-parse v1.0.0
+  Downloaded anstream v1.0.0
+  Downloaded allocator-api2 v0.2.21
+  Downloaded aho-corasick v1.1.4
+  Downloaded memoffset v0.9.1
+  Downloaded matchers v0.2.0
+  Downloaded cmake v0.1.58
+  Downloaded darling v0.23.0
+  Downloaded futures-core v0.3.33
+  Downloaded libm v0.2.16
+  Downloaded untrusted v0.7.1
+  Downloaded rand_core v0.10.1
+  Downloaded pem v3.0.6
+  Downloaded pin-project-lite v0.2.17
+  Downloaded yasna v0.5.2
+  Downloaded scopeguard v1.2.0
+  Downloaded untrusted v0.9.0
+  Downloaded zmij v1.0.23
+  Downloaded zerocopy-derive v0.8.55
+  Downloaded tracing-subscriber v0.3.23
+  Downloaded zeroize v1.9.0
+  Downloaded unicode-ident v1.0.24
+  Downloaded zeroize_derive v1.5.0
+  Downloaded thiserror-impl v2.0.19
+  Downloaded rand v0.10.2
+  Downloaded clap_builder v4.6.2
+  Downloaded arctic-map v0.1.3
+  Downloaded syn v3.0.3
+  Downloaded arc-swap v1.9.2
+  Downloaded tracing v0.1.44
+  Downloaded aws-lc-rs v1.17.3
+  Downloaded s2n-quic-core v0.85.0
+  Downloaded mio v1.2.2
+  Downloaded serde_json v1.0.151
+  Downloaded rustls v0.23.42
+  Downloaded regex-syntax v0.8.11
+  Downloaded thiserror v2.0.19
+  Downloaded syn v2.0.119
+  Downloaded smallvec v1.15.2
+  Downloaded s2n-quic-rustls v0.85.0
+  Downloaded portable-atomic v1.14.0
+  Downloaded regex-automata v0.4.16
+  Downloaded typenum v1.20.1
+  Downloaded tokio v1.53.1
+  Downloaded s2n-quic-platform v0.85.0
+  Downloaded base64 v0.22.1
+  Downloaded anyhow v1.0.104
+  Downloaded tracing-attributes v0.1.31
+  Downloaded zerocopy v0.8.55
+  Downloaded libc v0.2.189
+  Downloaded s2n-quic-transport v0.85.0
+  Downloaded proc-macro2 v1.0.107
+  Downloaded getrandom v0.4.3
+  Downloaded futures v0.3.33
+  Downloaded clap_derive v4.6.4
+  Downloaded serde_core v1.0.229
+  Downloaded quote v1.0.47
+  Downloaded nu-ansi-term v0.50.3
+  Downloaded intrusive-collections v0.10.2
+  Downloaded hex v0.4.3
+  Downloaded getrandom v0.2.17
+  Downloaded errno v0.3.14
+  Downloaded digest v0.10.7
+  Downloaded chacha20 v0.10.1
+  Downloaded byteorder v1.5.0
+  Downloaded block-buffer v0.10.4
+  Downloaded version_check v0.9.5
+  Downloaded utf8parse v0.2.2
+  Downloaded unty v0.0.4
+  Downloaded ring v0.17.14
+  Downloaded tracing-log v0.2.0
+  Downloaded strsim v0.11.1
+  Downloaded socket2 v0.5.10
+  Downloaded siphasher v1.0.3
+  Downloaded sha2 v0.10.9
+  Downloaded seize v0.5.1
+  Downloaded s2n-quic v1.85.0
+  Downloaded rustversion v1.0.23
+  Downloaded rcgen v0.13.2
+  Downloaded parking_lot v0.12.5
+  Downloaded num-conv v0.2.2
+  Downloaded hashbrown v0.17.1
+  Downloaded generic-array v0.14.7
+  Downloaded futures-io v0.3.33
+  Downloaded dunce v1.0.5
+  Downloaded clap_lex v1.1.0
+  Downloaded clap v4.6.4
+  Downloaded arbitrary-int v2.1.1
+  Downloaded anstyle-query v1.1.5
+  Downloaded tokio-rustls v0.26.4
+  Downloaded tokio-macros v2.7.1
+  Downloaded time v0.3.54
+  Downloaded thread_local v1.1.10
+  Downloaded subtle v2.6.1
+  Downloaded serde_derive v1.0.229
+  Downloaded s2n-quic-crypto v0.85.0
+  Downloaded memchr v2.8.3
+  Downloaded log v0.4.33
+  Downloaded futures-task v0.3.33
+  Downloaded equivalent v1.0.2
+  Downloaded colorchoice v1.0.5
+  Downloaded cfg-if v1.0.4
+  Downloaded virtue v0.0.18
+  Downloaded socket2 v0.6.5
+  Downloaded slab v0.4.12
+  Downloaded signal-hook-registry v1.4.8
+  Downloaded shlex v2.0.1
+  Downloaded s2n-codec v0.85.0
+  Downloaded sharded-slab v0.1.7
+  Downloaded serde v1.0.229
+  Downloaded ident_case v1.0.1
+  Downloaded tracing-core v0.1.36
+  Downloaded time-core v0.1.9
+  Downloaded heck v0.5.0
+  Downloaded itoa v1.0.18
+  Downloaded futures-sink v0.3.33
+  Downloaded rustls-webpki v0.103.13
+  Downloaded rustls-pemfile v2.2.0
+  Downloaded powerfmt v0.2.0
+  Downloaded lazy_static v1.5.0
+  Downloaded hex-literal v1.1.0
+  Downloaded bincode v2.0.1
+  Downloaded parking_lot_core v0.9.12
+  Downloaded atomic-waker v1.1.2
+  Downloaded foldhash v0.2.0
+  Downloaded deranged v0.5.8
+  Downloaded darling_macro v0.23.0
+  Downloaded cpufeatures v0.2.17
+  Downloaded bincode_derive v2.0.1
+  Downloaded autocfg v1.5.1
+  Downloaded rustls-pki-types v1.15.1
+  Downloaded pkg-config v0.3.33
+  Downloaded once_cell v1.21.4
+  Downloaded num-traits v0.2.19
+  Downloaded num-rational v0.4.2
+  Downloaded num-integer v0.1.46
+  Downloaded lock_api v0.4.14
+  Downloaded is_terminal_polyfill v1.70.2
+  Downloaded futures-macro v0.3.33
+  Downloaded futures-channel v0.3.33
+  Downloaded fs_extra v1.3.0
+  Downloaded find-msvc-tools v0.1.9
+  Downloaded darling_core v0.23.0
+  Downloaded crossbeam-utils v0.8.22
+  Downloaded cc v1.4.0
+  Downloaded bytes v1.12.1
+  Downloaded jobserver v0.1.35
+  Downloaded futures-util v0.3.33
+  Downloaded crypto-common v0.1.7
+  Downloaded ribbit v0.2.1
+  Downloaded ribbit-derive v0.1.0
+  Downloaded aws-lc-sys v0.43.0
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.4
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling autocfg v1.5.1
+   Compiling fs_extra v1.3.0
+   Compiling once_cell v1.21.4
+   Compiling pin-project-lite v0.2.17
+   Compiling dunce v1.0.5
+   Compiling pkg-config v0.3.33
+   Compiling libm v0.2.16
+   Compiling aws-lc-rs v1.17.3
+   Compiling bytes v1.12.1
+   Compiling zerocopy v0.8.55
+   Compiling num-traits v0.2.19
+   Compiling subtle v2.6.1
+   Compiling smallvec v1.15.2
+   Compiling crossbeam-utils v0.8.22
+   Compiling untrusted v0.9.0
+   Compiling parking_lot_core v0.9.12
+   Compiling untrusted v0.7.1
+   Compiling syn v2.0.119
+   Compiling syn v3.0.3
+   Compiling byteorder v1.5.0
+   Compiling version_check v0.9.5
+   Compiling getrandom v0.2.17
+   Compiling jobserver v0.1.35
+   Compiling atomic-waker v1.1.2
+   Compiling scopeguard v1.2.0
+   Compiling generic-array v0.14.7
+   Compiling lazy_static v1.5.0
+   Compiling log v0.4.33
+   Compiling cc v1.4.0
+   Compiling hex-literal v1.1.0
+   Compiling futures-sink v0.3.33
+   Compiling futures-core v0.3.33
+   Compiling memchr v2.8.3
+   Compiling serde_core v1.0.229
+   Compiling futures-channel v0.3.33
+   Compiling lock_api v0.4.14
+   Compiling num-integer v0.1.46
+   Compiling errno v0.3.14
+   Compiling memoffset v0.9.1
+   Compiling cmake v0.1.58
+   Compiling num-rational v0.4.2
+   Compiling typenum v1.20.1
+   Compiling rustls v0.23.42
+   Compiling signal-hook-registry v1.4.8
+   Compiling parking_lot v0.12.5
+   Compiling aws-lc-sys v0.43.0
+   Compiling ring v0.17.14
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.2
+   Compiling slab v0.4.12
+   Compiling rand_core v0.10.1
+   Compiling futures-task v0.3.33
+   Compiling futures-io v0.3.33
+   Compiling zmij v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling serde v1.0.229
+   Compiling serde_derive v1.0.229
+   Compiling tracing-core v0.1.36
+   Compiling time-core v0.1.9
+   Compiling serde_json v1.0.151
+   Compiling heck v0.5.0
+   Compiling allocator-api2 v0.2.21
+   Compiling ident_case v1.0.1
+   Compiling deranged v0.5.8
+   Compiling powerfmt v0.2.0
+   Compiling num-conv v0.2.2
+   Compiling thiserror v2.0.19
+   Compiling strsim v0.11.1
+   Compiling foldhash v0.2.0
+   Compiling equivalent v1.0.2
+   Compiling zeroize_derive v1.5.0
+   Compiling zerocopy-derive v0.8.55
+   Compiling futures-macro v0.3.33
+   Compiling tokio-macros v2.7.1
+   Compiling s2n-quic-platform v0.85.0
+   Compiling zeroize v1.9.0
+   Compiling rustls-pki-types v1.15.1
+   Compiling futures-util v0.3.33
+   Compiling tokio v1.53.1
+   Compiling time v0.3.54
+   Compiling hashbrown v0.17.1
+   Compiling tracing-attributes v0.1.31
+   Compiling darling_core v0.23.0
+   Compiling intrusive-collections v0.10.2
+   Compiling thiserror-impl v2.0.19
+   Compiling chacha20 v0.10.1
+   Compiling futures v0.3.33
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling siphasher v1.0.3
+   Compiling virtue v0.0.18
+   Compiling itoa v1.0.18
+   Compiling utf8parse v0.2.2
+   Compiling base64 v0.22.1
+   Compiling trains-core v0.1.0 (https://github.com/yeychenne/trains-rust?rev=da8c173878ed291a0935389de133313ef75fd132#da8c1738)
+   Compiling pem v3.0.6
+   Compiling bincode_derive v2.0.1
+   Compiling anstyle-parse v1.0.0
+   Compiling darling_macro v0.23.0
+   Compiling digest v0.10.7
+   Compiling rand v0.10.2
+   Compiling s2n-codec v0.85.0
+   Compiling tracing v0.1.44
+   Compiling yasna v0.5.2
+   Compiling cpufeatures v0.2.17
+   Compiling unty v0.0.4
+   Compiling trains-net v0.1.0 (https://github.com/yeychenne/trains-rust?rev=da8c173878ed291a0935389de133313ef75fd132#da8c1738)
+   Compiling s2n-quic-core v0.85.0
+   Compiling regex-syntax v0.8.11
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle v1.0.14
+   Compiling anstyle-query v1.1.5
+   Compiling colorchoice v1.0.5
+   Compiling portable-atomic v1.14.0
+   Compiling anstream v1.0.0
+   Compiling regex-automata v0.4.16
+   Compiling bincode v2.0.1
+   Compiling rcgen v0.13.2
+   Compiling sha2 v0.10.9
+   Compiling darling v0.23.0
+   Compiling rustls-pemfile v2.2.0
+   Compiling socket2 v0.5.10
+   Compiling s2n-quic-transport v0.85.0
+   Compiling clap_lex v1.1.0
+   Compiling hex v0.4.3
+   Compiling anyhow v1.0.104
+   Compiling rustversion v1.0.23
+   Compiling clap_builder v4.6.2
+   Compiling ribbit-derive v0.1.0
+   Compiling matchers v0.2.0
+   Compiling tracing-log v0.2.0
+   Compiling clap_derive v4.6.4
+   Compiling sharded-slab v0.1.7
+   Compiling thread_local v1.1.10
+   Compiling nu-ansi-term v0.50.3
+   Compiling arbitrary-int v2.1.1
+   Compiling tracing-subscriber v0.3.23
+   Compiling clap v4.6.4
+   Compiling ribbit v0.2.1
+   Compiling seize v0.5.1
+   Compiling arc-swap v1.9.2
+   Compiling arctic-map v0.1.3
+   Compiling rustls-webpki v0.103.13
+   Compiling s2n-quic-crypto v0.85.0
+   Compiling s2n-quic-rustls v0.85.0
+   Compiling tokio-rustls v0.26.4
+   Compiling s2n-quic v1.85.0
+   Compiling trains-recovery v0.1.0 (https://github.com/yeychenne/trains-rust?rev=da8c173878ed291a0935389de133313ef75fd132#da8c1738)
+   Compiling trains-valkey v0.1.0 (/opt/trains/source/crates/trains-valkey)
+   Compiling trains-valkey-arctic-shadow v0.1.0 (/opt/trains/source/experiments/arctic-shadow)
+    Finished `release` profile [optimized] target(s) in 53.66s
+     Running unittests src/lib.rs (target/release/deps/trains_valkey_arctic_shadow-4de3b30fe1e7de69)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/data-plane-bench.rs (target/release/deps/data_plane_bench-5bfea3d9187d3837)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/concurrent_store.rs (target/release/deps/concurrent_store-f8144ce216aa9e36)
+
+running 3 tests
+test concurrent_arctic_store_handles_shared_reads_writes_and_removes ... ok
+test snapshot_install_atomically_replaces_the_reader_generation ... ok
+test ordered_writer_and_shared_readers_make_progress_together ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/deterministic_faults.rs (target/release/deps/deterministic_faults-19b6a682e97a2a84)
+
+running 1 test
+test deterministic_fault_schedules_preserve_mirrored_state_across_victim_rotation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/differential_manifest.rs (target/release/deps/differential_manifest-d5c60fe694424bbf)
+
+running 1 test
+test seeded_command_manifest_matches_valkey_and_arctic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/shadow_valkey.rs (target/release/deps/shadow_valkey-932e361ea7a71e52)
+
+running 5 tests
+test duplicate_delivery_applies_to_valkey_and_arctic_once ... ok
+test arctic_point_commands_and_snapshot_match_valkey ... ok
+test passive_rejoiner_imports_mirrored_snapshot_and_tails_live_writes ... ok
+test trains_three_node_arctic_shadow_matches_valkey ... ok
+test live_crash_rejoin_promote_restores_mirrored_full_view ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.69s
+
+   Doc-tests trains_valkey_arctic_shadow
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling trains-valkey-arctic-shadow v0.1.0 (/opt/trains/source/experiments/arctic-shadow)
+    Finished `release` profile [optimized] target(s) in 5.34s
+     Running unittests src/lib.rs (target/release/deps/trains_valkey_arctic_shadow-d1b190b15ca207b1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/data-plane-bench.rs (target/release/deps/data_plane_bench-15048a293c32fe1b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/concurrent_store.rs (target/release/deps/concurrent_store-20720f254cbc2c0b)
+
+running 3 tests
+test snapshot_install_atomically_replaces_the_reader_generation ... ok
+test concurrent_arctic_store_handles_shared_reads_writes_and_removes ... ok
+test ordered_writer_and_shared_readers_make_progress_together ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/deterministic_faults.rs (target/release/deps/deterministic_faults-22ca3a269fadb5e8)
+
+running 1 test
+test deterministic_fault_schedules_preserve_mirrored_state_across_victim_rotation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/differential_manifest.rs (target/release/deps/differential_manifest-de0c18c1762e8a5d)
+
+running 1 test
+test seeded_command_manifest_matches_valkey_and_arctic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/shadow_valkey.rs (target/release/deps/shadow_valkey-de4f81a404dc9896)
+
+running 5 tests
+test duplicate_delivery_applies_to_valkey_and_arctic_once ... ok
+test arctic_point_commands_and_snapshot_match_valkey ... ok
+test passive_rejoiner_imports_mirrored_snapshot_and_tails_live_writes ... ok
+test trains_three_node_arctic_shadow_matches_valkey ... ok
+test live_crash_rejoin_promote_restores_mirrored_full_view ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.60s
+
+   Doc-tests trains_valkey_arctic_shadow
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+=== Build and fingerprint both candidates ===
+    Finished `release` profile [optimized] target(s) in 0.08s
+    Finished `release` profile [optimized] target(s) in 0.08s
+=== Warm both binaries (not recorded) ===
+=== Seven interleaved A/B rounds ===
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2702688,384,758,370.002,370.000,0.000
+ordered-mutex-btree,read-only,1,0,2148080,494,792,465.532,470.000,0.000
+ordered-arctic,read-only,8,0,22381329,371,579,357.441,2770.000,0.000
+ordered-mutex-btree,read-only,8,0,1214229,4635,30243,6588.544,36600.000,0.000
+ordered-arctic,read-90-write-10,1,0,748304,624,8753,1336.355,1460.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,703299,695,9184,1421.871,1530.000,0.000
+ordered-arctic,read-90-write-10,8,0,3355134,546,19887,2384.406,8190.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1157234,5158,48012,6913.035,29950.000,0.000
+ordered-arctic,write-only,1,0,117311,8762,12082,8524.376,9600.000,0.000
+ordered-mutex-btree,write-only,1,0,114920,8729,9185,8701.739,9810.000,0.000
+ordered-arctic,write-only,8,0,335228,22268,74773,23864.383,46020.000,0.000
+ordered-mutex-btree,write-only,8,0,346811,23000,24561,23067.296,45250.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-1.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2623867,404,712,381.117,380.000,0.000
+ordered-mutex-btree,read-only,1,0,2142836,499,792,466.671,470.000,0.000
+ordered-arctic,read-only,8,0,7260270,1091,1473,1101.887,8750.000,0.000
+ordered-mutex-btree,read-only,8,0,1184896,4517,33360,6751.650,36920.000,0.000
+ordered-arctic,read-90-write-10,1,0,740723,675,8504,1350.031,1470.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,713073,704,8928,1402.381,1510.000,0.000
+ordered-arctic,read-90-write-10,8,0,3167429,750,20193,2525.707,9680.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1137351,4367,47623,7033.890,30650.000,0.000
+ordered-arctic,write-only,1,0,113791,9040,12281,8788.056,9890.000,0.000
+ordered-mutex-btree,write-only,1,0,120468,8338,8797,8300.928,9590.000,0.000
+ordered-arctic,write-only,8,0,333224,22273,79378,24007.882,46060.000,0.000
+ordered-mutex-btree,write-only,8,0,345395,23086,24708,23161.911,45130.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-1.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2507595,423,768,398.788,400.000,0.000
+ordered-mutex-btree,read-only,1,0,2082574,509,830,480.175,480.000,0.000
+ordered-arctic,read-only,8,0,7061825,1103,1707,1132.852,8910.000,0.000
+ordered-mutex-btree,read-only,8,0,1181115,4179,37868,6773.262,34540.000,0.000
+ordered-arctic,read-90-write-10,1,0,720611,696,8696,1387.711,1510.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,714543,698,8955,1399.496,1510.000,0.000
+ordered-arctic,read-90-write-10,8,0,3175650,727,20161,2519.169,9430.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1142096,4596,45656,7004.667,31750.000,0.000
+ordered-arctic,write-only,1,0,117847,8667,11818,8485.612,9750.000,0.000
+ordered-mutex-btree,write-only,1,0,119570,8400,8902,8363.309,9580.000,0.000
+ordered-arctic,write-only,8,0,331181,22442,76052,24156.007,46240.000,0.000
+ordered-mutex-btree,write-only,8,0,347433,22964,24496,23026.008,44680.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-2.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2351677,445,822,425.228,420.000,0.000
+ordered-mutex-btree,read-only,1,0,2181194,491,780,458.465,450.000,0.000
+ordered-arctic,read-only,8,0,21575669,373,588,370.788,2780.000,0.000
+ordered-mutex-btree,read-only,8,0,1214510,4534,30848,6587.017,35730.000,0.000
+ordered-arctic,read-90-write-10,1,0,764770,635,8412,1307.583,1420.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,744699,642,8775,1342.824,1460.000,0.000
+ordered-arctic,read-90-write-10,8,0,3430210,530,19712,2332.219,8040.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1153575,4962,47494,6934.965,30510.000,0.000
+ordered-arctic,write-only,1,0,116787,8869,11840,8562.561,9650.000,0.000
+ordered-mutex-btree,write-only,1,0,116960,8596,9101,8549.946,9690.000,0.000
+ordered-arctic,write-only,8,0,327598,22686,72920,24420.207,46620.000,0.000
+ordered-mutex-btree,write-only,8,0,330950,24077,25971,24172.822,46590.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-2.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2537060,409,781,394.157,390.000,0.000
+ordered-mutex-btree,read-only,1,0,2194239,489,775,455.739,450.000,0.000
+ordered-arctic,read-only,8,0,6932249,1144,1669,1154.027,9170.000,0.000
+ordered-mutex-btree,read-only,8,0,1204184,4776,29783,6643.503,38600.000,0.000
+ordered-arctic,read-90-write-10,1,0,746356,634,8695,1339.844,1460.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,706527,706,9049,1415.373,1530.000,0.000
+ordered-arctic,read-90-write-10,8,0,3239102,638,20303,2469.820,8790.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1187862,4295,44858,6734.791,30940.000,0.000
+ordered-arctic,write-only,1,0,114729,8909,11556,8716.202,9910.000,0.000
+ordered-mutex-btree,write-only,1,0,118397,8478,8999,8446.185,9660.000,0.000
+ordered-arctic,write-only,8,0,336670,22148,75278,23762.110,45670.000,0.000
+ordered-mutex-btree,write-only,8,0,336639,23689,25249,23764.307,46000.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-3.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2423912,434,797,412.556,410.000,0.000
+ordered-mutex-btree,read-only,1,0,2177426,490,769,459.258,460.000,0.000
+ordered-arctic,read-only,8,0,21491458,379,633,372.241,2880.000,0.000
+ordered-mutex-btree,read-only,8,0,1216152,4337,35427,6578.124,34860.000,0.000
+ordered-arctic,read-90-write-10,1,0,738458,676,8683,1354.174,1480.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,727963,636,9101,1373.697,1480.000,0.000
+ordered-arctic,read-90-write-10,8,0,3329869,529,20630,2402.497,8130.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1159521,4723,47967,6899.398,29980.000,0.000
+ordered-arctic,write-only,1,0,115476,8771,13095,8659.810,9740.000,0.000
+ordered-mutex-btree,write-only,1,0,120214,8363,8934,8318.484,9450.000,0.000
+ordered-arctic,write-only,8,0,335324,22238,73518,23857.531,45780.000,0.000
+ordered-mutex-btree,write-only,8,0,347707,22947,24434,23007.877,45010.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-3.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2517865,418,755,397.162,390.000,0.000
+ordered-mutex-btree,read-only,1,0,2062714,520,823,484.798,480.000,0.000
+ordered-arctic,read-only,8,0,21827800,376,593,366.505,2820.000,0.000
+ordered-mutex-btree,read-only,8,0,1224865,4332,32877,6531.330,34910.000,0.000
+ordered-arctic,read-90-write-10,1,0,773264,614,8563,1293.219,1400.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,741897,667,8657,1347.896,1460.000,0.000
+ordered-arctic,read-90-write-10,8,0,3397525,528,20031,2354.655,8070.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1171305,4831,46507,6829.990,29870.000,0.000
+ordered-arctic,write-only,1,0,113913,8985,12228,8778.656,9840.000,0.000
+ordered-mutex-btree,write-only,1,0,116109,8675,9155,8612.606,9680.000,0.000
+ordered-arctic,write-only,8,0,333995,22324,70258,23952.449,45980.000,0.000
+ordered-mutex-btree,write-only,8,0,343177,23238,24825,23311.577,45470.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-4.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2739770,385,705,364.994,360.000,0.000
+ordered-mutex-btree,read-only,1,0,2027539,527,836,493.209,490.000,0.000
+ordered-arctic,read-only,8,0,6252223,1271,1728,1279.545,10200.000,0.000
+ordered-mutex-btree,read-only,8,0,1258357,4107,32501,6357.497,33740.000,0.000
+ordered-arctic,read-90-write-10,1,0,712670,678,8973,1403.174,1510.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,691546,695,9474,1446.036,1560.000,0.000
+ordered-arctic,read-90-write-10,8,0,3210873,654,20424,2491.534,8880.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1180480,4566,45067,6776.902,30600.000,0.000
+ordered-arctic,write-only,1,0,116620,8766,11516,8574.879,9830.000,0.000
+ordered-mutex-btree,write-only,1,0,118419,8474,8928,8444.591,9570.000,0.000
+ordered-arctic,write-only,8,0,329027,22647,73844,24314.114,46300.000,0.000
+ordered-mutex-btree,write-only,8,0,346357,23036,24580,23097.523,44970.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-4.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2427918,438,765,411.875,400.000,0.000
+ordered-mutex-btree,read-only,1,0,2098286,506,800,476.579,490.000,0.000
+ordered-arctic,read-only,8,0,21980436,375,596,363.960,2810.000,0.000
+ordered-mutex-btree,read-only,8,0,1227579,4511,32415,6516.894,36210.000,0.000
+ordered-arctic,read-90-write-10,1,0,748558,631,8728,1335.901,1470.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,707472,682,9171,1413.483,1520.000,0.000
+ordered-arctic,read-90-write-10,8,0,3360966,555,19906,2380.268,8250.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1132853,5144,51215,7061.815,30280.000,0.000
+ordered-arctic,write-only,1,0,115367,8882,11594,8667.980,9790.000,0.000
+ordered-mutex-btree,write-only,1,0,115808,8674,9169,8634.980,9790.000,0.000
+ordered-arctic,write-only,8,0,333477,22286,76885,23989.635,45900.000,0.000
+ordered-mutex-btree,write-only,8,0,328474,24256,26169,24355.045,46470.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-5.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2685434,391,728,372.379,370.000,0.000
+ordered-mutex-btree,read-only,1,0,2107413,507,804,474.515,480.000,0.000
+ordered-arctic,read-only,8,0,6178941,1278,1716,1294.720,10240.000,0.000
+ordered-mutex-btree,read-only,8,0,1242574,4339,30903,6438.250,35660.000,0.000
+ordered-arctic,read-90-write-10,1,0,733582,673,8816,1363.174,1490.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,711148,669,9300,1406.177,1510.000,0.000
+ordered-arctic,read-90-write-10,8,0,3209200,663,20468,2492.833,8940.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1169551,4337,45300,6840.235,30770.000,0.000
+ordered-arctic,write-only,1,0,115951,8846,12001,8624.336,9830.000,0.000
+ordered-mutex-btree,write-only,1,0,117305,8558,9004,8524.790,9640.000,0.000
+ordered-arctic,write-only,8,0,329868,22543,79221,24252.139,46760.000,0.000
+ordered-mutex-btree,write-only,8,0,345462,23085,24839,23157.381,45220.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-5.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2679628,390,749,373.186,370.000,0.000
+ordered-mutex-btree,read-only,1,0,2082545,510,806,480.182,480.000,0.000
+ordered-arctic,read-only,8,0,6969963,1130,1619,1147.782,9110.000,0.000
+ordered-mutex-btree,read-only,8,0,1226571,4774,28476,6522.250,38350.000,0.000
+ordered-arctic,read-90-write-10,1,0,749082,629,8669,1334.968,1440.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,708754,686,9208,1410.927,1520.000,0.000
+ordered-arctic,read-90-write-10,8,0,3082665,655,21781,2595.157,8970.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1132093,4926,47337,7066.558,31430.000,0.000
+ordered-arctic,write-only,1,0,114031,8981,11680,8769.528,9940.000,0.000
+ordered-mutex-btree,write-only,1,0,117200,8573,9030,8532.414,9590.000,0.000
+ordered-arctic,write-only,8,0,335740,22193,72943,23827.957,45710.000,0.000
+ordered-mutex-btree,write-only,8,0,346373,23046,24620,23096.489,45040.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-6.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2612554,405,726,382.767,380.000,0.000
+ordered-mutex-btree,read-only,1,0,2035531,527,831,491.272,490.000,0.000
+ordered-arctic,read-only,8,0,22389860,370,570,357.305,2750.000,0.000
+ordered-mutex-btree,read-only,8,0,1225288,4623,30867,6529.077,37000.000,0.000
+ordered-arctic,read-90-write-10,1,0,754497,610,8740,1325.387,1440.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,696421,688,9348,1435.912,1540.000,0.000
+ordered-arctic,read-90-write-10,8,0,3410936,548,19685,2345.397,8170.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1180327,4683,48607,6777.780,29480.000,0.000
+ordered-arctic,write-only,1,0,113599,9066,11689,8802.901,9850.000,0.000
+ordered-mutex-btree,write-only,1,0,119595,8390,8832,8361.529,9540.000,0.000
+ordered-arctic,write-only,8,0,324379,22908,79665,24662.479,46900.000,0.000
+ordered-mutex-btree,write-only,8,0,347594,22952,24407,23015.390,44800.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-6.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2652931,394,757,376.942,380.000,0.000
+ordered-mutex-btree,read-only,1,0,2230443,477,757,448.341,460.000,0.000
+ordered-arctic,read-only,8,0,7093558,1122,1445,1127.784,8980.000,0.000
+ordered-mutex-btree,read-only,8,0,1213119,4830,29272,6594.572,38720.000,0.000
+ordered-arctic,read-90-write-10,1,0,744211,638,8762,1343.705,1480.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,729956,661,8939,1369.946,1500.000,0.000
+ordered-arctic,read-90-write-10,8,0,3183619,657,20697,2512.863,8920.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1161591,4586,47066,6887.106,30610.000,0.000
+ordered-arctic,write-only,1,0,114879,8900,12146,8704.815,9790.000,0.000
+ordered-mutex-btree,write-only,1,0,118703,8458,8936,8424.393,9480.000,0.000
+ordered-arctic,write-only,8,0,335434,22257,74730,23849.702,45800.000,0.000
+ordered-mutex-btree,write-only,8,0,339105,23512,25089,23591.546,45790.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/rwlock-round-7.json
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+ordered-arctic,read-only,1,0,2494211,423,765,400.928,400.000,0.000
+ordered-mutex-btree,read-only,1,0,2107369,505,819,474.525,480.000,0.000
+ordered-arctic,read-only,8,0,22041195,374,577,362.957,2780.000,0.000
+ordered-mutex-btree,read-only,8,0,1187866,4709,34559,6734.766,37410.000,0.000
+ordered-arctic,read-90-write-10,1,0,728169,679,8712,1373.307,1490.000,0.000
+ordered-mutex-btree,read-90-write-10,1,0,734983,645,8902,1360.575,1470.000,0.000
+ordered-arctic,read-90-write-10,8,0,3419411,548,19961,2339.584,8160.000,0.000
+ordered-mutex-btree,read-90-write-10,8,0,1171620,4825,44793,6828.155,31000.000,0.000
+ordered-arctic,write-only,1,0,118355,8730,11807,8449.183,9560.000,0.000
+ordered-mutex-btree,write-only,1,0,117999,8513,8985,8474.634,9650.000,0.000
+ordered-arctic,write-only,8,0,335758,22193,73045,23826.716,45950.000,0.000
+ordered-mutex-btree,write-only,8,0,349660,22807,24336,22879.336,44820.000,0.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/arc-swap-round-7.json
+=== Valkey endpoint reference ===
+backend,workload,threads,repetition,ops_per_sec,p50_ns,p99_ns,elapsed_ms,process_cpu_ms,engine_cpu_ms
+valkey,read-only,1,0,59522,16801,17608,4200.153,2060.000,2580.000
+valkey,read-only,1,1,59608,16780,17593,4194.036,2050.000,2580.000
+valkey,read-only,1,2,60883,16429,17340,4106.218,2000.000,2540.000
+valkey,read-only,1,3,61452,16278,17210,4068.198,1960.000,2530.000
+valkey,read-only,1,4,59990,16710,17551,4167.392,2020.000,2580.000
+valkey,read-only,1,5,60483,16539,17472,4133.403,1990.000,2600.000
+valkey,read-only,1,6,60488,16590,17548,4133.053,2010.000,2560.000
+valkey,read-only,8,0,154201,49532,66228,12970.063,12970.000,12960.000
+valkey,read-only,8,1,158019,48304,64831,12656.680,12740.000,12650.000
+valkey,read-only,8,2,157807,48374,64839,12673.696,12810.000,12670.000
+valkey,read-only,8,3,155117,49242,65846,12893.474,12830.000,12890.000
+valkey,read-only,8,4,156185,48914,65350,12805.290,12940.000,12810.000
+valkey,read-only,8,5,156805,48694,65177,12754.659,12690.000,12760.000
+valkey,read-only,8,6,156257,48871,65416,12799.414,12830.000,12800.000
+valkey,read-90-write-10,1,0,60456,16573,18006,4135.254,1980.000,2590.000
+valkey,read-90-write-10,1,1,59784,16740,18063,4181.750,2030.000,2570.000
+valkey,read-90-write-10,1,2,59450,16843,18210,4205.226,2050.000,2610.000
+valkey,read-90-write-10,1,3,60014,16711,18120,4165.720,2030.000,2590.000
+valkey,read-90-write-10,1,4,59707,16763,18056,4187.081,2030.000,2590.000
+valkey,read-90-write-10,1,5,60770,16469,17641,4113.864,2000.000,2560.000
+valkey,read-90-write-10,1,6,61190,16508,17800,4085.654,1970.000,2560.000
+valkey,read-90-write-10,8,0,154480,49669,67340,12946.625,12910.000,12940.000
+valkey,read-90-write-10,8,1,153216,49862,67486,13053.467,12980.000,13050.000
+valkey,read-90-write-10,8,2,156817,48750,65737,12753.703,12750.000,12750.000
+valkey,read-90-write-10,8,3,154214,49514,67657,12968.994,12820.000,12960.000
+valkey,read-90-write-10,8,4,154508,49572,67173,12944.296,12960.000,12940.000
+valkey,read-90-write-10,8,5,154313,49593,67223,12960.704,12900.000,12950.000
+valkey,read-90-write-10,8,6,156243,48902,66186,12800.534,12800.000,12810.000
+valkey,write-only,1,0,60155,16657,17274,4155.959,2000.000,2640.000
+valkey,write-only,1,1,58503,17207,17872,4273.298,2050.000,2680.000
+valkey,write-only,1,2,59559,16822,17649,4197.538,1990.000,2670.000
+valkey,write-only,1,3,59741,16778,17449,4184.722,2000.000,2680.000
+valkey,write-only,1,4,57781,17358,17901,4326.716,2060.000,2710.000
+valkey,write-only,1,5,58875,16984,17614,4246.267,2020.000,2690.000
+valkey,write-only,1,6,58262,17240,17903,4290.968,2060.000,2690.000
+valkey,write-only,8,0,148726,51151,69804,13447.565,13040.000,13450.000
+valkey,write-only,8,1,151183,50313,68828,13229.012,12910.000,13220.000
+valkey,write-only,8,2,149664,50861,69475,13363.262,13010.000,13370.000
+valkey,write-only,8,3,149170,51036,69902,13407.557,13060.000,13400.000
+valkey,write-only,8,4,151704,50126,68728,13183.598,12840.000,13180.000
+valkey,write-only,8,5,149394,50934,69479,13387.383,12940.000,13390.000
+valkey,write-only,8,6,149774,50827,69366,13353.468,13080.000,13360.000
+wrote /opt/trains/results/arctic-ec2-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/valkey.json
+=== Complete ===

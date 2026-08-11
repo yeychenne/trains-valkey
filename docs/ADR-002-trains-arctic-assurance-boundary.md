@@ -235,6 +235,36 @@ interface enter the local proxy and replicated ring for end-to-end measurement.
 
 See `bench/results/arctic-ordered-data-plane-2026-08-11.md` and its raw JSON.
 
+## ArcSwap EC2-A1 Result
+
+The bounded performance gate completed on 2026-08-11 on one AWS
+`c7g.2xlarge` (Graviton3, 8 vCPU, 16 GiB) using Amazon Linux 2023, Rust 1.95.0,
+and Valkey 9.0.5. The exact candidate commit was tested in seven interleaved
+ArcSwap/RwLock rounds with 100,000 keys and 1,000,000 operations per thread.
+Both feature variants passed the full ten-test suite on the measured host.
+
+At eight threads, ArcSwap Arctic delivered 18.07x the ordered-mutex read-only
+throughput, 2.93x for 90/10 traffic, and 0.96x for write-only traffic. Median
+absolute throughput was 21.98, 3.40, and 0.334 million operations per second,
+respectively. Throughput median absolute deviation was below 2% in all three
+ArcSwap cases. Median process high-water RSS was 42.5 MiB for ArcSwap and 41.9
+MiB for the RwLock baseline.
+
+Decision: **GO for feature-flagged local proxy integration and an end-to-end
+single-node proxy benchmark.** This is still not a production data-path switch.
+The eight-thread write-only p99 latency was 73.5 us for Arctic versus 24.6 us
+for the ordered mutex even though the throughput gate passed. The RwLock
+Arctic result has the same latency shape, so queued Arctic mutation latency is
+an explicit next gate rather than an ArcSwap regression.
+
+The AWS stack exposed no inbound public rules, automatically scheduled host
+shutdown after six hours, collected results before destruction, and verified
+that no tagged benchmark instance remained. The live compute price was 0.3434
+USD/hour; the instance existed for about 32 minutes, making compute cost about
+0.18 USD before small storage and request charges.
+
+See `bench/results/ec2-arctic-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/REPORT.md`.
+
 ## References
 
 - Aurora DSQL paper: <https://arxiv.org/pdf/2607.13276>

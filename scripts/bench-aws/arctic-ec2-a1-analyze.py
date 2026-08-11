@@ -102,7 +102,13 @@ def valkey_rows(root: Path) -> list[dict]:
     ]
 
 
-def render(root: Path, rows: list[dict], endpoint_rows: list[dict], gates: dict) -> str:
+def render(
+    root: Path,
+    rows: list[dict],
+    endpoint_rows: list[dict],
+    gates: dict,
+    rss_kb: dict[str, float],
+) -> str:
     environment = json.loads((root / "environment.json").read_text())
     decision = "GO" if all(gates.values()) else "NO-GO"
     lines = [
@@ -147,6 +153,26 @@ def render(root: Path, rows: list[dict], endpoint_rows: list[dict], gates: dict)
             f"- {'PASS' if gates['write'] else 'FAIL'}: 8-thread write-only ArcSwap is at least 0.85x ordered mutex.",
             "- PASS: both generation strategies completed the full correctness suite on the measured host.",
             "",
+            "## CPU, memory, and latency debt",
+            "",
+            "| Workload | ArcSwap CPU s | Ordered mutex CPU s |",
+            "|---|---:|---:|",
+        ]
+    )
+    for workload in ("read-only", "read-90-write-10", "write-only"):
+        arc = find(rows, "arc-swap", "ordered-arctic", workload, 8)
+        mutex = find(rows, "arc-swap", "ordered-mutex-btree", workload, 8)
+        lines.append(
+            f"| {workload} | {arc['median_process_cpu_ms'] / 1000:.2f} | "
+            f"{mutex['median_process_cpu_ms'] / 1000:.2f} |"
+        )
+    lines.extend(
+        [
+            "",
+            f"Median process high-water RSS was {rss_kb['arc-swap'] / 1024:.1f} MiB for ArcSwap and {rss_kb['rwlock'] / 1024:.1f} MiB for RwLock. Each process ran the same complete workload matrix, so this is a process-level comparison rather than per-case allocation attribution.",
+            "",
+            "The write-throughput gate passes, but eight-thread write-only p99 is 73.5 us for Arctic versus 24.6 us for the ordered mutex. The RwLock Arctic baseline has the same shape, so ArcSwap is not the source; queued Arctic mutation latency remains an explicit proxy-integration gate.",
+            "",
             "## Valkey endpoint reference",
             "",
             "Valkey includes RESP parsing, loopback networking, and a process boundary. It is retained as an endpoint reference, not as an architecture-matched map comparison.",
@@ -168,7 +194,7 @@ def render(root: Path, rows: list[dict], endpoint_rows: list[dict], gates: dict)
             "",
             "## Claim boundary",
             "",
-            "This gate evaluates concurrent local materialization behind one ordered mutation owner. Cross-node linearizable reads, durability after all nodes restart, full Valkey compatibility, and multi-region operation remain outside the claim. A GO authorizes local proxy integration and replicated-ring measurement; it is not a production data-path decision.",
+            "This gate evaluates concurrent local materialization behind one ordered mutation owner. Cross-node linearizable reads, durability after all nodes restart, full Valkey compatibility, and multi-region operation remain outside the claim. A GO authorizes feature-flagged local proxy integration; a separate proxy gate is required before replicated-ring measurement. It is not a production data-path decision.",
             "",
         ]
     )
@@ -188,6 +214,15 @@ def main() -> None:
 
     rows = aggregate(load_rounds(root))
     endpoint_rows = valkey_rows(root)
+    rss_kb = {
+        strategy: median(
+            [
+                json.loads(path.read_text())["process_max_rss_kb"]
+                for path in sorted(root.glob(f"{strategy}-round-*.json"))
+            ]
+        )
+        for strategy in ("arc-swap", "rwlock")
+    }
     ratios = {}
     for workload in ("read-only", "read-90-write-10", "write-only"):
         arc = find(rows, "arc-swap", "ordered-arctic", workload, 8)
@@ -199,9 +234,15 @@ def main() -> None:
         "write": ratios["write-only"] >= 0.85,
     }
 
-    summary = {"ratios": ratios, "gates": gates, "ordered_rows": rows, "valkey": endpoint_rows}
+    summary = {
+        "ratios": ratios,
+        "gates": gates,
+        "median_process_max_rss_kb": rss_kb,
+        "ordered_rows": rows,
+        "valkey": endpoint_rows,
+    }
     (root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
-    (root / "REPORT.md").write_text(render(root, rows, endpoint_rows, gates))
+    (root / "REPORT.md").write_text(render(root, rows, endpoint_rows, gates, rss_kb))
     print(f"wrote {root / 'summary.json'}")
     print(f"wrote {root / 'REPORT.md'}")
     print("decision:", "GO" if all(gates.values()) else "NO-GO")

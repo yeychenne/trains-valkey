@@ -1,0 +1,9 @@
+{
+  "git_sha": "a3a8d0e39394d90551011b0d5d65718af45d0fa9",
+  "started_at": "2026-08-11T15:57:42+00:00",
+  "kernel": "Linux ip-10-0-2-221.eu-west-3.compute.internal 6.1.177-224.371.amzn2023.aarch64 #1 SMP Mon Jul 27 20:29:17 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux",
+  "os": "Amazon Linux 2023.12.20260803",
+  "instance_type": "c7g.2xlarge",
+  "engine": "Valkey server v=9.0.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=3be9513dab266553",
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-unknown-linux-gnu\nrelease: 1.95.0\nLLVM version: 22.1.2"
+}

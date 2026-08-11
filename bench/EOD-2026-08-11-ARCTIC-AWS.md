@@ -1,0 +1,57 @@
+# TRAINS + Arctic AWS pause point - 2026-08-11
+
+## Current decision
+
+EC2-A1 is complete: GO for a feature-flagged local proxy integration test, not
+for a production data-path switch. ArcSwap cleared the three established
+throughput gates and both generation variants passed all ten correctness tests
+on ARM64 AWS. The result preserves the existing claim boundary.
+
+The open performance issue is queued write latency. At eight threads, Arctic
+write-only p99 was 73.5 us versus 24.6 us for the architecture-matched ordered
+mutex, despite 0.96x throughput. Do not hide this in an aggregate GO result.
+
+## Next 48 hours
+
+### 0-12 hours: local proxy adapter
+
+- Add a feature-flagged `OrderedArcticStore` adapter behind the local RESP
+  proxy; keep the existing backend as the default.
+- Route only supported `GET` and single-key `EXISTS` through shared readers.
+- Keep mutations, `DBSIZE`, multi-key `EXISTS`, snapshots, and readmission on
+  the ordered owner.
+- Preserve C1-C7 and the current ten-test suite unchanged.
+
+### 12-24 hours: end-to-end local gate
+
+- Add concurrent RESP tests for same-node read-after-ack, snapshot replacement,
+  and writer/read contention.
+- Benchmark feature-off mutex, feature-on Arctic, and unmodified Valkey through
+  the same RESP client path.
+- Reject the AWS phase if any correctness test fails, read-heavy throughput is
+  below 1.5x the feature-off proxy, or write-only p99 exceeds 3x the feature-off
+  proxy without a documented queue explanation.
+
+### 24-42 hours: EC2-A2 proxy run
+
+- Reuse one `c7g.2xlarge` in `eu-west-3c`, seven interleaved rounds, one- and
+  eight-client loads, CPU/RSS telemetry, a six-hour host shutdown, and automatic
+  stack teardown.
+- Measure the real local RESP proxy path; do not include replicated-ring or
+  cross-node-read claims in this run.
+- Keep a 60 USD authorization ceiling. Expected spend remains below 3 USD with
+  the current instance and time limits.
+
+### 42-48 hours: decision and paper evidence
+
+- Publish raw JSON, environment identity, binary hashes, test logs, and a
+  generated report.
+- Decide GO/NO-GO for a three-node replicated-ring benchmark.
+- A GO still excludes cross-node linearizable reads, all-node restart
+  durability, full Valkey compatibility, and multi-region operation.
+
+## Re-entry command
+
+Start by reading the EC2-A1 report and this pause point, then implement only the
+feature-flagged local proxy adapter. Do not begin the EC2-A2 run until the local
+correctness and throughput gates are green.
