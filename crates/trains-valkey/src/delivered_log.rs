@@ -1,4 +1,4 @@
-//! Durable, bounded delivered-effect log (PR-RJ-2b).
+//! Runtime-retained, bounded delivered-effect log (PR-RJ-2b).
 //!
 //! # Why
 //! Rejoin / state transfer (`docs/PLAN-pr-rj-2-readmission-2026-06-15.md`,
@@ -18,13 +18,14 @@
 //! with any other's. That interchangeability is exactly what makes the
 //! single-source contiguous tail in the plan gap-free.
 //!
-//! # Bounding (the "durable" caveat)
+//! # Bounding and durability boundary
 //! The log is a fixed-capacity ring buffer: it retains the most recent [`cap`]
 //! entries and evicts the oldest, so a long-running proxy cannot OOM (the same
-//! discipline as the PR-RED-1 bounded dedup). "Durable" here means *retained for
-//! the run on the survivor* — a survivor stays up, so an in-memory tail suffices
-//! to serve a rejoiner; on-disk persistence across a survivor restart is a later
-//! concern and is intentionally out of scope for PR-RJ-2b. The bound implies a
+//! discipline as the PR-RED-1 bounded dedup). The log is retained only for the
+//! current survivor process; it is not an external durable Journal. At least one
+//! survivor with a complete store and protocol state is required for recovery.
+//! On-disk persistence across simultaneous survivor restart is intentionally
+//! out of scope for PR-RJ-2b. The bound implies a
 //! **maximum coverable downtime gap**: if a rejoiner's snapshot index is older
 //! than [`low_water_index`], the survivor can no longer serve a contiguous tail
 //! ([`can_serve_from`] is `false`) and the caller (PR-RJ-3) must fall back to a
