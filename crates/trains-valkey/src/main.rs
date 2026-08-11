@@ -8,6 +8,8 @@
 
 use std::net::SocketAddr;
 use std::path::PathBuf;
+#[cfg(feature = "arctic-proxy")]
+use std::sync::Arc;
 use std::time::Duration;
 
 use anyhow::{Context, Result};
@@ -17,8 +19,12 @@ use trains_net::{NodeIdentity, RingConfig, SpkiFingerprint};
 use trains_valkey::proxy::{
     run_proxy_node, ClientTlsConfig, ProxyConfig, ProxyHandle, RejoinCfg, SnapshotServerCfg,
 };
+#[cfg(feature = "arctic-proxy")]
+use trains_valkey::proxy::run_proxy_node_with_reader;
 use trains_valkey::store::RedisStore;
 use trains_valkey::{MemStore, RedisBackend};
+#[cfg(feature = "arctic-proxy")]
+use trains_valkey::OrderedArcticStore;
 
 /// Manually clone a [`NodeIdentity`] (it isn't `Clone`): the ring identity is
 /// reused for the state-transfer server and the rejoin fetch identity.
@@ -93,7 +99,8 @@ struct Cli {
     /// startup warning. Mutually exclusive with `--client-identity`.
     #[arg(long, conflicts_with = "client_identity")]
     no_client_tls: bool,
-    /// Storage backend: `mem` (default, in-process model — no engine needed),
+    /// Storage backend: `mem` (default, in-process model - no engine needed),
+    /// `arctic` when compiled with `--features arctic-proxy`,
     /// `redis://HOST:PORT` for a co-located engine over TCP, or
     /// `unix:///path/to/valkey.sock` for the hardened UNIX-domain-socket path
     /// (R-07: Valkey bound to a UDS only, no TCP).
@@ -220,6 +227,15 @@ async fn main() -> Result<()> {
                 .context("starting proxy node (redis UDS backend)")?;
             serve(cli.id, handle, cli.listen, cli.successor).await;
         }
+        #[cfg(feature = "arctic-proxy")]
+        Backend::Arctic => {
+            let store = OrderedArcticStore::new();
+            let reader = Arc::new(store.reader());
+            let handle = run_proxy_node_with_reader(cfg, store, Some(reader))
+                .await
+                .context("starting proxy node (Arctic backend)")?;
+            serve(cli.id, handle, cli.listen, cli.successor).await;
+        }
     }
     Ok(())
 }
@@ -252,13 +268,16 @@ async fn serve<S: RedisStore + Send + 'static>(
 }
 
 /// Selected storage backend.
+#[derive(Debug)]
 enum Backend {
     Mem,
     Redis(SocketAddr),
     RedisUds(PathBuf),
+    #[cfg(feature = "arctic-proxy")]
+    Arctic,
 }
 
-/// Parse `--backend`: `mem`, `redis://HOST:PORT`, or `unix:///path/to.sock`.
+/// Parse the selected materialized-state backend.
 fn parse_backend(s: &str) -> Result<Backend> {
     if s == "mem" {
         return Ok(Backend::Mem);
@@ -269,8 +288,18 @@ fn parse_backend(s: &str) -> Result<Backend> {
         }
         return Ok(Backend::RedisUds(PathBuf::from(path)));
     }
+    if s == "arctic" {
+        #[cfg(feature = "arctic-proxy")]
+        return Ok(Backend::Arctic);
+        #[cfg(not(feature = "arctic-proxy"))]
+        anyhow::bail!(
+            "--backend arctic requires a binary built with --features arctic-proxy"
+        );
+    }
     let addr = s.strip_prefix("redis://").ok_or_else(|| {
-        anyhow::anyhow!("--backend must be 'mem', 'redis://HOST:PORT', or 'unix:///path', got {s}")
+        anyhow::anyhow!(
+            "--backend must be 'mem', 'arctic', 'redis://HOST:PORT', or 'unix:///path', got {s}"
+        )
     })?;
     let addr: SocketAddr = addr
         .parse()
@@ -447,6 +476,19 @@ mod tests {
         }
         assert!(parse_backend("memcached").is_err());
         assert!(parse_backend("redis://not-an-addr").is_err());
+    }
+
+    #[cfg(feature = "arctic-proxy")]
+    #[test]
+    fn backend_parses_arctic_when_feature_is_enabled() {
+        assert!(matches!(parse_backend("arctic").unwrap(), Backend::Arctic));
+    }
+
+    #[cfg(not(feature = "arctic-proxy"))]
+    #[test]
+    fn backend_rejects_arctic_when_feature_is_disabled() {
+        let error = parse_backend("arctic").unwrap_err().to_string();
+        assert!(error.contains("--features arctic-proxy"));
     }
 
     #[test]

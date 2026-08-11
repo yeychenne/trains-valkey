@@ -11,9 +11,25 @@ The open performance issue is queued write latency. At eight threads, Arctic
 write-only p99 was 73.5 us versus 24.6 us for the architecture-matched ordered
 mutex, despite 0.96x throughput. Do not hide this in an aggregate GO result.
 
+## Continuation status
+
+The 0-12 hour local proxy adapter milestone is complete. The binary now selects
+the adapter explicitly with `--backend arctic` when compiled with the
+off-by-default `arctic-proxy` feature. The feature-off suite passes 104 tests;
+the feature-on suite passes 112, including a real three-node RESP/TLS Arctic
+ring test. Clippy passes with warnings denied in both configurations.
+
+The correctness portion of the 12-24 hour gate is also complete: same-node
+read-after-ack, cross-node convergence after quiescence, fast reads while the
+ordered mutex is held, writer/reader contention, and snapshot replacement under
+active RESP reads all pass. The symmetric local throughput/p99 comparison is
+still pending and remains the blocker for EC2-A2.
+
 ## Next 48 hours
 
 ### 0-12 hours: local proxy adapter
+
+Status: **complete**.
 
 - Add a feature-flagged `OrderedArcticStore` adapter behind the local RESP
   proxy; keep the existing backend as the default.
@@ -23,6 +39,8 @@ mutex, despite 0.96x throughput. Do not hide this in an aggregate GO result.
 - Preserve C1-C7 and the current ten-test suite unchanged.
 
 ### 12-24 hours: end-to-end local gate
+
+Status: **correctness complete; performance comparison pending**.
 
 - Add concurrent RESP tests for same-node read-after-ack, snapshot replacement,
   and writer/read contention.

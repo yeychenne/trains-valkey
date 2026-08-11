@@ -80,16 +80,22 @@ pub mod replica;
 pub mod resp;
 pub mod store;
 
+#[cfg(feature = "arctic-proxy")]
+pub mod arctic;
+
 pub use backend::RedisBackend;
 pub use chaos::{run_load, verify, verify_one, AckedWrites, PartialReport, VerifyReport};
 pub use classify::{classify, Class};
 pub use command::{Command, WriteOp};
 pub use delivered_log::{DeliveredEntry, DeliveredLog, DEFAULT_CAP};
 pub use effect::{resolve, Resolution};
-pub use proxy::{run_proxy_node, ProxyConfig, ProxyHandle};
+pub use proxy::{run_proxy_node, run_proxy_node_with_reader, ProxyConfig, ProxyHandle, ReadRouter};
 pub use replica::{
     apply_delivered_op_parts, build_state_transfer_lazy, Applied, ClientOutcome, OriginDedup,
     Replica, ReplicaSnapshot, Stepped, WriteDedup, SNAPSHOT_VERSION,
 };
 pub use resp::{Reply, RespDecoder, RespError};
 pub use store::{MemStore, RedisStore, SnapshotError, StoreEntry};
+
+#[cfg(feature = "arctic-proxy")]
+pub use arctic::{OrderedArcticStore, SharedArcticReader};

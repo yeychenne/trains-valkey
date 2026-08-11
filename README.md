@@ -110,6 +110,20 @@ Total: ~4 h babysat, < $0.50 spend. Per the chaos runbook §7, this is **not** a
 cargo test --workspace --no-fail-fast
 ```
 
+The experimental Arctic proxy backend is opt-in and requires a current Rust
+toolchain because `arctic-map` uses Rust edition 2024:
+
+```bash
+cargo test --workspace --all-targets --features arctic-proxy --locked
+cargo build --release --features arctic-proxy --bin trains-valkey
+# The resulting binary accepts: --backend arctic
+```
+
+With the feature disabled, `--backend arctic` returns an explicit startup
+error. The adapter currently supports the declared `SET`, `GET`, `DEL`,
+`EXISTS`, and `DBSIZE` command subset with NUL-free keys. This is an
+experimental local materialized-state path, not full Valkey compatibility.
+
 `crates/trains-valkey` depends on `trains-core`, `trains-net`, and
 `trains-recovery` from the
 [trains-rust](https://github.com/yeychenne/trains-rust) repo. The

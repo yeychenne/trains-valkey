@@ -265,6 +265,34 @@ USD/hour; the instance existed for about 32 minutes, making compute cost about
 
 See `bench/results/ec2-arctic-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/REPORT.md`.
 
+## Feature-Flagged Proxy Adapter Result
+
+The local proxy adapter gate completed on 2026-08-11. The production crate now
+has an off-by-default `arctic-proxy` feature and an explicit `--backend arctic`
+binary selection. Valid `GET` and single-key `EXISTS` commands use a cloneable
+`SharedArcticReader`; all mutations, malformed reads, `DBSIZE`, multi-key
+`EXISTS`, snapshots, and readmission retain the ordered store path.
+
+The feature-off workspace passed 104 tests and the feature-on workspace passed
+112 tests. The two pre-existing opt-in soak/timing tests remained ignored in
+both configurations. Warning-denied Clippy passed with and without the feature.
+Seven direct adapter tests cover routing, argument errors, ordered aggregate
+reads, atomic generation replacement, snapshot round-trip, and invalid snapshot
+key rejection.
+
+A new end-to-end test runs three Arctic-backed proxy nodes over the real TLS
+TRAINS ring and drives them through RESP. It proves same-node read-after-ack,
+post-quiescence cross-node convergence, mutex-independent point reads, 400
+concurrent point reads during 100 ordered writes, exact final convergence, and
+snapshot replacement while RESP reads remain active.
+
+Decision: **the correctness half of the local proxy gate passes**. The next
+required evidence is the symmetric RESP throughput and p99 comparison between
+the feature-off proxy, feature-on Arctic proxy, and unmodified Valkey. EC2-A2
+must not begin until that local performance gate passes.
+
+See `bench/results/arctic-proxy-integration-2026-08-11.md`.
+
 ## References
 
 - Aurora DSQL paper: <https://arxiv.org/pdf/2607.13276>

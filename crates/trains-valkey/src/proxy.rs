@@ -54,6 +54,20 @@ use crate::replica::{
 use crate::resp::{Reply, RespDecoder};
 use crate::store::{RedisStore, SnapshotError};
 
+/// Optional point-read path that can answer without locking the ordered store.
+pub trait ReadRouter: Send + Sync + 'static {
+    /// Return `Some` when the command was handled, or `None` to use the ordered
+    /// store path. Declining a command never changes its classification.
+    fn try_read(&self, cmd: &Command) -> Option<Reply>;
+}
+
+#[cfg(feature = "arctic-proxy")]
+impl ReadRouter for crate::arctic::SharedArcticReader {
+    fn try_read(&self, cmd: &Command) -> Option<Reply> {
+        self.try_read(cmd)
+    }
+}
+
 const CMD_CHANNEL_CAP: usize = 256;
 const READ_CHUNK: usize = 8 * 1024;
 /// Clock-gap hints required before a crash is confirmed (◇S detector) — matches
@@ -327,6 +341,18 @@ pub async fn run_proxy_node<S>(cfg: ProxyConfig, store: S) -> anyhow::Result<Pro
 where
     S: RedisStore + Send + 'static,
 {
+    run_proxy_node_with_reader(cfg, store, None).await
+}
+
+/// Start a proxy with an optional shared point-read path.
+pub async fn run_proxy_node_with_reader<S>(
+    cfg: ProxyConfig,
+    store: S,
+    reader: Option<Arc<dyn ReadRouter>>,
+) -> anyhow::Result<ProxyHandle<S>>
+where
+    S: RedisStore + Send + 'static,
+{
     if !cfg.ring_addrs.is_empty() && cfg.ring_addrs.len() != RING_SIZE {
         anyhow::bail!(
             "ring_addrs length {} != RING_SIZE {}",
@@ -350,7 +376,14 @@ where
     let (ctrl_tx, ctrl_rx) = mpsc::channel::<DriverCtrl>(8);
 
     let gate = ConnGate::new(MAX_CLIENT_CONNS);
-    let listener_task = tokio::spawn(listener_loop(listener, acceptor, store.clone(), cmd_tx, gate));
+    let listener_task = tokio::spawn(listener_loop(
+        listener,
+        acceptor,
+        store.clone(),
+        cmd_tx,
+        gate,
+        reader,
+    ));
 
     let mut tasks = vec![listener_task];
 
@@ -449,6 +482,7 @@ async fn listener_loop<S: RedisStore + Send + 'static>(
     store: Arc<Mutex<S>>,
     cmd_tx: mpsc::Sender<WriteRequest>,
     gate: ConnGate,
+    reader: Option<Arc<dyn ReadRouter>>,
 ) {
     loop {
         match listener.accept().await {
@@ -468,15 +502,16 @@ async fn listener_loop<S: RedisStore + Send + 'static>(
                 let store = store.clone();
                 let cmd_tx = cmd_tx.clone();
                 let acceptor = acceptor.clone();
+                let reader = reader.clone();
                 tokio::spawn(async move {
                     match acceptor {
                         Some(acc) => match acc.accept(sock).await {
-                            Ok(tls) => client_loop(tls, store, cmd_tx).await,
+                            Ok(tls) => client_loop(tls, store, cmd_tx, reader).await,
                             Err(e) => {
                                 tracing::debug!(%peer, error = %e, "RESP client TLS handshake failed");
                             }
                         },
-                        None => client_loop(sock, store, cmd_tx).await,
+                        None => client_loop(sock, store, cmd_tx, reader).await,
                     }
                     drop(guard); // explicit: release permit + per-IP slot
                 });
@@ -497,6 +532,7 @@ async fn client_loop<S, IO>(
     mut sock: IO,
     store: Arc<Mutex<S>>,
     cmd_tx: mpsc::Sender<WriteRequest>,
+    reader: Option<Arc<dyn ReadRouter>>,
 ) where
     S: RedisStore + Send + 'static,
     IO: AsyncRead + AsyncWrite + Unpin,
@@ -535,8 +571,13 @@ async fn client_loop<S, IO>(
 
             let reply = match classify(&cmd.name) {
                 Class::Read => {
-                    let g = store.lock().expect("store mutex poisoned");
-                    g.query(&cmd)
+                    match reader.as_ref().and_then(|router| router.try_read(&cmd)) {
+                        Some(reply) => reply,
+                        None => {
+                            let g = store.lock().expect("store mutex poisoned");
+                            g.query(&cmd)
+                        }
+                    }
                 }
                 // Both deterministic writes and non-deterministic mutations go to
                 // the driver: it owns the kernel, and non-deterministic effect

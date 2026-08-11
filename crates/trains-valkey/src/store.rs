@@ -46,6 +46,8 @@ pub trait RedisStore {
 pub enum SnapshotError {
     #[error("snapshot decode: {0}")]
     Decode(#[from] bincode::error::DecodeError),
+    #[error("snapshot invariant: {0}")]
+    Invariant(String),
 }
 
 /// A stored value. Models strings, hashes (RD-1) and sets (RD-2, needed so

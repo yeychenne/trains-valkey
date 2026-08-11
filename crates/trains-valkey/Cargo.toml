@@ -13,6 +13,10 @@ path = "src/main.rs"
 name = "trains-valkey-chaos"
 path = "src/bin/chaos.rs"
 
+[features]
+default = []
+arctic-proxy = ["dep:arctic-map", "dep:arc-swap"]
+
 [dependencies]
 trains-core     = { workspace = true }
 trains-net      = { workspace = true }
@@ -36,6 +40,8 @@ tracing     = { workspace = true }
 tracing-subscriber = { workspace = true }
 anyhow      = { workspace = true }
 clap        = { workspace = true }
+arctic-map  = { version = "=0.1.3", optional = true }
+arc-swap    = { version = "=1.9.2", optional = true }
 
 [dev-dependencies]
 tokio              = { workspace = true }
