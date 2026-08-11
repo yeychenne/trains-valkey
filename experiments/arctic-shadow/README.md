@@ -6,8 +6,9 @@ the production workspace because Arctic 0.1.3 uses Rust edition 2024 while the
 production workspace retains its Rust 1.78 minimum.
 
 The experiment combines correctness gates with bounded local data-plane
-measurements. The production proxy still serializes store access, so these
-results must not be presented as end-to-end TRAINS throughput.
+measurements. The production proxy now has an off-by-default `arctic-proxy`
+feature for concurrent point reads; the primitive results in this experiment
+still must not be presented as end-to-end TRAINS throughput.
 
 The single-region service contract, composition invariants, refinement map,
 durability assumptions, and pre-performance decision gate are recorded in
@@ -43,10 +44,10 @@ The suite contains seven gates:
   the supported command subset against Valkey, Arctic, and an independent
   expected-state model.
 
-The correctness gates are complete. ADR-002 records a scoped decision to
-prototype an ordered-writer/shared-reader interface. The current proxy still
-serializes store access, so the local benchmark below is not an end-to-end
-throughput claim.
+The correctness gates are complete. ADR-002 records the scoped
+ordered-writer/shared-reader interface and the feature-gated proxy integration.
+The local benchmark below predates that proxy path and remains a primitive-level
+measurement rather than an end-to-end throughput claim.
 
 ## Local Concurrency Benchmark
 

@@ -70,6 +70,9 @@ Status: **correctness complete; performance comparison pending**.
 
 ## Re-entry command
 
-Start by reading the EC2-A1 report and this pause point, then implement only the
-feature-flagged local proxy adapter. Do not begin the EC2-A2 run until the local
+The feature-flagged local proxy adapter is committed at `a7d139e`. Continue with
+the symmetric local performance gate in
+`TOMORROW-2026-08-12-ARCTIC-PROXY-GATE.md`. Do not begin EC2-A2 until its local
 correctness and throughput gates are green.
+
+No AWS resources were launched for this continuation.
