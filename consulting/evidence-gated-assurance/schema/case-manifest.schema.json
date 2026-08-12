@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/yeychenne/trains-valkey/blob/main/consulting/evidence-gated-assurance/schema/case-manifest.schema.json",
+  "title": "Evidence-Gated Assurance Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "status",
+    "created_utc",
+    "updated_utc",
+    "decision_question",
+    "target",
+    "owners",
+    "scope",
+    "claims",
+    "invariants",
+    "methods",
+    "gates",
+    "runs",
+    "decisions",
+    "artifacts",
+    "final_disposition"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "case_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "status": {
+      "enum": ["draft", "active", "blocked", "complete", "superseded"]
+    },
+    "created_utc": { "type": "string", "format": "date-time" },
+    "updated_utc": { "type": "string", "format": "date-time" },
+    "decision_question": { "type": "string" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "repository", "revision", "dependency_lock", "license"],
+      "properties": {
+        "name": { "type": "string" },
+        "repository": { "type": "string" },
+        "revision": { "type": "string" },
+        "dependency_lock": { "type": "string" },
+        "license": { "type": "string" }
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "evidence", "review"],
+      "properties": {
+        "decision": { "type": "string" },
+        "evidence": { "type": "string" },
+        "review": { "type": "string" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["included", "excluded", "assumptions"],
+      "properties": {
+        "included": { "type": "array", "items": { "type": "string" } },
+        "excluded": { "type": "array", "items": { "type": "string" } },
+        "assumptions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "invariants": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/invariant" }
+    },
+    "methods": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/method" }
+    },
+    "gates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/gate" }
+    },
+    "runs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/run" }
+    },
+    "decisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/decision" }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "final_disposition": {
+      "enum": ["pending", "go", "conditional-go", "no-go", "insufficient-evidence"]
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Z]+-[A-Z0-9-]+$" },
+    "evidence_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^ART-[A-Z0-9-]+$" },
+      "uniqueItems": true
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "criticality", "status", "evidence_ids", "limitations"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^CL-[A-Z0-9-]+$" },
+        "statement": { "type": "string", "minLength": 1 },
+        "criticality": { "enum": ["critical", "high", "medium", "low"] },
+        "status": {
+          "enum": ["proposed", "supported", "refuted", "conditional", "out-of-scope", "insufficient-evidence"]
+        },
+        "evidence_ids": { "$ref": "#/$defs/evidence_ids" },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "invariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "claim_ids", "observable", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^INV-[A-Z0-9-]+$" },
+        "statement": { "type": "string", "minLength": 1 },
+        "claim_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^CL-[A-Z0-9-]+$" },
+          "uniqueItems": true
+        },
+        "observable": { "type": "string" },
+        "status": { "enum": ["proposed", "covered", "violated", "blocked", "out-of-scope"] }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "boundary", "claim_ids", "limitations"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^M-[A-Z0-9-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "boundary": { "type": "string" },
+        "claim_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^CL-[A-Z0-9-]+$" },
+          "uniqueItems": true
+        },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "question", "status", "criteria", "evidence_ids", "next_on_pass", "next_on_fail"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^G-[A-Z0-9-]+$" },
+        "question": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["pending", "pass", "fail", "inconclusive", "not-run"] },
+        "criteria": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "evidence_ids": { "$ref": "#/$defs/evidence_ids" },
+        "next_on_pass": { "type": "string" },
+        "next_on_fail": { "type": "string" }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "classification", "revision", "started_utc", "ended_utc", "artifact_ids"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^RUN-[A-Z0-9-]+$" },
+        "classification": { "enum": ["diagnostic", "qualifying", "interrupted", "rejected"] },
+        "revision": { "type": "string", "minLength": 1 },
+        "started_utc": { "type": "string", "format": "date-time" },
+        "ended_utc": { "type": "string", "format": "date-time" },
+        "artifact_ids": { "$ref": "#/$defs/evidence_ids" }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "date", "disposition", "scope", "evidence_ids", "rationale"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^D-[A-Z0-9-]+$" },
+        "date": { "type": "string", "format": "date" },
+        "disposition": { "enum": ["go", "conditional-go", "no-go", "insufficient-evidence"] },
+        "scope": { "type": "string" },
+        "evidence_ids": { "$ref": "#/$defs/evidence_ids" },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "type", "required", "immutable", "sha256"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^ART-[A-Z0-9-]+$" },
+        "path": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["raw", "report", "log", "trace", "manifest", "source", "environment", "other"] },
+        "required": { "type": "boolean" },
+        "immutable": { "type": "boolean" },
+        "sha256": {
+          "anyOf": [
+            { "const": "" },
+            { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+          ]
+        }
+      }
+    }
+  }
+}

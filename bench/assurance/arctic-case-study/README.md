@@ -10,6 +10,10 @@ This directory indexes how the layered assurance method was applied to the
 TRAINS + Arctic case. It does not duplicate raw evidence. Each result remains
 in its immutable or canonical repository location.
 
+The technology-neutral consulting method extracted from this case is in
+`consulting/evidence-gated-assurance/`. Use that toolkit to start a new
+assessment; use this directory as its worked example.
+
 ## Artifacts in this set
 
 | Artifact | Purpose |
