@@ -16,13 +16,17 @@ DRIVER_PID=""
 case "$MODE" in
     smoke)
         KEYS="${PROXY_BENCH_KEYS:-1000}"
-        OPS="${PROXY_BENCH_OPS_PER_CLIENT:-2000}"
+        READ_OPS="${PROXY_BENCH_READ_OPS_PER_CLIENT:-2000}"
+        MIXED_OPS="${PROXY_BENCH_MIXED_OPS_PER_CLIENT:-2000}"
+        WRITE_OPS="${PROXY_BENCH_WRITE_OPS_PER_CLIENT:-2000}"
         REPS="${PROXY_BENCH_REPETITIONS:-1}"
         RESULTS_DIR="${RESULTS_DIR:-${TMPDIR:-/tmp}/trains-arctic-proxy-smoke/$SHA}"
         ;;
     qualification)
         KEYS="${PROXY_BENCH_KEYS:-10000}"
-        OPS="${PROXY_BENCH_OPS_PER_CLIENT:-100000}"
+        READ_OPS="${PROXY_BENCH_READ_OPS_PER_CLIENT:-100000}"
+        MIXED_OPS="${PROXY_BENCH_MIXED_OPS_PER_CLIENT:-20000}"
+        WRITE_OPS="${PROXY_BENCH_WRITE_OPS_PER_CLIENT:-5000}"
         REPS="${PROXY_BENCH_REPETITIONS:-7}"
         RESULTS_DIR="${RESULTS_DIR:-$REPO/bench/results/arctic-proxy-local/$SHA}"
         ;;
@@ -112,12 +116,18 @@ jq -n \
     --arg branch "$(git -C "$REPO" branch --show-current)" \
     --arg started "$STARTED" \
     --argjson keys "$KEYS" \
-    --argjson operations_per_client "$OPS" \
+    --argjson read_operations_per_client "$READ_OPS" \
+    --argjson mixed_operations_per_client "$MIXED_OPS" \
+    --argjson write_operations_per_client "$WRITE_OPS" \
     --argjson repetitions "$REPS" \
     --arg seed "6075990630378709030" \
     '{mode:$mode, commit:$commit, branch:$branch, dirty:false,
       started_utc:$started, keys:$keys,
-      operations_per_client:$operations_per_client, clients:[1,8],
+      operations_per_client:{
+        "read-only":$read_operations_per_client,
+        "read-90-write-10":$mixed_operations_per_client,
+        "write-only":$write_operations_per_client
+      }, clients:[1,8],
       repetitions:$repetitions,
       workloads:["read-only","read-90-write-10","write-only"],
       targets:["mutex-proxy","arctic-proxy","valkey"], seed:$seed,
@@ -134,13 +144,16 @@ jq -n \
 echo "=== Run $MODE gate ==="
 env \
     PROXY_BENCH_KEYS="$KEYS" \
-    PROXY_BENCH_OPS_PER_CLIENT="$OPS" \
+    PROXY_BENCH_READ_OPS_PER_CLIENT="$READ_OPS" \
+    PROXY_BENCH_MIXED_OPS_PER_CLIENT="$MIXED_OPS" \
+    PROXY_BENCH_WRITE_OPS_PER_CLIENT="$WRITE_OPS" \
     PROXY_BENCH_CLIENTS=1,8 \
     PROXY_BENCH_REPETITIONS="$REPS" \
     PROXY_BENCH_MUTEX_BIN="$MUTEX_BIN" \
     PROXY_BENCH_ARCTIC_BIN="$ARCTIC_BIN" \
     PROXY_BENCH_VALKEY_BIN="$VALKEY_BIN" \
     PROXY_BENCH_OUTPUT="$RESULTS_DIR/raw.json" \
+    PROXY_BENCH_CHECKPOINT_OUTPUT="$RESULTS_DIR/cases.jsonl" \
     PROXY_BENCH_TELEMETRY_OUTPUT="$RESULTS_DIR/process-telemetry.jsonl" \
     "$DRIVER_BIN" > >(tee "$RESULTS_DIR/run.log") 2>&1 &
 DRIVER_PID=$!
@@ -161,7 +174,7 @@ mv "$RESULTS_DIR/manifest.tmp" "$RESULTS_DIR/manifest.json"
 printf 'PASS: every reply and %s final keys per case validated.\n' \
     "$((KEYS < 64 ? KEYS : 64))" > "$RESULTS_DIR/correctness.log"
 
-for required in REPORT.md environment.json manifest.json summary.json raw.json \
+for required in REPORT.md environment.json manifest.json summary.json raw.json cases.jsonl \
     correctness.log process-telemetry.jsonl binary-sha256.txt run.log; do
     test -s "$RESULTS_DIR/$required" || {
         echo "missing evidence: $RESULTS_DIR/$required" >&2

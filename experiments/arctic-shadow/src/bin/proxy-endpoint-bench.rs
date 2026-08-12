@@ -92,7 +92,7 @@ impl Workload {
 #[derive(Serialize)]
 struct Config {
     keys: usize,
-    operations_per_client: usize,
+    operations_per_client: BTreeMap<String, usize>,
     client_counts: Vec<usize>,
     targets: Vec<String>,
     workloads: Vec<String>,
@@ -730,25 +730,39 @@ fn valkey_version(binary: &str) -> Result<String> {
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_owned())
 }
 
-fn write_outputs(report: &Report, telemetry: &[TelemetrySample]) -> Result<()> {
-    let output = PathBuf::from(
-        std::env::var("PROXY_BENCH_OUTPUT").context("PROXY_BENCH_OUTPUT is required")?,
-    );
-    if let Some(parent) = output.parent() {
-        std::fs::create_dir_all(parent)?;
-    }
-    serde_json::to_writer_pretty(BufWriter::new(File::create(&output)?), report)?;
+fn output_path(name: &str) -> Result<PathBuf> {
+    Ok(PathBuf::from(
+        std::env::var(name).with_context(|| format!("{name} is required"))?,
+    ))
+}
 
-    let telemetry_output = PathBuf::from(
-        std::env::var("PROXY_BENCH_TELEMETRY_OUTPUT")
-            .context("PROXY_BENCH_TELEMETRY_OUTPUT is required")?,
-    );
-    let mut writer = BufWriter::new(File::create(telemetry_output)?);
+fn append_checkpoint(result: &CaseResult, telemetry: &[TelemetrySample]) -> Result<()> {
+    let checkpoint = output_path("PROXY_BENCH_CHECKPOINT_OUTPUT")?;
+    let mut writer = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(checkpoint)?;
+    serde_json::to_writer(&mut writer, result)?;
+    writer.write_all(b"\n")?;
+
+    let telemetry_output = output_path("PROXY_BENCH_TELEMETRY_OUTPUT")?;
+    let mut writer = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(telemetry_output)?;
     for sample in telemetry {
         serde_json::to_writer(&mut writer, sample)?;
         writer.write_all(b"\n")?;
     }
-    writer.flush()?;
+    Ok(())
+}
+
+fn write_report(report: &Report) -> Result<()> {
+    let output = output_path("PROXY_BENCH_OUTPUT")?;
+    if let Some(parent) = output.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    serde_json::to_writer_pretty(BufWriter::new(File::create(&output)?), report)?;
     Ok(())
 }
 
@@ -757,7 +771,21 @@ fn main() -> Result<()> {
     const WORKLOADS: [&str; 3] = ["read-only", "read-90-write-10", "write-only"];
 
     let keys_count = env_usize("PROXY_BENCH_KEYS", 1_000);
-    let operations = env_usize("PROXY_BENCH_OPS_PER_CLIENT", 2_000);
+    let default_operations = env_usize("PROXY_BENCH_OPS_PER_CLIENT", 2_000);
+    let operation_counts = BTreeMap::from([
+        (
+            "read-only".to_string(),
+            env_usize("PROXY_BENCH_READ_OPS_PER_CLIENT", default_operations),
+        ),
+        (
+            "read-90-write-10".to_string(),
+            env_usize("PROXY_BENCH_MIXED_OPS_PER_CLIENT", default_operations),
+        ),
+        (
+            "write-only".to_string(),
+            env_usize("PROXY_BENCH_WRITE_OPS_PER_CLIENT", default_operations),
+        ),
+    ]);
     let repetitions = env_usize("PROXY_BENCH_REPETITIONS", 1);
     let client_counts = list_usize("PROXY_BENCH_CLIENTS", &[1, 8]);
     let target_names = selected_names("PROXY_BENCH_TARGETS", &TARGETS);
@@ -788,9 +816,18 @@ fn main() -> Result<()> {
         .collect();
     let keys = make_keys(keys_count);
     let mut results = Vec::new();
-    let mut telemetry = Vec::new();
+
+    for path in [
+        output_path("PROXY_BENCH_CHECKPOINT_OUTPUT")?,
+        output_path("PROXY_BENCH_TELEMETRY_OUTPUT")?,
+    ] {
+        if path.exists() {
+            std::fs::remove_file(path)?;
+        }
+    }
 
     for workload in workloads {
+        let operations = operation_counts[workload.name()];
         for &clients in &client_counts {
             for repetition in 0..repetitions {
                 for offset in 0..targets.len() {
@@ -807,8 +844,8 @@ fn main() -> Result<()> {
                         Arc::clone(&keys),
                         &binaries,
                     )?;
+                    append_checkpoint(&result, &samples)?;
                     results.push(result);
-                    telemetry.extend(samples);
                 }
             }
         }
@@ -821,7 +858,7 @@ fn main() -> Result<()> {
         valkey_version: valkey_version(&binaries.valkey)?,
         config: Config {
             keys: keys_count,
-            operations_per_client: operations,
+            operations_per_client: operation_counts,
             client_counts,
             targets: target_names,
             workloads: workload_names,
@@ -832,6 +869,6 @@ fn main() -> Result<()> {
         },
         results,
     };
-    write_outputs(&report, &telemetry)?;
+    write_report(&report)?;
     Ok(())
 }

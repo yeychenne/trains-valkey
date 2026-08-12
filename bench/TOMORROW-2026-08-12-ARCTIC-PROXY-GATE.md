@@ -88,7 +88,8 @@ From the repository root:
 Run the qualifying gate only after the smoke artifacts validate:
 
 ```text
-keys=10,000; operations/client=100,000; clients=1,8; repetitions=7
+keys=10,000; clients=1,8; repetitions=7
+operations/client=100,000 read-only; 20,000 mixed; 5,000 write-only
 workloads=read-only,read-90-write-10,write-only
 latency sample interval=16 operations
 ```
@@ -101,6 +102,13 @@ Run it only after reviewing the smoke report:
 
 Use medians over the seven interleaved rounds. Also retain every paired round;
 an aggregate must not hide a bimodal or steadily degrading result.
+
+The per-workload counts replace the original uniform 100,000-operation plan.
+An interrupted pilot showed that sustained ordered writes make that matrix take
+hours without improving the statistical decision: 5,000 write-only operations
+still provide 313 sampled latencies per one-client round and 2,504 per
+eight-client round. Every completed case is checkpointed before the next target
+starts; only a complete matrix receives a GO/NO-GO report.
 
 ## Evidence contract
 

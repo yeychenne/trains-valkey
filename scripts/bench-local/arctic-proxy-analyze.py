@@ -46,17 +46,18 @@ def main() -> int:
     if len(set(ids)) != len(ids):
         errors.append("case ids are not unique")
 
-    expected_latency_samples = {
-        clients: clients
-        * ((config["operations_per_client"] + config["latency_sample_every"] - 1)
-           // config["latency_sample_every"])
-        for clients in config["client_counts"]
-    }
     expected_validated = min(config["keys"], 64)
     for row in rows:
         if row["total_operations"] <= 0 or row["operations_per_second"] <= 0:
             errors.append(f"{row['case_id']}: non-positive operation count or throughput")
-        if row["latency_samples"] != expected_latency_samples[row["clients"]]:
+        operations_per_client = config["operations_per_client"][row["workload"]]
+        if row["total_operations"] != row["clients"] * operations_per_client:
+            errors.append(f"{row['case_id']}: operation count does not match config")
+        expected_latency_samples = row["clients"] * (
+            (operations_per_client + config["latency_sample_every"] - 1)
+            // config["latency_sample_every"]
+        )
+        if row["latency_samples"] != expected_latency_samples:
             errors.append(f"{row['case_id']}: incomplete latency sample set")
         if row["validated_keys"] != expected_validated:
             errors.append(f"{row['case_id']}: final-value validation incomplete")
