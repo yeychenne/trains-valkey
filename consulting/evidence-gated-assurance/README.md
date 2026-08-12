@@ -31,6 +31,7 @@ been mechanically established.
 | Path | Purpose |
 |---|---|
 | `PLAYBOOK.md` | End-to-end engagement workflow, gates, and stopping rules |
+| `TWO-PAGE-USAGE-GUIDE.md` | Client-facing explanation of the artifacts and practical workflow |
 | `METHOD-CATALOG.md` | Selectable formal, executable, operational, and performance methods |
 | `DELIVERY-MODEL.md` | Engagement tiers, roles, cadence, and client deliverables |
 | `INTAKE-QUESTIONNAIRE.md` | Questions used to bound a new client assessment quickly |
