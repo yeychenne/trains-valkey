@@ -121,3 +121,29 @@ includes RESP, loopback networking, and a process boundary.
 
 Cross-node linearizable reads, durability after all nodes restart, full Valkey
 compatibility, and multi-region operation remain outside this phase's claim.
+
+## Real proxy endpoint gate
+
+The next-stage driver compares feature-off `MemStore`, feature-on Arctic, and
+unmodified Valkey through one deterministic persistent-connection RESP client.
+The proxy targets each launch a real three-node TLS TRAINS ring. The runner
+builds the feature variants in isolated target directories, captures CPU/RSS
+telemetry and binary hashes, validates every reply, and refuses to overwrite an
+evidence directory.
+
+From the repository root, run the orchestration smoke before any qualifying
+measurement:
+
+```sh
+./scripts/bench-local/arctic-proxy-gate.sh smoke
+```
+
+The qualifying seven-round command is intentionally separate and remains
+blocked until the smoke report is reviewed:
+
+```sh
+./scripts/bench-local/arctic-proxy-gate.sh qualification
+```
+
+The decision comparison is Arctic proxy versus mutex proxy. Valkey remains an
+endpoint reference because its process and replication boundaries differ.

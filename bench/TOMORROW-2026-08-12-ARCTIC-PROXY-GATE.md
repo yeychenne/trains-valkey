@@ -32,10 +32,15 @@ denominator or described as an apples-to-apples map comparison.
 
 ## First implementation block
 
-Add a committed Rust RESP workload driver and local orchestrator. Reuse the
-request schedule and JSON conventions from
-`experiments/arctic-shadow/src/bin/data-plane-bench.rs`, but drive every target
-through persistent RESP connections. Do not depend on `memtier_benchmark`.
+Status: **implemented; official smoke pending a committed source revision**.
+
+The Rust RESP workload driver, benchmark-only three-node target, local runner,
+telemetry capture, and gate analyzer are in `experiments/arctic-shadow/src/bin/`,
+`crates/trains-valkey/src/bin/`, and `scripts/bench-local/`. The driver reuses
+the deterministic schedule and JSON conventions from
+`experiments/arctic-shadow/src/bin/data-plane-bench.rs`, but drives every target
+through persistent RESP connections. It does not depend on
+`memtier_benchmark`.
 
 Build the proxy variants into separate target directories so Cargo feature
 selection cannot overwrite one artifact with the other:
@@ -74,12 +79,24 @@ catch orchestration, reply-validation, and cleanup failures:
 keys=1,000; operations/client=2,000; clients=1,8; repetitions=1
 ```
 
+From the repository root:
+
+```sh
+./scripts/bench-local/arctic-proxy-gate.sh smoke
+```
+
 Run the qualifying gate only after the smoke artifacts validate:
 
 ```text
 keys=10,000; operations/client=100,000; clients=1,8; repetitions=7
 workloads=read-only,read-90-write-10,write-only
 latency sample interval=16 operations
+```
+
+Run it only after reviewing the smoke report:
+
+```sh
+./scripts/bench-local/arctic-proxy-gate.sh qualification
 ```
 
 Use medians over the seven interleaved rounds. Also retain every paired round;

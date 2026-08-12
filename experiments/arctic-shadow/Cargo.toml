@@ -12,6 +12,7 @@ default = []
 rwlock-generation = []
 
 [dependencies]
+anyhow = "1"
 arctic = { package = "arctic-map", version = "=0.1.3" }
 arc-swap = "=1.9.2"
 bincode = { version = "2", features = ["serde"] }
