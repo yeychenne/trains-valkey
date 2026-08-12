@@ -141,6 +141,8 @@ project is ready for the final report.
 
 Primary evidence:
 
+- `bench/assurance/arctic-case-study/` (method application, evidence map, and
+  machine-readable manifest)
 - `docs/ADR-002-trains-arctic-assurance-boundary.md`
 - `bench/results/arctic-data-plane-2026-07-25.md`
 - `bench/results/arctic-proxy-integration-2026-08-11.md`

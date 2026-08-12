@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "case_id": "trains-arctic-layered-assurance-2026-08-12",
+  "status": "complete",
+  "final_decision": "no-go-for-ec2-a2-retain-correctness-case-study",
+  "repository": "https://github.com/yeychenne/trains-valkey",
+  "branch": "experiment/arctic-aws-validation",
+  "trains_rust_revision": "da8c173878ed291a0935389de133313ef75fd132",
+  "method_application": "bench/assurance/arctic-case-study/METHOD-APPLICATION.md",
+  "evidence_map": "bench/assurance/arctic-case-study/EVIDENCE-MAP.md",
+  "decision_memo": "bench/reports/two-page-arctic-decision-2026-08-12.md",
+  "kernel_assurance_methods": [
+    "TLA+/TLC",
+    "Apalache",
+    "Kani/CBMC",
+    "property-based testing",
+    "differential testing",
+    "trace validation",
+    "Ivy parameterized verification"
+  ],
+  "composition_invariants": ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
+  "claim_boundary": {
+    "commands": ["SET", "GET", "DEL", "EXISTS", "DBSIZE"],
+    "keys": "NUL-free",
+    "region_model": "single-region",
+    "recovery_assumption": "at-least-one-surviving-snapshot-or-tail-source",
+    "excluded": [
+      "arbitrary-cross-node-linearizable-reads",
+      "all-node-restart-durability",
+      "full-valkey-compatibility",
+      "multi-region-operation"
+    ]
+  },
+  "stages": [
+    {
+      "id": "composition-correctness",
+      "commit": "0e5637adffbd861153255be407d346ccd38904c6",
+      "decision": "go-for-scoped-performance-exploration",
+      "artifacts": [
+        "docs/ADR-002-trains-arctic-assurance-boundary.md",
+        "bench/EOD-2026-07-25.md",
+        "experiments/arctic-shadow/tests/shadow_valkey.rs",
+        "experiments/arctic-shadow/tests/deterministic_faults.rs",
+        "experiments/arctic-shadow/tests/differential_manifest.rs"
+      ]
+    },
+    {
+      "id": "primitive-data-plane",
+      "decision": "go-for-ordered-writer-shared-reader",
+      "artifacts": [
+        "bench/results/arctic-data-plane-2026-07-25.md",
+        "bench/results/arctic-data-plane-2026-07-25.json"
+      ]
+    },
+    {
+      "id": "ordered-data-plane",
+      "commit": "0e5637adffbd861153255be407d346ccd38904c6",
+      "decision": "go-for-bounded-platform-validation",
+      "artifacts": [
+        "bench/results/arctic-ordered-data-plane-2026-08-11.md",
+        "bench/results/arctic-ordered-data-plane-2026-08-11.json"
+      ]
+    },
+    {
+      "id": "ec2-a1",
+      "commit": "a3a8d0e39394d90551011b0d5d65718af45d0fa9",
+      "decision": "go-for-local-proxy-integration",
+      "artifacts": [
+        "bench/results/ec2-arctic-a1/a3a8d0e39394d90551011b0d5d65718af45d0fa9/"
+      ]
+    },
+    {
+      "id": "feature-gated-proxy-correctness",
+      "commit": "a7d139e688e5a6a80d046391596d98ee87277a69",
+      "decision": "pass-correctness-proceed-to-endpoint-gate",
+      "artifacts": [
+        "crates/trains-valkey/src/arctic.rs",
+        "crates/trains-valkey/tests/arctic_proxy.rs",
+        "bench/results/arctic-proxy-integration-2026-08-11.md"
+      ]
+    },
+    {
+      "id": "proxy-endpoint-qualification",
+      "measured_commit": "7c03a87b5b0fac2624d7b0d28ec1412488e44299",
+      "evidence_commit": "f91f5aee0d4b3824c3efb73bb1cb567d43c47a9e",
+      "decision": "no-go-for-ec2-a2",
+      "case_count": 126,
+      "analyzer_errors": 0,
+      "gates": {
+        "correctness_and_evidence": "pass",
+        "eight_client_read_only_1_5x": "fail-1.22x",
+        "eight_client_mixed_1_5x": "fail-0.99x",
+        "write_p99_below_3x": "pass-0.88x",
+        "write_throughput_within_15_percent": "pass-1.04x"
+      },
+      "artifacts": [
+        "bench/TOMORROW-2026-08-12-ARCTIC-PROXY-GATE.md",
+        "scripts/bench-local/arctic-proxy-gate.sh",
+        "scripts/bench-local/arctic-proxy-analyze.py",
+        "bench/results/arctic-proxy-local/7c03a87b5b0fac2624d7b0d28ec1412488e44299/"
+      ]
+    }
+  ],
+  "final_report_ready": true,
+  "remaining_work": [
+    "editorial-claim-to-evidence-synthesis",
+    "ordinary-paper-review"
+  ]
+}
