@@ -1,0 +1,17 @@
+{
+  "case_id": "mutex-proxy-write-only-c1-r7",
+  "target": "mutex-proxy",
+  "workload": "write-only",
+  "clients": 1,
+  "repetition": 6,
+  "total_operations": 5000,
+  "elapsed_ms": 42396.718083,
+  "operations_per_second": 117.93365680361168,
+  "latency_samples": 313,
+  "latency_p50_us": 7723.791,
+  "latency_p99_us": 34760.291,
+  "target_cpu_ms": 51830.0,
+  "target_peak_rss_kb": 12624,
+  "client_cpu_ms": 443.9670000000042,
+  "validated_keys": 64
+}

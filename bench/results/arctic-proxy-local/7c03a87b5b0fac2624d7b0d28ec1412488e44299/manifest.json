@@ -1,0 +1,41 @@
+{
+  "mode": "qualification",
+  "commit": "7c03a87b5b0fac2624d7b0d28ec1412488e44299",
+  "branch": "experiment/arctic-aws-validation",
+  "dirty": false,
+  "started_utc": "2026-08-12T06:09:10Z",
+  "keys": 10000,
+  "operations_per_client": {
+    "read-only": 100000,
+    "read-90-write-10": 20000,
+    "write-only": 5000
+  },
+  "clients": [
+    1,
+    8
+  ],
+  "repetitions": 7,
+  "workloads": [
+    "read-only",
+    "read-90-write-10",
+    "write-only"
+  ],
+  "targets": [
+    "mutex-proxy",
+    "arctic-proxy",
+    "valkey"
+  ],
+  "seed": "6075990630378709030",
+  "commands": [
+    "GET key",
+    "SET key 32-byte-value"
+  ],
+  "build_commands": [
+    "cargo build --release --locked -p trains-valkey --bin proxy-bench-server",
+    "cargo build --release --locked -p trains-valkey --bin proxy-bench-server --features arctic-proxy",
+    "cargo build --release --locked --bin proxy-endpoint-bench"
+  ],
+  "target_rotation": "offset by repetition modulo three",
+  "client_model": "one persistent RESP connection and one outstanding request per client",
+  "ended_utc": "2026-08-12T07:03:19Z"
+}

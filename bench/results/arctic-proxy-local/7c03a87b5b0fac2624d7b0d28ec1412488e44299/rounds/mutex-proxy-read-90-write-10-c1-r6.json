@@ -1,0 +1,17 @@
+{
+  "case_id": "mutex-proxy-read-90-write-10-c1-r6",
+  "target": "mutex-proxy",
+  "workload": "read-90-write-10",
+  "clients": 1,
+  "repetition": 5,
+  "total_operations": 20000,
+  "elapsed_ms": 9563.306417,
+  "operations_per_second": 2091.326903888329,
+  "latency_samples": 1250,
+  "latency_p50_us": 62.791,
+  "latency_p99_us": 4404.542,
+  "target_cpu_ms": 13820.0,
+  "target_peak_rss_kb": 22880,
+  "client_cpu_ms": 198.8530000000028,
+  "validated_keys": 64
+}

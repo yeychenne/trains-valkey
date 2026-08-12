@@ -1,0 +1,182 @@
+{
+  "mode": "qualification",
+  "status": "NO-GO",
+  "errors": [],
+  "gates": {
+    "correctness_and_evidence": true,
+    "read_only_throughput_1_5x": false,
+    "mixed_throughput_1_5x": false,
+    "write_p99_below_3x": true,
+    "write_throughput_within_15pct": true
+  },
+  "medians": [
+    {
+      "workload": "read-only",
+      "clients": 1,
+      "targets": {
+        "mutex-proxy": {
+          "throughput_ops_s": 20739.80043260183,
+          "p99_us": 731.916,
+          "target_cpu_ms": 7290.0,
+          "target_peak_rss_kb": 13408.0
+        },
+        "arctic-proxy": {
+          "throughput_ops_s": 19299.800348390345,
+          "p99_us": 804.583,
+          "target_cpu_ms": 7840.0,
+          "target_peak_rss_kb": 12992.0
+        },
+        "valkey": {
+          "throughput_ops_s": 69140.96840914582,
+          "p99_us": 37.542,
+          "target_cpu_ms": 550.0,
+          "target_peak_rss_kb": 8496.0
+        },
+        "arctic_vs_mutex": {
+          "throughput_ratio": 0.9305682767348192,
+          "p99_ratio": 1.0992832510834576
+        }
+      }
+    },
+    {
+      "workload": "read-only",
+      "clients": 8,
+      "targets": {
+        "mutex-proxy": {
+          "throughput_ops_s": 83109.73567961468,
+          "p99_us": 469.416,
+          "target_cpu_ms": 24680.0,
+          "target_peak_rss_kb": 14416.0
+        },
+        "arctic-proxy": {
+          "throughput_ops_s": 101562.09216075641,
+          "p99_us": 295.167,
+          "target_cpu_ms": 21570.0,
+          "target_peak_rss_kb": 13584.0
+        },
+        "valkey": {
+          "throughput_ops_s": 138448.77820209658,
+          "p99_us": 172.667,
+          "target_cpu_ms": 4480.0,
+          "target_peak_rss_kb": 8576.0
+        },
+        "arctic_vs_mutex": {
+          "throughput_ratio": 1.222024006336333,
+          "p99_ratio": 0.6287962063500179
+        }
+      }
+    },
+    {
+      "workload": "read-90-write-10",
+      "clients": 1,
+      "targets": {
+        "mutex-proxy": {
+          "throughput_ops_s": 1928.5560699228236,
+          "p99_us": 4617.292,
+          "target_cpu_ms": 15210.0,
+          "target_peak_rss_kb": 20848.0
+        },
+        "arctic-proxy": {
+          "throughput_ops_s": 1992.4055062903979,
+          "p99_us": 4667.292,
+          "target_cpu_ms": 14230.0,
+          "target_peak_rss_kb": 17568.0
+        },
+        "valkey": {
+          "throughput_ops_s": 68851.29910903252,
+          "p99_us": 19.792,
+          "target_cpu_ms": 110.0,
+          "target_peak_rss_kb": 8480.0
+        },
+        "arctic_vs_mutex": {
+          "throughput_ratio": 1.0331073788122371,
+          "p99_ratio": 1.0108288581272313
+        }
+      }
+    },
+    {
+      "workload": "read-90-write-10",
+      "clients": 8,
+      "targets": {
+        "mutex-proxy": {
+          "throughput_ops_s": 22641.380207216742,
+          "p99_us": 3084.958,
+          "target_cpu_ms": 12190.000000000004,
+          "target_peak_rss_kb": 33584.0
+        },
+        "arctic-proxy": {
+          "throughput_ops_s": 22442.09606196347,
+          "p99_us": 3686.333,
+          "target_cpu_ms": 11610.0,
+          "target_peak_rss_kb": 31824.0
+        },
+        "valkey": {
+          "throughput_ops_s": 255433.24471662275,
+          "p99_us": 60.167,
+          "target_cpu_ms": 580.0,
+          "target_peak_rss_kb": 8576.0
+        },
+        "arctic_vs_mutex": {
+          "throughput_ratio": 0.9911982333484356,
+          "p99_ratio": 1.1949378241130024
+        }
+      }
+    },
+    {
+      "workload": "write-only",
+      "clients": 1,
+      "targets": {
+        "mutex-proxy": {
+          "throughput_ops_s": 174.14429599444972,
+          "p99_us": 11540.041,
+          "target_cpu_ms": 38190.0,
+          "target_peak_rss_kb": 15056.0
+        },
+        "arctic-proxy": {
+          "throughput_ops_s": 174.4828178786646,
+          "p99_us": 11616.75,
+          "target_cpu_ms": 38380.0,
+          "target_peak_rss_kb": 14368.0
+        },
+        "valkey": {
+          "throughput_ops_s": 62689.83264949174,
+          "p99_us": 32.583,
+          "target_cpu_ms": 30.0,
+          "target_peak_rss_kb": 8384.0
+        },
+        "arctic_vs_mutex": {
+          "throughput_ratio": 1.0019439160052976,
+          "p99_ratio": 1.0066472034198146
+        }
+      }
+    },
+    {
+      "workload": "write-only",
+      "clients": 8,
+      "targets": {
+        "mutex-proxy": {
+          "throughput_ops_s": 837.4691682781471,
+          "p99_us": 22582.125,
+          "target_cpu_ms": 58770.0,
+          "target_peak_rss_kb": 27952.0
+        },
+        "arctic-proxy": {
+          "throughput_ops_s": 866.8774966918465,
+          "p99_us": 19949.166,
+          "target_cpu_ms": 56710.0,
+          "target_peak_rss_kb": 28304.0
+        },
+        "valkey": {
+          "throughput_ops_s": 111612.2295595916,
+          "p99_us": 216.417,
+          "target_cpu_ms": 280.0,
+          "target_peak_rss_kb": 8560.0
+        },
+        "arctic_vs_mutex": {
+          "throughput_ratio": 1.035115714736297,
+          "p99_ratio": 0.8834051711253924
+        }
+      }
+    }
+  ]
+}

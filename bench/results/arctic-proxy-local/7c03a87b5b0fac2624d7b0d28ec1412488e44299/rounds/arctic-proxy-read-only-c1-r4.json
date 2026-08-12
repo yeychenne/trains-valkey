@@ -1,0 +1,17 @@
+{
+  "case_id": "arctic-proxy-read-only-c1-r4",
+  "target": "arctic-proxy",
+  "workload": "read-only",
+  "clients": 1,
+  "repetition": 3,
+  "total_operations": 100000,
+  "elapsed_ms": 5181.40075,
+  "operations_per_second": 19299.800348390345,
+  "latency_samples": 6250,
+  "latency_p50_us": 21.042,
+  "latency_p99_us": 901.75,
+  "target_cpu_ms": 7840.0,
+  "target_peak_rss_kb": 14864,
+  "client_cpu_ms": 806.0229999999992,
+  "validated_keys": 64
+}

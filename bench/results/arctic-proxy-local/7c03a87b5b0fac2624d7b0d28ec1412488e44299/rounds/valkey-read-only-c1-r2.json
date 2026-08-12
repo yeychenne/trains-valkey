@@ -1,0 +1,17 @@
+{
+  "case_id": "valkey-read-only-c1-r2",
+  "target": "valkey",
+  "workload": "read-only",
+  "clients": 1,
+  "repetition": 1,
+  "total_operations": 100000,
+  "elapsed_ms": 1406.423791,
+  "operations_per_second": 71102.3239509463,
+  "latency_samples": 6250,
+  "latency_p50_us": 13.792,
+  "latency_p99_us": 37.542,
+  "target_cpu_ms": 540.0,
+  "target_peak_rss_kb": 8496,
+  "client_cpu_ms": 511.72699999999986,
+  "validated_keys": 64
+}

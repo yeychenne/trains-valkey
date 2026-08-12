@@ -1,0 +1,17 @@
+{
+  "case_id": "arctic-proxy-read-90-write-10-c1-r3",
+  "target": "arctic-proxy",
+  "workload": "read-90-write-10",
+  "clients": 1,
+  "repetition": 2,
+  "total_operations": 20000,
+  "elapsed_ms": 10685.372583999999,
+  "operations_per_second": 1871.7176067353498,
+  "latency_samples": 1250,
+  "latency_p50_us": 62.25,
+  "latency_p99_us": 5045.458,
+  "target_cpu_ms": 15070.0,
+  "target_peak_rss_kb": 21664,
+  "client_cpu_ms": 211.83099999994738,
+  "validated_keys": 64
+}

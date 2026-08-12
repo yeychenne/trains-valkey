@@ -22,8 +22,10 @@ ring test. Clippy passes with warnings denied in both configurations.
 The correctness portion of the 12-24 hour gate is also complete: same-node
 read-after-ack, cross-node convergence after quiescence, fast reads while the
 ordered mutex is held, writer/reader contention, and snapshot replacement under
-active RESP reads all pass. The symmetric local throughput/p99 comparison is
-still pending and remains the blocker for EC2-A2.
+active RESP reads all pass. The symmetric local throughput/p99 comparison
+completed on 2026-08-12 with a NO-GO for EC2-A2. Arctic reached 1.22x the mutex
+proxy for eight-client read-only traffic and 0.99x for 90/10, below both 1.5x
+gates. Correctness, write throughput, write p99, CPU, and RSS checks passed.
 
 ## Next 48 hours
 
@@ -40,7 +42,7 @@ Status: **complete**.
 
 ### 12-24 hours: end-to-end local gate
 
-Status: **correctness complete; performance comparison pending**.
+Status: **complete; performance NO-GO for EC2-A2**.
 
 - Add concurrent RESP tests for same-node read-after-ack, snapshot replacement,
   and writer/read contention.
@@ -51,6 +53,8 @@ Status: **correctness complete; performance comparison pending**.
   proxy without a documented queue explanation.
 
 ### 24-42 hours: EC2-A2 proxy run
+
+Status: **not authorized by the local gate**.
 
 - Reuse one `c7g.2xlarge` in `eu-west-3c`, seven interleaved rounds, one- and
   eight-client loads, CPU/RSS telemetry, a six-hour host shutdown, and automatic
@@ -75,4 +79,6 @@ the symmetric local performance gate in
 `TOMORROW-2026-08-12-ARCTIC-PROXY-GATE.md`. Do not begin EC2-A2 until its local
 correctness and throughput gates are green.
 
-No AWS resources were launched for this continuation.
+No AWS resources were launched for this continuation. The final local result
+and run reasoning are in
+`bench/results/arctic-proxy-local/7c03a87b5b0fac2624d7b0d28ec1412488e44299/`.

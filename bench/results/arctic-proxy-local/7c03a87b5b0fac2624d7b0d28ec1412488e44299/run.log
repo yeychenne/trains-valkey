@@ -1,0 +1,252 @@
+START mutex-proxy-read-only-c1-r1
+DONE  mutex-proxy-read-only-c1-r1: 12076 ops/s p99 1265.500 us
+START arctic-proxy-read-only-c1-r1
+DONE  arctic-proxy-read-only-c1-r1: 17189 ops/s p99 850.291 us
+START valkey-read-only-c1-r1
+DONE  valkey-read-only-c1-r1: 69141 ops/s p99 37.333 us
+START arctic-proxy-read-only-c1-r2
+DONE  arctic-proxy-read-only-c1-r2: 30327 ops/s p99 585.250 us
+START valkey-read-only-c1-r2
+DONE  valkey-read-only-c1-r2: 71102 ops/s p99 37.542 us
+START mutex-proxy-read-only-c1-r2
+DONE  mutex-proxy-read-only-c1-r2: 22267 ops/s p99 712.292 us
+START valkey-read-only-c1-r3
+DONE  valkey-read-only-c1-r3: 58765 ops/s p99 59.416 us
+START mutex-proxy-read-only-c1-r3
+DONE  mutex-proxy-read-only-c1-r3: 22031 ops/s p99 694.292 us
+START arctic-proxy-read-only-c1-r3
+DONE  arctic-proxy-read-only-c1-r3: 16727 ops/s p99 804.583 us
+START mutex-proxy-read-only-c1-r4
+DONE  mutex-proxy-read-only-c1-r4: 19910 ops/s p99 829.000 us
+START arctic-proxy-read-only-c1-r4
+DONE  arctic-proxy-read-only-c1-r4: 19300 ops/s p99 901.750 us
+START valkey-read-only-c1-r4
+DONE  valkey-read-only-c1-r4: 66048 ops/s p99 45.084 us
+START arctic-proxy-read-only-c1-r5
+DONE  arctic-proxy-read-only-c1-r5: 14061 ops/s p99 1168.792 us
+START valkey-read-only-c1-r5
+DONE  valkey-read-only-c1-r5: 71729 ops/s p99 31.583 us
+START mutex-proxy-read-only-c1-r5
+DONE  mutex-proxy-read-only-c1-r5: 18601 ops/s p99 910.792 us
+START valkey-read-only-c1-r6
+DONE  valkey-read-only-c1-r6: 59163 ops/s p99 60.167 us
+START mutex-proxy-read-only-c1-r6
+DONE  mutex-proxy-read-only-c1-r6: 20740 ops/s p99 728.250 us
+START arctic-proxy-read-only-c1-r6
+DONE  arctic-proxy-read-only-c1-r6: 26803 ops/s p99 734.708 us
+START mutex-proxy-read-only-c1-r7
+DONE  mutex-proxy-read-only-c1-r7: 25480 ops/s p99 731.916 us
+START arctic-proxy-read-only-c1-r7
+DONE  arctic-proxy-read-only-c1-r7: 21443 ops/s p99 785.958 us
+START valkey-read-only-c1-r7
+DONE  valkey-read-only-c1-r7: 72287 ops/s p99 33.042 us
+START mutex-proxy-read-only-c8-r1
+DONE  mutex-proxy-read-only-c8-r1: 81630 ops/s p99 504.000 us
+START arctic-proxy-read-only-c8-r1
+DONE  arctic-proxy-read-only-c8-r1: 82191 ops/s p99 523.083 us
+START valkey-read-only-c8-r1
+DONE  valkey-read-only-c8-r1: 134667 ops/s p99 177.792 us
+START arctic-proxy-read-only-c8-r2
+DONE  arctic-proxy-read-only-c8-r2: 101562 ops/s p99 296.542 us
+START valkey-read-only-c8-r2
+DONE  valkey-read-only-c8-r2: 147561 ops/s p99 157.333 us
+START mutex-proxy-read-only-c8-r2
+DONE  mutex-proxy-read-only-c8-r2: 81337 ops/s p99 515.667 us
+START valkey-read-only-c8-r3
+DONE  valkey-read-only-c8-r3: 114340 ops/s p99 214.917 us
+START mutex-proxy-read-only-c8-r3
+DONE  mutex-proxy-read-only-c8-r3: 83110 ops/s p99 469.416 us
+START arctic-proxy-read-only-c8-r3
+DONE  arctic-proxy-read-only-c8-r3: 85491 ops/s p99 521.834 us
+START mutex-proxy-read-only-c8-r4
+DONE  mutex-proxy-read-only-c8-r4: 87842 ops/s p99 418.042 us
+START arctic-proxy-read-only-c8-r4
+DONE  arctic-proxy-read-only-c8-r4: 105316 ops/s p99 247.791 us
+START valkey-read-only-c8-r4
+DONE  valkey-read-only-c8-r4: 152972 ops/s p99 149.125 us
+START arctic-proxy-read-only-c8-r5
+DONE  arctic-proxy-read-only-c8-r5: 101725 ops/s p99 295.167 us
+START valkey-read-only-c8-r5
+DONE  valkey-read-only-c8-r5: 138449 ops/s p99 172.667 us
+START mutex-proxy-read-only-c8-r5
+DONE  mutex-proxy-read-only-c8-r5: 57312 ops/s p99 1091.042 us
+START valkey-read-only-c8-r6
+DONE  valkey-read-only-c8-r6: 133666 ops/s p99 184.416 us
+START mutex-proxy-read-only-c8-r6
+DONE  mutex-proxy-read-only-c8-r6: 101805 ops/s p99 268.708 us
+START arctic-proxy-read-only-c8-r6
+DONE  arctic-proxy-read-only-c8-r6: 100869 ops/s p99 291.291 us
+START mutex-proxy-read-only-c8-r7
+DONE  mutex-proxy-read-only-c8-r7: 106221 ops/s p99 246.583 us
+START arctic-proxy-read-only-c8-r7
+DONE  arctic-proxy-read-only-c8-r7: 106063 ops/s p99 230.000 us
+START valkey-read-only-c8-r7
+DONE  valkey-read-only-c8-r7: 150208 ops/s p99 160.042 us
+START mutex-proxy-read-90-write-10-c1-r1
+DONE  mutex-proxy-read-90-write-10-c1-r1: 1693 ops/s p99 6366.292 us
+START arctic-proxy-read-90-write-10-c1-r1
+DONE  arctic-proxy-read-90-write-10-c1-r1: 1673 ops/s p99 6734.333 us
+START valkey-read-90-write-10-c1-r1
+DONE  valkey-read-90-write-10-c1-r1: 57018 ops/s p99 38.791 us
+START arctic-proxy-read-90-write-10-c1-r2
+DONE  arctic-proxy-read-90-write-10-c1-r2: 1848 ops/s p99 5067.792 us
+START valkey-read-90-write-10-c1-r2
+DONE  valkey-read-90-write-10-c1-r2: 66918 ops/s p99 39.292 us
+START mutex-proxy-read-90-write-10-c1-r2
+DONE  mutex-proxy-read-90-write-10-c1-r2: 1706 ops/s p99 5668.292 us
+START valkey-read-90-write-10-c1-r3
+DONE  valkey-read-90-write-10-c1-r3: 71656 ops/s p99 35.416 us
+START mutex-proxy-read-90-write-10-c1-r3
+DONE  mutex-proxy-read-90-write-10-c1-r3: 2106 ops/s p99 4242.833 us
+START arctic-proxy-read-90-write-10-c1-r3
+DONE  arctic-proxy-read-90-write-10-c1-r3: 1872 ops/s p99 5045.458 us
+START mutex-proxy-read-90-write-10-c1-r4
+DONE  mutex-proxy-read-90-write-10-c1-r4: 2246 ops/s p99 4185.125 us
+START arctic-proxy-read-90-write-10-c1-r4
+DONE  arctic-proxy-read-90-write-10-c1-r4: 2099 ops/s p99 4661.041 us
+START valkey-read-90-write-10-c1-r4
+DONE  valkey-read-90-write-10-c1-r4: 66035 ops/s p99 19.792 us
+START arctic-proxy-read-90-write-10-c1-r5
+DONE  arctic-proxy-read-90-write-10-c1-r5: 1992 ops/s p99 4437.208 us
+START valkey-read-90-write-10-c1-r5
+DONE  valkey-read-90-write-10-c1-r5: 69053 ops/s p99 18.250 us
+START mutex-proxy-read-90-write-10-c1-r5
+DONE  mutex-proxy-read-90-write-10-c1-r5: 1929 ops/s p99 4617.292 us
+START valkey-read-90-write-10-c1-r6
+DONE  valkey-read-90-write-10-c1-r6: 68955 ops/s p99 18.500 us
+START mutex-proxy-read-90-write-10-c1-r6
+DONE  mutex-proxy-read-90-write-10-c1-r6: 2091 ops/s p99 4404.542 us
+START arctic-proxy-read-90-write-10-c1-r6
+DONE  arctic-proxy-read-90-write-10-c1-r6: 2076 ops/s p99 4667.292 us
+START mutex-proxy-read-90-write-10-c1-r7
+DONE  mutex-proxy-read-90-write-10-c1-r7: 1837 ops/s p99 5094.333 us
+START arctic-proxy-read-90-write-10-c1-r7
+DONE  arctic-proxy-read-90-write-10-c1-r7: 2000 ops/s p99 4463.709 us
+START valkey-read-90-write-10-c1-r7
+DONE  valkey-read-90-write-10-c1-r7: 68851 ops/s p99 18.375 us
+START mutex-proxy-read-90-write-10-c8-r1
+DONE  mutex-proxy-read-90-write-10-c8-r1: 24147 ops/s p99 2946.083 us
+START arctic-proxy-read-90-write-10-c8-r1
+DONE  arctic-proxy-read-90-write-10-c8-r1: 24743 ops/s p99 2882.375 us
+START valkey-read-90-write-10-c8-r1
+DONE  valkey-read-90-write-10-c8-r1: 262284 ops/s p99 57.958 us
+START arctic-proxy-read-90-write-10-c8-r2
+DONE  arctic-proxy-read-90-write-10-c8-r2: 22442 ops/s p99 3465.541 us
+START valkey-read-90-write-10-c8-r2
+DONE  valkey-read-90-write-10-c8-r2: 257581 ops/s p99 60.167 us
+START mutex-proxy-read-90-write-10-c8-r2
+DONE  mutex-proxy-read-90-write-10-c8-r2: 24395 ops/s p99 2813.792 us
+START valkey-read-90-write-10-c8-r3
+DONE  valkey-read-90-write-10-c8-r3: 255433 ops/s p99 59.666 us
+START mutex-proxy-read-90-write-10-c8-r3
+DONE  mutex-proxy-read-90-write-10-c8-r3: 24865 ops/s p99 2810.959 us
+START arctic-proxy-read-90-write-10-c8-r3
+DONE  arctic-proxy-read-90-write-10-c8-r3: 22542 ops/s p99 3686.333 us
+START mutex-proxy-read-90-write-10-c8-r4
+DONE  mutex-proxy-read-90-write-10-c8-r4: 22641 ops/s p99 3084.958 us
+START arctic-proxy-read-90-write-10-c8-r4
+DONE  arctic-proxy-read-90-write-10-c8-r4: 24472 ops/s p99 2908.708 us
+START valkey-read-90-write-10-c8-r4
+DONE  valkey-read-90-write-10-c8-r4: 258536 ops/s p99 59.417 us
+START arctic-proxy-read-90-write-10-c8-r5
+DONE  arctic-proxy-read-90-write-10-c8-r5: 9099 ops/s p99 12836.083 us
+START valkey-read-90-write-10-c8-r5
+DONE  valkey-read-90-write-10-c8-r5: 113943 ops/s p99 222.541 us
+START mutex-proxy-read-90-write-10-c8-r5
+DONE  mutex-proxy-read-90-write-10-c8-r5: 16980 ops/s p99 5384.833 us
+START valkey-read-90-write-10-c8-r6
+DONE  valkey-read-90-write-10-c8-r6: 186047 ops/s p99 131.791 us
+START mutex-proxy-read-90-write-10-c8-r6
+DONE  mutex-proxy-read-90-write-10-c8-r6: 9662 ops/s p99 10412.666 us
+START arctic-proxy-read-90-write-10-c8-r6
+DONE  arctic-proxy-read-90-write-10-c8-r6: 7273 ops/s p99 15266.375 us
+START mutex-proxy-read-90-write-10-c8-r7
+DONE  mutex-proxy-read-90-write-10-c8-r7: 10441 ops/s p99 10242.834 us
+START arctic-proxy-read-90-write-10-c8-r7
+DONE  arctic-proxy-read-90-write-10-c8-r7: 14884 ops/s p99 7160.916 us
+START valkey-read-90-write-10-c8-r7
+DONE  valkey-read-90-write-10-c8-r7: 138815 ops/s p99 148.708 us
+START mutex-proxy-write-only-c1-r1
+DONE  mutex-proxy-write-only-c1-r1: 193 ops/s p99 8873.083 us
+START arctic-proxy-write-only-c1-r1
+DONE  arctic-proxy-write-only-c1-r1: 213 ops/s p99 8314.167 us
+START valkey-write-only-c1-r1
+DONE  valkey-write-only-c1-r1: 70425 ops/s p99 20.541 us
+START arctic-proxy-write-only-c1-r2
+DONE  arctic-proxy-write-only-c1-r2: 193 ops/s p99 9371.791 us
+START valkey-write-only-c1-r2
+DONE  valkey-write-only-c1-r2: 69782 ops/s p99 24.125 us
+START mutex-proxy-write-only-c1-r2
+DONE  mutex-proxy-write-only-c1-r2: 241 ops/s p99 6630.250 us
+START valkey-write-only-c1-r3
+DONE  valkey-write-only-c1-r3: 64427 ops/s p99 21.959 us
+START mutex-proxy-write-only-c1-r3
+DONE  mutex-proxy-write-only-c1-r3: 174 ops/s p99 12603.833 us
+START arctic-proxy-write-only-c1-r3
+DONE  arctic-proxy-write-only-c1-r3: 180 ops/s p99 11616.750 us
+START mutex-proxy-write-only-c1-r4
+DONE  mutex-proxy-write-only-c1-r4: 154 ops/s p99 11540.041 us
+START arctic-proxy-write-only-c1-r4
+DONE  arctic-proxy-write-only-c1-r4: 153 ops/s p99 16109.166 us
+START valkey-write-only-c1-r4
+DONE  valkey-write-only-c1-r4: 59780 ops/s p99 58.166 us
+START arctic-proxy-write-only-c1-r5
+DONE  arctic-proxy-write-only-c1-r5: 106 ops/s p99 22753.333 us
+START valkey-write-only-c1-r5
+DONE  valkey-write-only-c1-r5: 23182 ops/s p99 194.167 us
+START mutex-proxy-write-only-c1-r5
+DONE  mutex-proxy-write-only-c1-r5: 105 ops/s p99 39055.875 us
+START valkey-write-only-c1-r6
+DONE  valkey-write-only-c1-r6: 62690 ops/s p99 32.583 us
+START mutex-proxy-write-only-c1-r6
+DONE  mutex-proxy-write-only-c1-r6: 195 ops/s p99 9065.542 us
+START arctic-proxy-write-only-c1-r6
+DONE  arctic-proxy-write-only-c1-r6: 133 ops/s p99 16318.084 us
+START mutex-proxy-write-only-c1-r7
+DONE  mutex-proxy-write-only-c1-r7: 118 ops/s p99 34760.291 us
+START arctic-proxy-write-only-c1-r7
+DONE  arctic-proxy-write-only-c1-r7: 174 ops/s p99 10800.958 us
+START valkey-write-only-c1-r7
+DONE  valkey-write-only-c1-r7: 54619 ops/s p99 51.334 us
+START mutex-proxy-write-only-c8-r1
+DONE  mutex-proxy-write-only-c8-r1: 1122 ops/s p99 15525.250 us
+START arctic-proxy-write-only-c8-r1
+DONE  arctic-proxy-write-only-c8-r1: 1027 ops/s p99 13844.917 us
+START valkey-write-only-c8-r1
+DONE  valkey-write-only-c8-r1: 111699 ops/s p99 199.958 us
+START arctic-proxy-write-only-c8-r2
+DONE  arctic-proxy-write-only-c8-r2: 867 ops/s p99 23273.166 us
+START valkey-write-only-c8-r2
+DONE  valkey-write-only-c8-r2: 111612 ops/s p99 216.417 us
+START mutex-proxy-write-only-c8-r2
+DONE  mutex-proxy-write-only-c8-r2: 715 ops/s p99 26069.208 us
+START valkey-write-only-c8-r3
+DONE  valkey-write-only-c8-r3: 28499 ops/s p99 2507.750 us
+START mutex-proxy-write-only-c8-r3
+DONE  mutex-proxy-write-only-c8-r3: 896 ops/s p99 14006.458 us
+START arctic-proxy-write-only-c8-r3
+DONE  arctic-proxy-write-only-c8-r3: 841 ops/s p99 21153.417 us
+START mutex-proxy-write-only-c8-r4
+DONE  mutex-proxy-write-only-c8-r4: 1608 ops/s p99 9387.125 us
+START arctic-proxy-write-only-c8-r4
+DONE  arctic-proxy-write-only-c8-r4: 1477 ops/s p99 9310.750 us
+START valkey-write-only-c8-r4
+DONE  valkey-write-only-c8-r4: 208698 ops/s p99 104.125 us
+START arctic-proxy-write-only-c8-r5
+DONE  arctic-proxy-write-only-c8-r5: 1577 ops/s p99 9517.958 us
+START valkey-write-only-c8-r5
+DONE  valkey-write-only-c8-r5: 207798 ops/s p99 101.166 us
+START mutex-proxy-write-only-c8-r5
+DONE  mutex-proxy-write-only-c8-r5: 837 ops/s p99 27783.416 us
+START valkey-write-only-c8-r6
+DONE  valkey-write-only-c8-r6: 72765 ops/s p99 451.625 us
+START mutex-proxy-write-only-c8-r6
+DONE  mutex-proxy-write-only-c8-r6: 653 ops/s p99 28759.666 us
+START arctic-proxy-write-only-c8-r6
+DONE  arctic-proxy-write-only-c8-r6: 837 ops/s p99 19949.166 us
+START mutex-proxy-write-only-c8-r7
+DONE  mutex-proxy-write-only-c8-r7: 745 ops/s p99 22582.125 us
+START arctic-proxy-write-only-c8-r7
+DONE  arctic-proxy-write-only-c8-r7: 785 ops/s p99 21162.959 us
+START valkey-write-only-c8-r7
+DONE  valkey-write-only-c8-r7: 76141 ops/s p99 331.625 us

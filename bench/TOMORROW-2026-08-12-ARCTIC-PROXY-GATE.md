@@ -32,7 +32,8 @@ denominator or described as an apples-to-apples map comparison.
 
 ## First implementation block
 
-Status: **implemented; official smoke pending a committed source revision**.
+Status: **complete at `7c03a87`; local qualification decision is NO-GO for
+EC2-A2**.
 
 The Rust RESP workload driver, benchmark-only three-node target, local runner,
 telemetry capture, and gate analyzer are in `experiments/arctic-shadow/src/bin/`,
@@ -117,9 +118,11 @@ Write immutable evidence below:
 ```text
 bench/results/arctic-proxy-local/<git-sha>/
   REPORT.md
+  RUN-NOTES.md
   environment.json
   manifest.json
   summary.json
+  cases.jsonl
   rounds/*.json
   correctness.log
   process-telemetry.jsonl
@@ -148,6 +151,11 @@ For the eight-client median, Arctic proxy must reach:
 Record write-only throughput even though it is not the primary gate. Stop and
 investigate before AWS if its regression exceeds 15%, if CPU saturation differs
 materially between paired targets, or if RSS grows across rounds.
+
+Final result: correctness and evidence passed; write-only throughput and p99
+passed; eight-client read-only reached `1.22x` and 90/10 reached `0.99x`, so
+both `1.5x` throughput gates failed. EC2-A2 is not authorized. See
+`bench/results/arctic-proxy-local/7c03a87b5b0fac2624d7b0d28ec1412488e44299/`.
 
 ## AWS hold point
 

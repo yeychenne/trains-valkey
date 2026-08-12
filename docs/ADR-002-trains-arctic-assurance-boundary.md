@@ -293,6 +293,31 @@ must not begin until that local performance gate passes.
 
 See `bench/results/arctic-proxy-integration-2026-08-11.md`.
 
+## Local Proxy Performance Result
+
+The symmetric endpoint gate completed on 2026-08-12 at commit `7c03a87`. It
+used one deterministic persistent-connection RESP driver against a real
+three-node feature-off mutex proxy, a feature-on Arctic proxy, and unmodified
+Valkey as an endpoint reference. All 126 cases and evidence checks passed.
+
+At eight clients, Arctic delivered 1.22x mutex-proxy read-only throughput and
+0.99x mutex-proxy 90/10 throughput. Both miss the predeclared 1.5x gates.
+Write-only throughput was 1.04x and p99 was 0.88x, so Arctic did not create the
+queued-write regression feared after EC2-A1. CPU and RSS were comparable or
+slightly lower for Arctic.
+
+Decision: **NO-GO for EC2-A2 on the current architecture.** Retain the
+feature-gated adapter and correctness evidence, but do not spend the AWS budget
+to repeat a locally failed endpoint gate. Profile shared RESP, scheduling,
+TRAINS circulation/delivery, and acknowledgement costs before defining another
+performance gate. This decision does not retract the primitive or EC2-A1
+results; it establishes that their map-level advantage does not yet dominate
+the complete proxy endpoint.
+
+See
+`bench/results/arctic-proxy-local/7c03a87b5b0fac2624d7b0d28ec1412488e44299/REPORT.md`
+and `RUN-NOTES.md`.
+
 ## References
 
 - Aurora DSQL paper: <https://arxiv.org/pdf/2607.13276>

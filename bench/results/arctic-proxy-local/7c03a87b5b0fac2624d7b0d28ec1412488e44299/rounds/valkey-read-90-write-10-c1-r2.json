@@ -1,0 +1,17 @@
+{
+  "case_id": "valkey-read-90-write-10-c1-r2",
+  "target": "valkey",
+  "workload": "read-90-write-10",
+  "clients": 1,
+  "repetition": 1,
+  "total_operations": 20000,
+  "elapsed_ms": 298.87475,
+  "operations_per_second": 66917.66367014944,
+  "latency_samples": 1250,
+  "latency_p50_us": 14.5,
+  "latency_p99_us": 39.292,
+  "target_cpu_ms": 110.0,
+  "target_peak_rss_kb": 8480,
+  "client_cpu_ms": 102.65499999999884,
+  "validated_keys": 64
+}

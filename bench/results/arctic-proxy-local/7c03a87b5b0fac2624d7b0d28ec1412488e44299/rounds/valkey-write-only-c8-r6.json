@@ -1,0 +1,17 @@
+{
+  "case_id": "valkey-write-only-c8-r6",
+  "target": "valkey",
+  "workload": "write-only",
+  "clients": 8,
+  "repetition": 5,
+  "total_operations": 40000,
+  "elapsed_ms": 549.7169170000001,
+  "operations_per_second": 72764.72446635657,
+  "latency_samples": 2504,
+  "latency_p50_us": 95.875,
+  "latency_p99_us": 451.625,
+  "target_cpu_ms": 400.0,
+  "target_peak_rss_kb": 8528,
+  "client_cpu_ms": 737.6429999999818,
+  "validated_keys": 64
+}
